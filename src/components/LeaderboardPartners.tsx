@@ -67,8 +67,8 @@ const LeaderboardPartners: FC = () => {
   return (
     <div className={styles.frameParent}>
       <div className={styles.headingParent}>
-        <div className={styles.heading}>RANK</div>
-        <div className={styles.heading1}>PARTNER</div>
+        <div className={styles.heading}>Partner</div>
+        <div className={styles.heading1}></div>
         <div className={styles.heading2}>TRUST SCORE</div>
         <div className={styles.heading3}>HOLDINGS</div>
       </div>

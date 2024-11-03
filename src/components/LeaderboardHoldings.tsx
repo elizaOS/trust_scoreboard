@@ -1,17 +1,16 @@
-import { useEffect, useState } from 'react';
-import styles from './LeaderboardHoldings.module.css';
+import { FC, useState, useEffect } from 'react';
 import Image from 'next/image';
+import styles from './LeaderboardHoldings.module.css';
 
 interface DAOHolding {
   rank: number;
   name: string;
-  members: number;
   holdings: string;
   percentage: string;
   imageUrl: string;
 }
 
-export default function LeaderboardHoldings() {
+const LeaderboardHoldings: FC = () => {
   const [holdings, setHoldings] = useState<DAOHolding[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,20 +18,23 @@ export default function LeaderboardHoldings() {
   useEffect(() => {
     const fetchHoldings = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch('/api/daoHoldings');
-        const data = await response.json();
         
-        // Validate that data is an array
-        if (!Array.isArray(data)) {
-          throw new Error('Invalid data format received from API');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        setHoldings(data);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching DAO holdings:', error);
-        setError('Failed to load DAO holdings');
-        setHoldings([]); // Reset to empty array on error
+        const data = await response.json();
+        
+        if (!data.holdings || !Array.isArray(data.holdings)) {
+          throw new Error('Invalid data format received from API');
+        }
+
+        setHoldings(data.holdings);
+      } catch (err) {
+        console.error('Error fetching DAO holdings:', err);
+        setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
         setIsLoading(false);
       }
@@ -41,28 +43,22 @@ export default function LeaderboardHoldings() {
     fetchHoldings();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className={styles.container}>
-      <table className={styles.holdingsTable}>
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>Rank</th>
-            <th>DAO</th>
-            <th>Members</th>
+            <th>Asset</th>
             <th>Holdings</th>
             <th>Percentage</th>
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(holdings) && holdings.map((dao) => (
+          {holdings.map((dao) => (
             <tr key={dao.rank} className={styles.row}>
               <td>{dao.rank}</td>
               <td>
@@ -77,7 +73,6 @@ export default function LeaderboardHoldings() {
                   <span>{dao.name}</span>
                 </div>
               </td>
-              <td>{dao.members.toLocaleString()}</td>
               <td>{dao.holdings}</td>
               <td>{dao.percentage}</td>
             </tr>
@@ -86,4 +81,6 @@ export default function LeaderboardHoldings() {
       </table>
     </div>
   );
-}
+};
+
+export default LeaderboardHoldings;
