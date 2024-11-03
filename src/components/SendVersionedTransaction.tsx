@@ -52,7 +52,7 @@ export const SendVersionedTransaction: FC = () => {
             console.log('error', `Transaction failed! ${error?.message}`, signature);
             return;
         }
-    }, [publicKey, notify, connection, sendTransaction]);
+    }, [publicKey, connection, sendTransaction]);
 
     return (
         <div className="flex flex-row justify-center">

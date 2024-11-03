@@ -2,6 +2,7 @@ import { FC } from 'react';
 import Link from "next/link";
 import dynamic from 'next/dynamic';
 import React, { useState } from "react";
+import Image from 'next/image';
 import { useAutoConnect } from '../../contexts/AutoConnectProvider';
 import NetworkSwitcher from '../NetworkSwitcher';
 import NavElement from '.';
@@ -23,7 +24,7 @@ export const AppBar: React.FC = () => {
         <div className="navbar-start align-items-center">
           <div className="hidden sm:inline w-22 h-22 md:p-2 ml-10">
             <Link href="/" passHref className="text-secondary hover:text-white">
-              <img src="/logo.svg" alt="Logo" style={{ width: 'auto', height: '30px' }} />
+              <Image src="/logo.svg" alt="Logo" style={{ width: 'auto', height: '30px' }} />
             </Link>
           </div>
           <WalletMultiButtonDynamic className="btn-ghost btn-sm relative flex md:hidden text-lg" onClick={() => window.location.href = '/profile'} />
@@ -37,7 +38,7 @@ export const AppBar: React.FC = () => {
             {session?.user?.image ? (
               <div className="flex items-center">
                 <Link href="/profile">
-                  <img 
+                  <Image 
                     src={session.user.image} 
                     alt="Profile" 
                     className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80"

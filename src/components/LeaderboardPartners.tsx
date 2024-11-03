@@ -1,14 +1,18 @@
 import { FC, useEffect, useState } from 'react';
 import styles from './LeaderboardPartners.module.css';
 import Image from 'next/image';
-import { calculateTrustScore, TrustScoreResult } from '../pages/api/trustScore';
-import type { LeaderboardResponse } from '../pages/api/leaderboard';
+import LeaderboardResponse from '../pages/api/leaderboard';
+
+interface TrustScoreResult {
+  score: number;
+  imagePath: string;
+}
 
 interface Partner {
   owner: string;
   displayAddress: string;
   amount: number;
-  trustScore?: TrustScoreResult;
+  trustScore: TrustScoreResult;
 }
 
 interface TokenPrice {
@@ -16,93 +20,49 @@ interface TokenPrice {
   usdPrice: number;
 }
 
-export const LeaderboardPartners: FC = () => {
+const LeaderboardPartners: FC = () => {
   const [partners, setPartners] = useState<Partner[]>([]);
-  const [tokenPrices, setTokenPrices] = useState<TokenPrice[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPartners = async () => {
       try {
-        const response = await fetch('/api/leaderboard');
-        if (!response.ok) {
-          throw new Error(`API error: ${response.status}`);
-        }
-        
-        const data: LeaderboardResponse = await response.json();
-        
-        const partnersWithTrust = data.partners.map((partner) => ({
+        const partnersData = await fetch('/api/partners').then(res => res.json());
+        const trustScores = await Promise.all(
+          partnersData.map((partner: any) =>
+            fetch(`/api/trustScore?address=${partner.owner}`).then(res => res.json())
+          )
+        );
+
+        const partnersWithTrust = partnersData.map((partner: any, index: number) => ({
           ...partner,
-          trustScore: calculateTrustScore(partner.amount)
+          trustScore: trustScores[index],
         }));
 
         setPartners(partnersWithTrust);
-        setTokenPrices(data.prices);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch data');
-      } finally {
-        setIsLoading(false);
+        setError('Failed to fetch partners');
       }
     };
 
-    fetchData();
+    fetchPartners();
   }, []);
 
-  if (isLoading) return <div>Loading partners...</div>;
-  if (error) return <div>Error: {error}</div>;
-
   return (
-    <div className={styles.frameParent}>
-      <div className={styles.headingParent}>
-	  <div className={styles.heading}>Rank</div>
-        <div className={styles.heading}>Partner</div>
-        <div className={styles.heading1}>Trust Score</div>
-        <div className={styles.heading2}>Holdings</div>
-      </div>
-
-      {partners.map((partner, index) => (
-        <div key={partner.owner} className={index % 2 === 0 ? styles.row : styles.row1}>
-          {/* Rank column */}
-          <div className={styles.text}>{index + 1}</div>
-          
-          {/* Partner column */}
-          <div className={styles.textParent}>
-            <div className={styles.text1}>
-              {partner.displayAddress || `${partner.owner.slice(0, 4)}...${partner.owner.slice(-4)}`}
-            </div>
-            <div className={styles.text2}>{partner.trustScore?.label || 'Unverified'}</div>
+    <div className={styles.container}>
+      {error ? (
+        <div className={styles.error}>{error}</div>
+      ) : (
+        partners.map((partner) => (
+          <div key={partner.owner} className={styles.partner}>
+            <div>{partner.displayAddress}</div>
+            <div>{partner.amount}</div>
+            <div>{partner.trustScore.score}</div>
+            <Image src={partner.trustScore.imagePath} alt="Trust Score" width={50} height={50} />
           </div>
-          
-          {/* Trust Score column */}
-          <div className={styles.textWrapper}>
-            {partner.trustScore?.score === 0 ? (
-              <Image 
-                src={partner.trustScore?.imagePath || '/null.png'} 
-                alt="Trust Score" 
-                width={34} 
-                height={34} 
-                className={styles.rowChild}
-              />
-            ) : (
-              <div className={styles.text3}>
-                {partner.trustScore?.score ? partner.trustScore.score.toFixed(1) : '0.0'}
-              </div>
-            )}
-          </div>
-          
-          {/* Holdings column */}
-          <div className={styles.textWrapper}>
-            <div className={styles.text3}>
-              {new Intl.NumberFormat('en-US', {
-                notation: 'compact',
-                maximumFractionDigits: 2
-              }).format(partner.amount)}
-            </div>
-          </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };

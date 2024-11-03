@@ -25,7 +25,7 @@ export const SignMessage: FC = () => {
             notify({ type: 'error', message: `Sign Message failed!`, description: error?.message });
             console.log('error', `Sign Message failed! ${error?.message}`);
         }
-    }, [publicKey, notify, signMessage]);
+    }, [publicKey, signMessage]);
 
     return (
         <div className="flex flex-row justify-center">

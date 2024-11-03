@@ -1,25 +1,35 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { SignMessage } from '../../components/SignMessage';
 import { SendTransaction } from '../../components/SendTransaction';
 import { SendVersionedTransaction } from '../../components/SendVersionedTransaction';
-import  ProfileTotals  from '../../components/ProfileTotals'; // Changed to named import
-import  Socials  from '../../components/Socials'; // Changed to named import
-import  ProfileWallets  from '../../components/ProfileWallets'; // Changed to named import
+import ProfileTotals from '../../components/ProfileTotals';
+import Socials from '../../components/Socials';
+import ProfileWallets from '../../components/ProfileWallets';
+import ProfileHoldings from '../../components/ProfileHoldings';
+import styles from './index.module.css';
 
-export const ProfileView: FC = () => {
+type View = 'profile' | 'holdings';
+
+const ProfileView: FC = () => {
+  const [currentView, setCurrentView] = useState<View>('profile');
+
+  const handleViewChange = (view: View) => {
+    console.log('View changed to:', view); // Debug log
+    setCurrentView(view);
+  };
+
   return (
-    <div className="md:hero mx-auto p-4">
-      <div className="md:hero-content flex flex-col">
-        <h1 className="text-center text-5xl font-bold text-black bg-clip-text  mt-10 mb-8">
-          Profile
-        </h1>
-        
-        {/* Profile Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          <ProfileTotals />
-          <Socials />
-          <ProfileWallets address="your-wallet-address-here" /> {/* Added required prop */}
-        </div>
+    <div className={styles.container}>
+      <ProfileTotals onViewChange={handleViewChange} />
+      <div className={styles.content}>
+        {currentView === 'profile' ? (
+          <>
+            <ProfileWallets />
+            <Socials />
+          </>
+        ) : (
+          <ProfileHoldings />
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from 'react';
+import type { NextPage } from 'next';
+import { FC, useCallback, useEffect, useState } from 'react';
 import styles from './ProfileTotals.module.css';
 
 interface TokenPrice {
@@ -11,48 +12,46 @@ interface Partner {
   amount: number;
 }
 
-export const ProfileTotals: FC = () => {
+type View = 'profile' | 'holdings';
+
+interface ProfileTotalsProps {
+  onViewChange?: (view: View) => void; // Make optional
+}
+
+const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }) => { // Add default empty function
   const [tokenPrices, setTokenPrices] = useState<TokenPrice[]>([]);
   const [partners, setPartners] = useState<Partner[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [activeView, setActiveView] = useState<View>('profile');
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleViewChange = useCallback((view: View) => {
+    setActiveView(view);
+    if (onViewChange) { // Add safety check
+      onViewChange(view);
+    }
+  }, [onViewChange]);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        // Check if API routes exist first
         const [pricesRes, partnersRes] = await Promise.all([
-          fetch('/api/tokenPrice'),
+          fetch('/api/token-prices'),
           fetch('/api/partners')
         ]);
 
-        // Validate responses
-        if (!pricesRes.ok) {
-          throw new Error(`Token prices API error: ${pricesRes.status}`);
-        }
-        if (!partnersRes.ok) {
-          throw new Error(`Partners API error: ${partnersRes.status}`);
+        if (!pricesRes.ok || !partnersRes.ok) {
+          throw new Error('API error');
         }
 
-        // Parse JSON safely
-        const pricesText = await pricesRes.text();
-        const partnersText = await partnersRes.text();
+        const pricesData = await pricesRes.json();
+        const partnersData = await partnersRes.json();
 
-        let pricesData, partnersData;
-        try {
-          pricesData = JSON.parse(pricesText);
-          partnersData = JSON.parse(partnersText);
-        } catch (e) {
-          throw new Error('Invalid JSON response from API');
-        }
-
-        setTokenPrices(pricesData.prices || []);
-        setPartners(partnersData.partners || []);
-        setError(null);
+        setTokenPrices(pricesData);
+        setPartners(partnersData);
       } catch (error) {
-        console.error('Error fetching data:', error);
         setError(error instanceof Error ? error.message : 'Unknown error');
-        // Set default empty values
         setTokenPrices([]);
         setPartners([]);
       } finally {
@@ -70,56 +69,36 @@ export const ProfileTotals: FC = () => {
     return price * totalHoldings;
   };
 
-  if (isLoading) {
-    return (
-      <div className="w-full rounded-lg p-6 bg-gradient-to-r from-[#F98C1C] to-[#FFAF03]">
-        <div className="text-center text-white">Loading...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="w-full rounded-lg p-6 bg-gradient-to-r from-[#F98C1C] to-[#FFAF03]">
-        <div className="text-center text-white">Error: {error}</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-col items-center w-full max-w-2xl">
-      <div className="w-full rounded-lg p-6 bg-gradient-to-r from-[#F98C1C] to-[#FFAF03]">
-        <div className="flex justify-between items-center">
-          <div className="text-center">
-            <p className="text-sm text-white">Total Value</p>
-            <p className="text-2xl font-bold text-white">
-              {new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                notation: 'compact',
-                maximumFractionDigits: 2
-              }).format(calculateTotalValue())}
-            </p>
+    <div className={styles.frameParent}>
+      <div className={styles.instanceParent}>
+        <div className={styles.buttonParent}>
+          <div 
+            className={`${styles.button} ${activeView === 'profile' ? styles.active : ''}`}
+            onClick={() => handleViewChange('profile')}
+          >
+            <div className={styles.text}>Profile</div>
           </div>
-
-          <div className="text-center">
-            <p className="text-sm text-white">Total Partners</p>
-            <p className="text-2xl font-bold text-white">
-              {partners.length}
-            </p>
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm text-white">Total Holdings</p>
-            <p className="text-2xl font-bold text-white">
-              {new Intl.NumberFormat('en-US', {
-                notation: 'compact',
-                maximumFractionDigits: 2
-              }).format(partners.reduce((sum, partner) => sum + partner.amount, 0))}
-            </p>
+          <div 
+            className={`${styles.button1} ${activeView === 'holdings' ? styles.active : ''}`}
+            onClick={() => handleViewChange('holdings')}
+          >
+            <div className={styles.text}>Holdings</div>
           </div>
         </div>
       </div>
+      
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>Error: {error}</div>
+      ) : (
+        <div className={styles.totalsContainer}>
+          <div className={styles.totalValue}>
+            Total Value: ${calculateTotalValue().toLocaleString()}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './LeaderboardHoldings.module.css';
+import Image from 'next/image';
 
 interface DAOHolding {
   rank: number;
@@ -66,7 +67,7 @@ export default function LeaderboardHoldings() {
               <td>{dao.rank}</td>
               <td>
                 <div className={styles.daoInfo}>
-                  <img 
+                  <Image 
                     src={dao.imageUrl} 
                     alt={dao.name} 
                     width={34} 

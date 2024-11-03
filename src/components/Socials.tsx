@@ -15,12 +15,12 @@ const SocialButton: FC<SocialButtonProps> = ({ provider }) => {
       session,
       status,
       provider,
-      account: session?.user?.accounts?.[0]
+      account: session?.user?.connections?.[provider.toLowerCase()]
     });
   }, [session, status, provider]);
 
   // Check if this provider is the active one
-  const isThisProviderActive = session?.user?.accounts?.[0]?.provider === provider.toLowerCase();
+  const isThisProviderActive = !!session?.user?.connections?.[provider.toLowerCase()];
 
   const handleClick = () => {
     if (session) {

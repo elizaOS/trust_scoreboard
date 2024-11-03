@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { ProfileView } from "../views/profile";
+import ProfileView from "../views/profile";
 
 const Profile: NextPage = (props) => {
   return (

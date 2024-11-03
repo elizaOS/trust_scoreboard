@@ -1,2 +1,3 @@
 export { HomeView } from "./home";
-export { Profile } from "./profile";
+import ProfileView from "./profile";
+export { ProfileView };

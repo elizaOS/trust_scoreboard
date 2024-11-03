@@ -22,78 +22,37 @@ interface TokenPrices {
 }
 
 interface ErrorResponse {
-  error: string;
   message: string;
   statusCode: number;
 }
 
-export interface LeaderboardResponse {
-  partners: Partner[];
-  tokenPrices: TokenPrice[];
-}
-
-type ApiResponse = LeaderboardResponse | ErrorResponse;
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<{partners: Partner[], prices: any[]} | ErrorResponse>
-) {
-  // Add timeout
-  const timeout = setTimeout(() => {
-    res.status(504).json({ error: 'Request timeout' });
-  }, 30000);
-
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ErrorResponse | { partners: Partner[]; prices: any[] }>) {
   try {
     if (req.method !== 'GET') {
-      return res.status(405).json({ error: 'Method not allowed' });
+      return res.status(405).json({ message: 'Method not allowed', statusCode: 405 });
     }
 
     // Get partners first with error handling
-    const partners = await getAllPartners().catch(error => {
-      console.error('Partner fetch error:', error);
-      throw new Error('Failed to fetch partners');
-    });
-
-    // Validate API key
-    if (!API_KEY) {
-      throw new Error('CoinGecko API key not configured');
+    const partners = await getAllPartners();
+    if (!partners) {
+      return res.status(500).json({ message: 'Failed to fetch partners', statusCode: 500 });
     }
 
-    // Fetch prices with error handling
-    const pricesResponse = await fetch(
-      `${COINGECKO_API}/simple/token_price/${SOLANA_PLATFORM_ID}?contract_addresses=${TOKEN_ADDRESSES.join(',')}&vs_currencies=usd`,
-      {
-        headers: {
-          'x-cg-pro-api-key': API_KEY,
-          'Accept': 'application/json'
-        }
-      }
-    ).catch(error => {
-      console.error('Price fetch error:', error);
-      throw new Error('Failed to fetch token prices');
-    });
+    // Fetch token prices from CoinGecko
+    const pricesRes = await fetch(`${COINGECKO_API}/simple/token_price/${SOLANA_PLATFORM_ID}?contract_addresses=${TOKEN_ADDRESSES.join(',')}&vs_currencies=usd&x_cg_pro_api_key=${API_KEY}`);
+    const pricesData = await pricesRes.json();
 
-    if (!pricesResponse.ok) {
-      const errorText = await pricesResponse.text();
-      console.error('CoinGecko API error:', errorText);
-      throw new Error(`CoinGecko API error: ${pricesResponse.status}`);
+    if (!pricesRes.ok) {
+      return res.status(500).json({ message: 'Failed to fetch token prices', statusCode: 500 });
     }
 
-    const pricesData: TokenPrices = await pricesResponse.json();
-    const prices = Object.entries(pricesData).map(([address, priceData]) => ({
+    const prices: TokenPrice[] = TOKEN_ADDRESSES.map((address) => ({
       address,
-      usdPrice: priceData.usd
+      usd: pricesData[address]?.usd || 0,
     }));
 
-    clearTimeout(timeout);
     return res.status(200).json({ partners, prices });
-
   } catch (error) {
-    clearTimeout(timeout);
-    console.error('Leaderboard API Error:', error);
-    return res.status(500).json({
-      error: 'Failed to fetch leaderboard data',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    });
+    return res.status(500).json({ message: 'Internal server error', statusCode: 500 });
   }
 }
