@@ -1,68 +1,98 @@
-import { FC, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useState, useEffect } from 'react'; 
+import Image from "next/image";
 import styles from './LeaderboardPartners.module.css';
-import Image from 'next/image';
-import LeaderboardResponse from '../pages/api/leaderboard';
-
-interface TrustScoreResult {
-  score: number;
-  imagePath: string;
-}
 
 interface Partner {
-  owner: string;
-  displayAddress: string;
-  amount: number;
-  trustScore: TrustScoreResult;
+  address: string;
+  trustScore: number;
+  holdings: number;
 }
 
-interface TokenPrice {
+interface PartnerData {
   address: string;
-  usdPrice: number;
+  holdings: number;
+}
+
+interface ApiResponse {
+  partners: PartnerData[];
 }
 
 const LeaderboardPartners: FC = () => {
   const [partners, setPartners] = useState<Partner[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPartners = async () => {
       try {
-        const partnersData = await fetch('/api/partners').then(res => res.json());
-        const trustScores = await Promise.all(
-          partnersData.map((partner: any) =>
-            fetch(`/api/trustScore?address=${partner.owner}`).then(res => res.json())
-          )
-        );
+        setIsLoading(true);
+        const [partnersResponse, trustScoresResponse] = await Promise.all([
+          fetch('/api/partners'),
+          fetch('/api/trustScore')
+        ]);
+        
+        if (!partnersResponse.ok || !trustScoresResponse.ok) {
+          throw new Error('Failed to fetch data');
+        }
 
-        const partnersWithTrust = partnersData.map((partner: any, index: number) => ({
-          ...partner,
-          trustScore: trustScores[index],
+        const { partners: partnersData }: ApiResponse = await partnersResponse.json();
+        const trustScores = await trustScoresResponse.json();
+
+        // Validate that partnersData is an array
+        if (!Array.isArray(partnersData)) {
+          throw new Error('Invalid partners data format');
+        }
+
+        const combinedData = partnersData.map((partner: PartnerData) => ({
+          address: partner.address,
+          trustScore: trustScores[partner.address] || 0,
+          holdings: partner.holdings
         }));
 
-        setPartners(partnersWithTrust);
-        setError(null);
-      } catch (err) {
-        setError('Failed to fetch partners');
+        setPartners(combinedData);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchPartners();
   }, []);
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <div className={styles.container}>
-      {error ? (
-        <div className={styles.error}>{error}</div>
-      ) : (
-        partners.map((partner) => (
-          <div key={partner.owner} className={styles.partner}>
-            <div>{partner.displayAddress}</div>
-            <div>{partner.amount}</div>
-            <div>{partner.trustScore.score}</div>
-            <Image src={partner.trustScore.imagePath} alt="Trust Score" width={50} height={50} />
+    <div className={styles.frameParent}>
+      <div className={styles.headingParent}>
+        <div className={styles.heading}>RANK</div>
+        <div className={styles.heading1}>PARTNER</div>
+        <div className={styles.heading2}>TRUST SCORE</div>
+        <div className={styles.heading3}>HOLDINGS</div>
+      </div>
+      
+      {partners.map((partner, index) => (
+        <div key={partner.address} className={index % 2 === 0 ? styles.row : styles.row1}>
+          <div className={styles.text}>{index + 1}</div>
+          <div className={styles.rowChild}>
+            <Image width={34} height={34} alt="Partner avatar" src={`https://avatars.dicebear.com/api/identicon/${partner.address}.svg`} />
           </div>
-        ))
-      )}
+          <div className={styles.textParent}>
+            <div className={styles.text1}>{partner.address.substring(0, 6)}...{partner.address.substring(38)}</div>
+            <div className={styles.text2}>Partner</div>
+          </div>
+          <div className={styles.instanceParent}>
+            <div className={styles.textWrapper}>
+              <div className={styles.text3}>{partner.trustScore.toFixed(1)}</div>
+            </div>
+            <div className={styles.textWrapper}>
+              <div className={styles.text3}>{partner.holdings.toFixed(2)}</div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

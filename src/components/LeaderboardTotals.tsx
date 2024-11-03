@@ -27,9 +27,6 @@ export const LeaderboardTotals: FC = () => {
         ]);
 
         // Validate responses
-        if (!pricesRes.ok) {
-          throw new Error(`Token prices API error: ${pricesRes.status}`);
-        }
         if (!partnersRes.ok) {
           throw new Error(`Partners API error: ${partnersRes.status}`);
         }

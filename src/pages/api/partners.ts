@@ -86,10 +86,24 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
-    const partners = await getAllPartners();
-    // Partners are already sorted by amount
-    res.status(200).json({ partners });
+    const allPartners = await getAllPartners();
+    
+    // Transform data to match expected PartnerData interface
+    const formattedPartners = allPartners.map(partner => ({
+      address: partner.owner,
+      holdings: partner.amount
+    }));
+
+    // Return in expected ApiResponse format
+    res.status(200).json({ 
+      partners: formattedPartners 
+    });
+
   } catch (error) {
     console.error('API Error:', error);
     res.status(500).json({ 

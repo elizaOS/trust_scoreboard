@@ -9,10 +9,9 @@ const TOKEN_ADDRESSES = [
   'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnypump'
 ];
 
-interface TokenPrices {
-  [key: string]: {
-    usd: number;
-  };
+interface TokenPrice {
+  address: string;
+  usdPrice: number;
 }
 
 export default async function handler(
@@ -20,12 +19,12 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
     if (!API_KEY) {
-      throw new Error('CoinGecko API key is not configured');
+      throw new Error('CoinGecko API key not configured');
     }
 
     const response = await fetch(
@@ -39,24 +38,26 @@ export default async function handler(
     );
 
     if (!response.ok) {
-      console.error('CoinGecko API error:', await response.text());
       throw new Error(`CoinGecko API error: ${response.status}`);
     }
 
-    const data: TokenPrices = await response.json();
+    const data = await response.json();
     
     // Transform data to expected format
-    const prices = Object.entries(data).map(([address, priceData]) => ({
+    const prices: TokenPrice[] = Object.entries(data).map(([address, priceData]: [string, any]) => ({
       address,
-      usdPrice: priceData.usd
+      usdPrice: priceData.usd || 0
     }));
 
     res.status(200).json({ prices });
   } catch (error) {
     console.error('Token price API error:', error);
-    res.status(500).json({ 
-      message: 'Failed to fetch token prices',
-      error: error instanceof Error ? error.message : 'Unknown error'
+    // Return fallback prices if API fails
+    res.status(200).json({ 
+      prices: TOKEN_ADDRESSES.map(address => ({
+        address,
+        usdPrice: 0
+      }))
     });
   }
 }
