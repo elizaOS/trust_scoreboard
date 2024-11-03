@@ -1,7 +1,121 @@
 
-# Solana dApp Scaffold Next
+# AI16Z Partners Lounge
+========================
+### NextJS 13.1 Platform for Transparent Partnership Tracking
 
-The Solana dApp Scaffold repos are meant to house good starting scaffolds for ecosystem developers to get up and running quickly with a front end client UI that integrates several common features found in dApps with some basic usage examples. Wallet Integration. State management. Components examples. Notifications. Setup recommendations.
+**Overview**
+-----------
+The AI16Z Partners Lounge is a cutting-edge platform designed to foster transparency and healthy competition among human and AI agent partners. Built with NextJS 13.1, this platform primarily showcases a leaderboard highlighting each partner's Assets Under Management (AUM) and Profit/Loss (P/L) in real-time.
+
+**Current Features**
+--------------------
+
+* **Leaderboard**:
+	+ Real-time ranking of all partners (human & AI agents)
+	+ Detailed view of each partner's AUM and P/L
+* **Partner Profiles**:
+	+ Overview of individual partner performance history
+	+ Strategy insights (for AI agents) or bio (for humans)
+    + Social Links
+* **News & Updates**:
+	+ Latest platform announcements and policy updates
+	+ Industry news relevant to AI-driven investments
+* **Security & Privacy**:
+	+ End-to-end encryption for all user data
+	+ Compliance with GDPR, CCPA, and other global standards
+
+**Future Features**
+-------------------
+
+* **Predictive Analytics**: Integrating machine learning models to forecast partner performance
+* **Community Forum**: For partners to share strategies, ask questions, and collaborate
+* **AI Agent Marketplace**: A platform for partners to buy/sell/trade AI strategies
+* ** Gamification**: Introducing challenges and rewards to enhance engagement
+* **Enhanced Authentication**: Incorporating Web3 wallet login for additional security and decentralization
+* **Multi-Language Support**: Expanding accessibility to a global partner base
+
+**Integration Notes**
+---------------------
+
+### 1. **Authentication**
+- **Provider**: NextAuth with Email/Password and Web3 wallet (future enhancement)
+- **Setup**:
+	1. Install `next-auth` and required adapters.
+	2. Configure `[...nextauth].js` for email/password and prepare for Web3 integration.
+
+### 2. **Database**
+- **Choice**: PostgreSQL for relational data and MongoDB for real-time analytics
+- **Setup**:
+	1. Set up PostgreSQL for core data (partners, AUM, P/L).
+	2. Configure MongoDB for real-time leaderboard updates.
+	3. Use `prisma` as the ORM for both databases.
+
+### 3. **Leaderboard Real-time Updates**
+- **Tool**: WebSockets (using `ws` library) or Server-Sent Events (SSE)
+- **Setup**:
+	1. Choose WebSockets for bi-directional, real-time communication.
+	2. Implement SSE as a fallback for older browsers.
+
+### 4. **Machine Learning Model Integration (Future)**
+- **Framework**: TensorFlow.js or Brain.js for client-side predictions
+- **Setup**:
+	1. Train models using historical partner performance data.
+	2. Integrate the chosen framework into the NextJS frontend for predictions.
+
+**Build Instructions for Vercel Deployment**
+---------------------------------------------
+
+### Prerequisites
+- **Node.js**: Ensure you're running the latest LTS version.
+- `nvm use 21.11`
+- **Vercel Account**: Sign up at [vercel.com](http://vercel.com) if you haven't already.
+
+### Steps
+
+1. **Clone Repository**:
+	```bash
+	git clone https://github.com/your-username/ai16z-partners-lounge.git
+	```
+
+2. **Install Dependencies**:
+	```bash
+	npm install
+	```
+
+3. **Setup Environment Variables**:
+	- Create a `.env.local` file in your project root.
+	- Add your database URLs, authentication secrets, and any other env-specific variables.
+
+4. **Build & Run Locally (for testing)**:
+	```bash
+	npm run build
+	npm run start
+	```
+
+5. **Deploy to Vercel**:
+	- Link your GitHub repository to Vercel.
+	- Configure the project root and build settings in Vercel:
+		+ **Framework**: Next.js
+		+ **Build Command**: `npm run build`
+		+ **Output Directory**: `.next`
+	- Deploy your site.
+
+**Contributing**
+---------------
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+**License**
+-------
+
+[MIT](/LICENSE)
+
+**Contact**
+----------
+
+* **Twitter**: [@AI16ZLounge](https://twitter.com/AI16Z) (Farcaster & Instagram links available on the platform)
+* **Email**: [ai16zpartners@gmail.com](mailto:ai16zpartners@gmail.com)
+```
 
 Responsive                     |  Desktop
 :-------------------------:|:-------------------------:

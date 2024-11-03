@@ -1,0 +1,96 @@
+/* registry.css */
+
+.registry-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 1000px;
+    margin: 20px auto;
+  }
+  
+  .registry-header {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .registry-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #e0e0e0;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .registry-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .registry-section {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #d3d3d3;
+    border-radius: 8px;
+    width: 45%;
+  }
+  
+  .registry-label {
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .registry-input {
+    color: #000;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  
+  .registry-button {
+    color: #fff;
+    background-color: #0070f3;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    align-self: center;
+  }
+  
+  .registry-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+  
+  .registry-entries {
+    margin-top: 20px;
+    width: 100%;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .registry-entry {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+  
+  .registry-not-connected {
+    font-size: 1.2em;
+    color: #ff0000;
+    margin-top: 20px;
+  }
