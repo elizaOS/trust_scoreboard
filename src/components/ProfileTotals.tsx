@@ -25,6 +25,16 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const buttonStyles = {
+    container: "flex space-x-2 mb-4",
+    button: (isActive: boolean) => `
+      px-4 py-2 rounded-lg transition-colors
+      ${isActive 
+        ? 'bg-[#B5AD95] text-white' 
+        : 'bg-[#E8E3D6] text-[#B5AD95]'}
+    `
+  };
+
   const handleViewChange = useCallback((view: View) => {
     setActiveView(view);
     if (onViewChange) { // Add safety check
@@ -70,22 +80,20 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
   };
 
   return (
-    <div className={styles.frameParent}>
-      <div className={styles.instanceParent}>
-        <div className={styles.buttonParent}>
-          <div 
-            className={`${styles.button} ${activeView === 'profile' ? styles.active : ''}`}
-            onClick={() => handleViewChange('profile')}
-          >
-            <div className={styles.text}>Profile</div>
-          </div>
-          <div 
-            className={`${styles.button1} ${activeView === 'holdings' ? styles.active : ''}`}
-            onClick={() => handleViewChange('holdings')}
-          >
-            <div className={styles.text}>Holdings</div>
-          </div>
-        </div>
+    <div>
+      <div className={buttonStyles.container}>
+        <button
+          className={buttonStyles.button(activeView === 'profile')}
+          onClick={() => handleViewChange('profile')}
+        >
+          Profile
+        </button>
+        <button
+          className={buttonStyles.button(activeView === 'holdings')}
+          onClick={() => handleViewChange('holdings')}
+        >
+          Holdings
+        </button>
       </div>
       
       {isLoading ? (

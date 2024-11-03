@@ -24,7 +24,14 @@ export const AppBar: React.FC = () => {
         <div className="navbar-start align-items-center">
           <div className="hidden sm:inline w-22 h-22 md:p-2 ml-10">
             <Link href="/" passHref className="text-secondary hover:text-white">
-              <Image src="/logo.svg" alt="Logo" style={{ width: 'auto', height: '30px' }} />
+              <Image 
+                src="/logo.svg"
+                alt="Site Logo"
+                width={24}
+                height={24}
+                priority
+                className="h-6 w-auto" // Adjust size as needed while maintaining aspect ratio
+              />
             </Link>
           </div>
           <WalletMultiButtonDynamic className="btn-ghost btn-sm relative flex md:hidden text-lg" onClick={() => window.location.href = '/profile'} />
@@ -41,6 +48,8 @@ export const AppBar: React.FC = () => {
                   <Image 
                     src={session.user.image} 
                     alt="Profile" 
+                    width={32}
+                    height={32}
                     className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80"
                     onError={(e) => {
                       e.currentTarget.src = "/default-avatar.png"; // Fallback image

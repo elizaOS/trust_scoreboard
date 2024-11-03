@@ -151,3 +151,52 @@
   flex-direction: column;
   gap: 16px;
 }
+
+.holdingsTable {
+  width: 100%;
+  border-spacing: 0;
+  margin-top: 1rem;
+}
+
+.tableHeader {
+  text-align: left;
+  padding: 1rem;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  color: #B5AD95;
+  background-color: #E8E3D6;
+}
+
+.tableRow {
+  transition: background-color 0.2s;
+}
+
+.tableRow:hover {
+  background-color: #E8E3D6;
+}
+
+.tableCell {
+  padding: 1rem;
+  font-family: var(--font-display);
+  border-bottom: 1px solid #E8E3D6;
+}
+
+.amount {
+  font-size: 1.125rem;
+  color: #000000;
+}
+
+.allocation {
+  color: #B5AD95;
+}
+
+.value {
+  text-align: right;
+  font-weight: 700;
+  color: #000000;
+}
+
+.subtext {
+  color: #666666;
+  font-size: 0.875rem;
+}
