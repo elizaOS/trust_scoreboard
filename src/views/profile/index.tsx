@@ -7,10 +7,13 @@ import Socials from '../../components/Socials';
 import ProfileWallets from '../../components/ProfileWallets';
 import ProfileHoldings from '../../components/ProfileHoldings';
 import styles from './index.module.css';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 type View = 'profile' | 'holdings';
 
 const ProfileView: FC = () => {
+  const { data: session, status } = useSession();
   const [currentView, setCurrentView] = useState<View>('profile');
 
   const handleViewChange = (view: View) => {
@@ -20,13 +23,42 @@ const ProfileView: FC = () => {
 
   return (
     <div className={`${styles.container} text-left`}>
-      <ProfileTotals onViewChange={handleViewChange} />
+      <div className="flex flex-col items-center mb-8">
+      <h1 className="font-display text-2xl mt-4 mx-4 text-black">Profile</h1>
+        {status === 'loading' ? (
+          <div className="w-20 h-20 rounded-full bg-gray-200 animate-pulse" />
+        ) : session?.user?.image ? (
+          <Image
+            src={session.user.image}
+            alt="Profile"
+            width={80}
+            height={80}
+            className="rounded-full"
+            priority
+          />
+        ) : (
+          <Image
+            src="/default-avatar.png"
+            alt="Default Profile"
+            width={80}
+            height={80}
+            className="rounded-full"
+            priority
+          />
+        )}
+        
+      </div>
+      
+      <div className="flex justify-center w-full mb-8">
+        <ProfileTotals onViewChange={handleViewChange} />
+      </div>
+
       <div className={`${styles.content} text-left`}>
         {currentView === 'profile' ? (
           <>
-            <h1 className="text-left font-display text-2xl mb-4">Socials</h1>
+            <h1 className="text-left text-black font-display text-2xl mb-4">Socials</h1>
             <Socials />
-            <h1 className="text-left font-display text-2xl mb-4 mt-8">Wallets</h1>
+            <h1 className="text-left font-display text-black text-2xl mb-4 mt-8">Wallets</h1>
             <ProfileWallets />
           </>
         ) : (
