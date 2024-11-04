@@ -49,8 +49,27 @@ const LeaderboardHoldings: FC = () => {
     fetchData();
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const renderSkeletonRow = (index: number) => (
+    <div key={`skeleton-${index}`} className={index % 2 === 0 ? styles.row : styles.row1}>
+      <div className={styles.text}>
+        <div className="animate-pulse bg-gray-300 h-6 w-8 rounded" />
+      </div>
+      <div className={styles.daoInfo}>
+        <div className={styles.textParent}>
+          <div className="animate-pulse bg-gray-300 h-6 w-32 rounded" />
+          <div className="animate-pulse bg-gray-300 h-4 w-16 rounded mt-1" />
+        </div>
+      </div>
+      <div className={styles.instanceParent}>
+        <div className={styles.textWrapper}>
+          <div className="animate-pulse bg-gray-300 h-6 w-24 rounded" />
+        </div>
+        <div className={styles.textWrapper}>
+          <div className="animate-pulse bg-gray-300 h-6 w-24 rounded" />
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className={styles.frameParent}>
@@ -61,25 +80,33 @@ const LeaderboardHoldings: FC = () => {
         <div className={styles.heading2}>Value</div>
       </div>
       
-      {holdings.map((dao, index) => (
-        <div key={dao.rank} className={index % 2 === 0 ? styles.row : styles.row1}>
-          <div className={styles.text}>{dao.rank}</div>
-          <div className={styles.daoInfo}>
-            <div className={styles.textParent}>
-              <div className={styles.text1}>{dao.name}</div>
-              <div className={styles.text2}>Token</div>
+      {isLoading ? (
+        Array(5).fill(0).map((_, index) => renderSkeletonRow(index))
+      ) : error ? (
+        <div className={styles.errorMessage}>Error: {error}</div>
+      ) : holdings.length === 0 ? (
+        <div className={styles.emptyMessage}>No holdings found</div>
+      ) : (
+        holdings.map((dao, index) => (
+          <div key={dao.rank} className={index % 2 === 0 ? styles.row : styles.row1}>
+            <div className={styles.text}>{dao.rank}</div>
+            <div className={styles.daoInfo}>
+              <div className={styles.textParent}>
+                <div className={styles.text1}>{dao.name}</div>
+                <div className={styles.text2}>Token</div>
+              </div>
+            </div>
+            <div className={styles.instanceParent}>
+              <div className={styles.textWrapper}>
+                <div className={styles.text3}>{dao.holdings}</div>
+              </div>
+              <div className={styles.textWrapper}>
+                <div className={styles.text3}>{dao.value}</div>
+              </div>
             </div>
           </div>
-          <div className={styles.instanceParent}>
-            <div className={styles.textWrapper}>
-              <div className={styles.text3}>{dao.holdings}</div>
-            </div>
-            <div className={styles.textWrapper}>
-              <div className={styles.text3}>{dao.value}</div>
-            </div>
-          </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };

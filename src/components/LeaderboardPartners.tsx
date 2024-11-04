@@ -72,57 +72,82 @@ const LeaderboardPartners: FC = () => {
     return value.toFixed(2);
   };
 
-  if (isLoading) return <div>Loading partners...</div>;
-  if (error) return <div>Error loading partners. Retrying... ({retryCount}/{MAX_RETRIES})</div>;
-  if (!partners?.length) return <div>No partners found</div>;
+  const renderSkeletonRow = (index: number) => (
+    <div key={`skeleton-${index}`} className={index % 2 === 0 ? styles.row : styles.row1}>
+      <div className={styles.text}>
+        <div className="animate-pulse bg-gray-300 h-6 w-8 rounded" />
+      </div>
+      <div className={styles.rowChild}>
+        <div className="animate-pulse bg-gray-300 h-[34px] w-[34px] rounded-full" />
+        <div className={styles.textParent}>
+          <div className="animate-pulse bg-gray-300 h-6 w-32 rounded" />
+          <div className="animate-pulse bg-gray-300 h-4 w-16 rounded mt-1" />
+        </div>
+      </div>
+      <div className={styles.textWrapper}>
+        <div className="animate-pulse bg-gray-300 h-6 w-16 rounded" />
+      </div>
+      <div className={styles.text3}>
+        <div className="animate-pulse bg-gray-300 h-6 w-24 rounded" />
+      </div>
+    </div>
+  );
 
   return (
     <div className={styles.frameParent}>
       <div className={styles.headingParent}>
-        <div className={styles.heading}>
-          PARTNER
-        </div>
+        <div className={styles.heading}>PARTNER</div>
         <div className={styles.heading}></div>
         <div className={styles.heading2}>TRUST SCORE</div>
         <div className={styles.heading3}>HOLDINGS</div>
       </div>
       
-      {partners.map((partner) => (
-        <div key={partner.address} className={partner.rank % 2 === 0 ? styles.row : styles.row1}>
-          <div className={styles.text}>{partner.rank}</div>
-          <div className={styles.rowChild}>
-            <Image 
-              width={34} 
-              height={34} 
-              alt="Partner avatar" 
-              src="/profile_default.png"
-              className={styles.avatarImage} 
-            />
-            <div className={styles.textParent}>
-              <div className={styles.text1}>{partner.displayAddress}</div>
-              <div className={styles.text2}>Partner</div>
+      {isLoading ? (
+        Array(5).fill(0).map((_, index) => renderSkeletonRow(index))
+      ) : error ? (
+        <div className={styles.errorMessage}>
+          Error loading partners. Retrying... ({retryCount}/{MAX_RETRIES})
+        </div>
+      ) : !partners?.length ? (
+        <div className={styles.emptyMessage}>No partners found</div>
+      ) : (
+        partners.map((partner) => (
+          <div key={partner.address} className={partner.rank % 2 === 0 ? styles.row : styles.row1}>
+            <div className={styles.text}>{partner.rank}</div>
+            <div className={styles.rowChild}>
+              <Image 
+                width={34} 
+                height={34} 
+                alt="Partner avatar" 
+                src="/profile_default.png"
+                className={styles.avatarImage} 
+              />
+              <div className={styles.textParent}>
+                <div className={styles.text1}>{partner.displayAddress}</div>
+                <div className={styles.text2}>Partner</div>
+              </div>
+            </div>
+            <div className={styles.textWrapper}>
+              {partner.trustScore === 0 ? (
+                <div className={styles.imageWrapper}>
+                  <Image 
+                    src="/null.svg"
+                    alt="Null trust score"
+                    width={20}
+                    height={20}
+                    className={styles.trustScoreImage}
+                  />
+                </div>
+              ) : (
+                <div className={styles.text3}>{partner.trustScore.toFixed(1)}</div>
+              )}
+            </div>
+            <div className={styles.text3}>
+              {formatHoldings(partner.holdings)}
             </div>
           </div>
-          <div className={styles.textWrapper}>
-            {partner.trustScore === 0 ? (
-              <div className={styles.imageWrapper}>
-                <Image 
-                  src="/null.svg"
-                  alt="Null trust score"
-                  width={20}
-                  height={20}
-                  className={styles.trustScoreImage}
-                />
-              </div>
-            ) : (
-              <div className={styles.text3}>{partner.trustScore.toFixed(1)}</div>
-            )}
-          </div>
-          <div className={styles.text3}>
-            {formatHoldings(partner.holdings)}
-          </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };

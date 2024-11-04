@@ -57,18 +57,6 @@ const ProfileHoldings: FC = () => {
     fetchHoldings();
   }, [publicKey]);
 
-  if (isLoading) {
-    return <div className="text-center py-4">Loading holdings...</div>;
-  }
-
-  if (error) {
-    return <div className="text-red-500 py-4">Error: {error}</div>;
-  }
-
-  if (!publicKey) {
-    return <div className="text-center py-4">Please connect your wallet to view holdings</div>;
-  }
-
   return (
     <div className={styles.container}>
       <table className={styles.holdingsTable}>
@@ -82,7 +70,29 @@ const ProfileHoldings: FC = () => {
           </tr>
         </thead>
         <tbody>
-          {!holdings || holdings.length === 0 ? (
+          {isLoading ? (
+            Array(3).fill(0).map((_, index) => (
+              <tr key={index} className={`${styles.tableRow} ${index % 2 === 1 ? styles.alternateRow : ''}`}>
+                {Array(5).fill(0).map((_, cellIndex) => (
+                  <td key={cellIndex} className={styles.holdingCell}>
+                    <div className="animate-pulse bg-gray-300 h-6 w-20 rounded"></div>
+                  </td>
+                ))}
+              </tr>
+            ))
+          ) : !publicKey ? (
+            <tr>
+              <td colSpan={5} className="text-center py-4">
+                Connect wallet to view holdings
+              </td>
+            </tr>
+          ) : error ? (
+            <tr>
+              <td colSpan={5} className="text-center py-4 text-red-500">
+                Error: {error}
+              </td>
+            </tr>
+          ) : !holdings || holdings.length === 0 ? (
             <tr>
               <td colSpan={5} className="text-center py-4">
                 No holdings found

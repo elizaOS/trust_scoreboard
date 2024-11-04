@@ -85,45 +85,42 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
     return `$${value.toLocaleString()}`;
   };
 
+  const renderMetricItem = (value: React.ReactNode, label: string) => (
+    <div className={styles.metricItem}>
+      <div className={styles.metricValue}>{value}</div>
+      <div className={styles.metricLabel}>{label}</div>
+    </div>
+  );
+
   return (
     <div>
-      {/* <div className={styles.buttonParent}>
-        <button
-          className={activeView === 'profile' ? styles.button1 : styles.button}
-          onClick={() => handleViewChange('profile')}
-        >
-          Profile
-        </button>
-        <button
-          className={activeView === 'holdings' ? styles.button1 : styles.button}
-          onClick={() => handleViewChange('holdings')}
-        >
-          Holdings
-        </button>
-      </div> */}
-      
-      {!publicKey ? (
-        <div className="text-center text-gray-500">Connect wallet to view metrics</div>
-      ) : isLoading ? (
-        <div>Loading...</div>
-      ) : error ? (
-        <div>Error: {error}</div>
-      ) : (
-        <div className={styles.metricsBar}>
-          <div className={styles.metricItem}>
-            <div className={styles.metricValue}>{trustScore.toFixed(1)}</div>
-            <div className={styles.metricLabel}>TRUST SCORE</div>
-          </div>
-          <div className={styles.metricItem}>
-            <div className={styles.metricValue}>{formatCurrency(totalWorth)}</div>
-            <div className={styles.metricLabel}>TOTAL WORTH</div>
-          </div>
-          <div className={styles.metricItem}>
-            <div className={styles.metricValue}>{rank || '-'}</div>
-            <div className={styles.metricLabel}>RANK</div>
-          </div>
-        </div>
-      )}
+      <div className={styles.metricsBar}>
+        {!publicKey ? (
+          <>
+            {renderMetricItem('-', 'TRUST SCORE')}
+            {renderMetricItem('-', 'TOTAL WORTH')}
+            {renderMetricItem('-', 'RANK')}
+          </>
+        ) : isLoading ? (
+          <>
+            {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'TRUST SCORE')}
+            {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'TOTAL WORTH')}
+            {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'RANK')}
+          </>
+        ) : error ? (
+          <>
+            {renderMetricItem('-', 'TRUST SCORE')}
+            {renderMetricItem('-', 'TOTAL WORTH')}
+            {renderMetricItem('-', 'RANK')}
+          </>
+        ) : (
+          <>
+            {renderMetricItem(trustScore.toFixed(1), 'TRUST SCORE')}
+            {renderMetricItem(formatCurrency(totalWorth), 'TOTAL WORTH')}
+            {renderMetricItem(rank || '-', 'RANK')}
+          </>
+        )}
+      </div>
     </div>
   );
 };
