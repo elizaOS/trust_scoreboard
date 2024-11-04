@@ -216,7 +216,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 4px;
+    gap: 24px;
     box-sizing: border-box;
     overflow: hidden;
 }

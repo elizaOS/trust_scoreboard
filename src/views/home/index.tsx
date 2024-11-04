@@ -2,11 +2,11 @@
 import { FC, useState } from 'react';
 import LeaderboardTotals from '../../components/LeaderboardTotals';
 import LeaderboardPartners from '../../components/LeaderboardPartners';
-import LeaderboardHoldings from '../../components/LeaderboardHoldings';
-import LeaderboardHoldingTotals from '../../components/LeaderboardHoldingTotals';
+// import LeaderboardHoldings from '../../components/LeaderboardHoldings';
+// import LeaderboardHoldingTotals from '../../components/LeaderboardHoldingTotals';
 
 export const HomeView: FC = () => {
-  const [activeView, setActiveView] = useState<'partners' | 'holdings'>('partners');
+  // const [activeView, setActiveView] = useState<'partners' | 'holdings'>('partners');
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-2">
@@ -15,7 +15,7 @@ export const HomeView: FC = () => {
           <h2 className="text-[34px] font-semibold text-[#242424] bg-clip-text mb-[24px]">
             Leaderboard
           </h2>
-          <div className="flex mb-[24px]">
+          {/* <div className="flex mb-[24px]">
             <button
               onClick={() => setActiveView('partners')}
               className={`px-6 py-2 rounded-[0.875rem] transition-all ${
@@ -36,10 +36,10 @@ export const HomeView: FC = () => {
             >
               Holdings
             </button>
-          </div>
-          {activeView === 'partners' ? <LeaderboardTotals /> : <LeaderboardHoldingTotals />}
+          </div> */}
+          <LeaderboardTotals />
           <div className="relative group w-full">
-            {activeView === 'partners' ? <LeaderboardPartners /> : <LeaderboardHoldings />}
+            <LeaderboardPartners />
           </div>
         </div>
       </div>
