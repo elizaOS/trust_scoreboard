@@ -1,8 +1,9 @@
 // FILE: src/views/HomeView.tsx
 import { FC, useState } from 'react';
-import LeaderboardTotals from '../../components/LeaderboardTotals';  // Remove curly braces
-import LeaderboardPartners from '../../components/LeaderboardPartners';  // Remove curly braces
-import LeaderboardHoldings from '../../components/LeaderboardHoldings';  // Remove curly braces
+import LeaderboardTotals from '../../components/LeaderboardTotals';
+import LeaderboardPartners from '../../components/LeaderboardPartners';
+import LeaderboardHoldings from '../../components/LeaderboardHoldings';
+import LeaderboardHoldingTotals from '../../components/LeaderboardHoldingTotals';
 
 export const HomeView: FC = () => {
   const [activeView, setActiveView] = useState<'partners' | 'holdings'>('partners');
@@ -38,7 +39,7 @@ export const HomeView: FC = () => {
                 Holdings
               </button>
             </div>
-            <LeaderboardTotals />
+            {activeView === 'partners' ? <LeaderboardTotals /> : <LeaderboardHoldingTotals />}
             <div className="relative group">
                 {activeView === 'partners' ? <LeaderboardPartners /> : <LeaderboardHoldings />}
             </div>

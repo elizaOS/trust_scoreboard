@@ -19,9 +19,7 @@ interface ProfileTotalsProps {
 }
 
 const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }) => { // Add default empty function
-  const [tokenPrices, setTokenPrices] = useState<TokenPrice[]>([]);
-  const [partners, setPartners] = useState<Partner[]>([]);
-  const [activeView, setActiveView] = useState<View>('profile');
+  const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,7 +34,6 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
   };
 
   const handleViewChange = useCallback((view: View) => {
-    setActiveView(view);
     if (onViewChange) { // Add safety check
       onViewChange(view);
     }
@@ -46,24 +43,15 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const [pricesRes, partnersRes] = await Promise.all([
-          fetch('/api/token-prices'),
-          fetch('/api/partners')
-        ]);
-
-        if (!pricesRes.ok || !partnersRes.ok) {
+        const response = await fetch('/api/dashboard');
+        if (!response.ok) {
           throw new Error('API error');
         }
 
-        const pricesData = await pricesRes.json();
-        const partnersData = await partnersRes.json();
-
-        setTokenPrices(pricesData);
-        setPartners(partnersData);
+        const dashboardData = await response.json();
+        setData(dashboardData);
       } catch (error) {
         setError(error instanceof Error ? error.message : 'Unknown error');
-        setTokenPrices([]);
-        setPartners([]);
       } finally {
         setIsLoading(false);
       }
@@ -73,9 +61,9 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
   }, []);
 
   const calculateTotalValue = () => {
-    if (!tokenPrices.length || !partners.length) return 0;
-    const price = tokenPrices[0].usdPrice;
-    const totalHoldings = partners.reduce((sum, partner) => sum + partner.amount, 0);
+    if (!data?.prices?.length || !data?.partners?.length) return 0;
+    const price = data.prices[0].usdPrice;
+    const totalHoldings = data.partners.reduce((sum, partner) => sum + partner.amount, 0);
     return price * totalHoldings;
   };
 
@@ -83,13 +71,13 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
     <div>
       <div className={buttonStyles.container}>
         <button
-          className={buttonStyles.button(activeView === 'profile')}
+          className={buttonStyles.button(true)}
           onClick={() => handleViewChange('profile')}
         >
           Profile
         </button>
         <button
-          className={buttonStyles.button(activeView === 'holdings')}
+          className={buttonStyles.button(false)}
           onClick={() => handleViewChange('holdings')}
         >
           Holdings

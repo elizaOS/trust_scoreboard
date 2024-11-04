@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { getUserHoldings } from '../pages/api/userHoldings';
 import Image from "next/image";
 import styles from './ProfileHoldings.module.css';
 
@@ -41,11 +40,13 @@ const ProfileHoldings: FC = () => {
       setError(null);
       
       try {
-        const response = await getUserHoldings(publicKey.toString());
-        if (response.error) {
-          setError(response.error);
+        const response = await fetch(`/api/dashboard?wallet=${publicKey.toString()}`);
+        const data = await response.json();
+        
+        if (data.error) {
+          setError(data.error);
         } else {
-          setHoldings(response.holdings);
+          setHoldings(data.userHoldings || []);
         }
       } catch (err) {
         setError('Failed to fetch holdings');

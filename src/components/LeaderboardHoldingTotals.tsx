@@ -12,9 +12,12 @@ interface DashboardData {
     address: string;
     usdPrice: number;
   }[];
+  holdings: {
+    value: string;
+  }[];
 }
 
-const LeaderboardTotals: NextPage = () => {
+const LeaderboardHoldingTotals: NextPage = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -28,7 +31,7 @@ const LeaderboardTotals: NextPage = () => {
         }
         const result = await response.json();
         // Validate the data structure
-        if (!result.partners || !result.prices) {
+        if (!result.partners || !result.prices || !result.holdings) {
           throw new Error('Invalid data format received');
         }
         setData(result);
@@ -43,11 +46,17 @@ const LeaderboardTotals: NextPage = () => {
 
   if (isLoading) return <div className={styles.loading}>Loading...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
-  if (!data?.partners || !data?.prices) return null;
+  if (!data?.partners || !data?.prices || !data?.holdings) return null;
 
   const totalPartners = data.partners?.length || 0;
-  const totalValue = data.partners?.reduce((sum, partner) => 
-    sum + (partner.amount * (data.prices?.[0]?.usdPrice || 0)), 0) || 0;
+  
+  // Calculate total value from holdings
+  const totalValue = data.holdings.reduce((sum, holding) => {
+    // Parse the value string (remove $ and commas) and convert to number
+    const value = parseFloat(holding.value.replace(/[$,]/g, ''));
+    return sum + (isNaN(value) ? 0 : value);
+  }, 0);
+
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const newPartners = data.partners?.filter(partner => 
     new Date(partner.createdAt) > sevenDaysAgo)?.length || 0;
@@ -56,8 +65,8 @@ const LeaderboardTotals: NextPage = () => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(value);
   };
 
@@ -66,8 +75,8 @@ const LeaderboardTotals: NextPage = () => {
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Total Partners</th>
-            <th>Total Value</th>
+            <th>MARKET CAP</th>
+            <th>AUM</th>
             <th>New Partners (7d)</th>
           </tr>
         </thead>
@@ -83,4 +92,4 @@ const LeaderboardTotals: NextPage = () => {
   );
 };
 
-export default LeaderboardTotals;
+export default LeaderboardHoldingTotals;
