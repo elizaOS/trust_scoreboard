@@ -17,6 +17,9 @@ interface DashboardData {
   }[];
 }
 
+const HELP_ADDRESS = 'HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC';
+const HELP_TOTAL_SUPPLY = 1099999775.54;
+
 const LeaderboardHoldingTotals: NextPage = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,11 +51,12 @@ const LeaderboardHoldingTotals: NextPage = () => {
   if (error) return <div className={styles.error}>{error}</div>;
   if (!data?.partners || !data?.prices || !data?.holdings) return null;
 
-  const totalPartners = data.partners?.length || 0;
+  // Calculate market cap
+  const helpPrice = data.prices.find(p => p.address === HELP_ADDRESS)?.usdPrice || 0;
+  const marketCap = helpPrice * HELP_TOTAL_SUPPLY;
   
   // Calculate total value from holdings
   const totalValue = data.holdings.reduce((sum, holding) => {
-    // Parse the value string (remove $ and commas) and convert to number
     const value = parseFloat(holding.value.replace(/[$,]/g, ''));
     return sum + (isNaN(value) ? 0 : value);
   }, 0);
@@ -82,7 +86,7 @@ const LeaderboardHoldingTotals: NextPage = () => {
         </thead>
         <tbody>
           <tr>
-            <td>{totalPartners.toLocaleString()}</td>
+            <td>{formatCurrency(marketCap)}</td>
             <td>{formatCurrency(totalValue)}</td>
             <td>{newPartners}</td>
           </tr>
