@@ -158,7 +158,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 Each Scaffold will contain at least the following features:
 
 ```
-Wallet Integration with Auto Connec / Refresh
+Wallet Integration with Auto Connect / Refresh
 
 State Management
 
