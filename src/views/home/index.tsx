@@ -14,10 +14,10 @@ export const HomeView: FC = () => {
         <div className="md:hero-content flex flex-col w-full">
           {/* Leaderboard Section */}
           <div className="w-full max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-black bg-clip-text text-black mb-4">
+            <h2 className="text-[34px] font-semi-bold text-[#242424] bg-clip-text mb-[24px]">
               Leaderboard
             </h2>
-            <div className="flex gap-4 mb-6">
+            <div className="flex mb-[24px]">
               <button
                 onClick={() => setActiveView('partners')}
                 className={`px-6 py-2 rounded-lg transition-all ${
@@ -30,10 +30,10 @@ export const HomeView: FC = () => {
               </button>
               <button
                 onClick={() => setActiveView('holdings')}
-                className={`px-6 py-2 rounded-lg transition-all ${
+                className={`px-6 py-2 rounded-[14px] transition-all ${
                   activeView === 'holdings'
-                  ? 'bg-[#B5AD94] text-white' // Active state
-                  : 'bg-[#E8E3D500] text-slate-700' // Inactive state
+                  ? 'bg-[#B5AD94] text-white font-semibold' // Active state
+                  : 'bg-[#E8E3D500] text-[#9B8D7D] text-slate-700 font-semibold' // Inactive state
                 }`}
               >
                 Holdings
