@@ -21,26 +21,31 @@ const LeaderboardPartners: FC = () => {
       try {
         setIsLoading(true);
         const response = await fetch('/api/dashboard');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
         const data = await response.json();
         
-        if (!Array.isArray(data.partners)) {
+        if (!data.partners || !Array.isArray(data.partners)) {
+          console.error('Invalid data structure:', data);
           throw new Error('Invalid partners data format');
         }
 
         // Filter and sort partners by amount
         const sortedPartners = data.partners
-          .filter(partner => partner.amount >= 100000)
+          .filter(partner => partner && partner.amount >= 100000)
           .sort((a, b) => b.amount - a.amount)
           .map((partner, index) => ({
             rank: index + 1,
             address: partner.owner,
             displayAddress: `${partner.owner.slice(0, 6)}...${partner.owner.slice(-4)}`,
-            trustScore: data.trustScores[partner.owner] || 0,
+            trustScore: data.trustScores?.[partner.owner] || 0,
             holdings: partner.amount
           }));
 
         setPartners(sortedPartners);
       } catch (err: any) {
+        console.error('Fetch error:', err);
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -52,6 +57,7 @@ const LeaderboardPartners: FC = () => {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+  if (!partners || partners.length === 0) return <div>No partners found</div>;
 
   return (
     <div className={styles.frameParent}>
@@ -87,11 +93,6 @@ const LeaderboardPartners: FC = () => {
           </div>
         </div>
       ))}
-      {partners.length === 0 && (
-        <div className="text-center text-gray-500 mt-4">
-          No partners found with minimum required holdings
-        </div>
-      )}
     </div>
   );
 };

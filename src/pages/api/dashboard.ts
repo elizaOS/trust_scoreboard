@@ -35,6 +35,7 @@ interface Partner {
   displayAddress: string;
   amount: number;
   createdAt: string;
+  trustScore: number;
 }
 
 interface DashboardResponse {
@@ -182,70 +183,71 @@ async function getUserHoldings(walletAddress: string): Promise<TokenHolding[]> {
 // Main Data Fetching Functions
 async function getAllPartners(): Promise<Partner[]> {
   try {
-    const response = await fetch(HELIUS_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        id: "helius-test",
-        method: "getAsset",
-        params: {
-          id: TOKENS.HELP.address,
-          displayOptions: {
-            showFungible: true
+    let allHolders: Partner[] = [];
+    let cursor = undefined;
+    
+    // Keep fetching until we have all holders
+    while (true) {
+      const response = await fetch(HELIUS_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: "helius-test",
+          method: "getTokenAccounts",
+          params: {
+            mint: TOKENS.HELP.address,
+            limit: 1000,
+            displayOptions: {
+              showZeroBalance: false
+            },
+            ...(cursor && { cursor })
+          },
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!data.result?.token_accounts || data.result.token_accounts.length === 0) {
+        break;
+      }
+
+      // Process current batch of holders
+      const currentHolders = data.result.token_accounts
+        .map((account: any) => {
+          const amount = Number(account.amount || 0) / Math.pow(10, DECIMALS);
+          if (amount >= MIN_AMOUNT) {
+            return {
+              owner: account.owner,
+              displayAddress: `${account.owner.slice(0, 6)}...${account.owner.slice(-4)}`,
+              amount: amount,
+              createdAt: new Date().toISOString(),
+              trustScore: 0 // Default trust score
+            };
           }
-        },
-      }),
-    });
+          return null;
+        })
+        .filter(Boolean);
 
-    const { result } = await response.json();
-    console.log("Helius API response:", result); // Debug log
-
-    if (!result?.ownership?.owner) {
-      throw new Error('Invalid response format from Helius API');
+      allHolders = [...allHolders, ...currentHolders];
+      
+      // Get cursor for next page
+      cursor = data.result.cursor;
+      
+      // If no cursor, we've reached the end
+      if (!cursor) {
+        break;
+      }
     }
 
-    // Get all token holders
-    const holdersResponse = await fetch(HELIUS_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        id: "helius-test",
-        method: "searchAssets",
-        params: {
-          ownerAddress: null,
-          grouping: ["mint"],
-          mintAccount: TOKENS.HELP.address,
-          page: 1,
-          limit: 1000
-        },
-      }),
-    });
+    // Sort by amount and ensure unique holders
+    const uniqueHolders = Array.from(
+      new Map(allHolders.map(holder => [holder.owner, holder]))
+      .values()
+    ).sort((a, b) => b.amount - a.amount);
 
-    const holdersData = await holdersResponse.json();
-    console.log("Holders data:", holdersData); // Debug log
-
-    if (!holdersData.result?.items) {
-      throw new Error('Invalid holders data format');
-    }
-
-    const partners = holdersData.result.items
-      .map((item: any) => {
-        const amount = Number(item.token_info?.amount || 0) / Math.pow(10, DECIMALS);
-        if (amount >= MIN_AMOUNT) {
-          return {
-            owner: item.owner,
-            displayAddress: `${item.owner.slice(0, 6)}...${item.owner.slice(-4)}`,
-            amount: amount,
-            createdAt: new Date().toISOString() // You might want to get this from somewhere else
-          };
-        }
-        return null;
-      })
-      .filter(Boolean);
-
-    return partners.sort((a, b) => b.amount - a.amount);
+    console.log(`Found ${uniqueHolders.length} unique holders with > ${MIN_AMOUNT} HELP`);
+    return uniqueHolders;
   } catch (error) {
     console.error("Error fetching partner accounts:", error);
     return [];

@@ -27,12 +27,19 @@ const LeaderboardTotals: NextPage = () => {
           throw new Error('Failed to fetch data');
         }
         const result = await response.json();
-        // Validate the data structure
-        if (!result.partners || !result.prices) {
-          throw new Error('Invalid data format received');
+        
+        if (!result.partners || !Array.isArray(result.partners)) {
+          console.error('Invalid partners data:', result);
+          throw new Error('Invalid partners data format');
         }
+        if (!result.prices || !Array.isArray(result.prices)) {
+          console.error('Invalid prices data:', result);
+          throw new Error('Invalid prices data format');
+        }
+
         setData(result);
       } catch (err) {
+        console.error('Fetch error:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch data');
       } finally {
         setIsLoading(false);
@@ -43,14 +50,17 @@ const LeaderboardTotals: NextPage = () => {
 
   if (isLoading) return <div className={styles.loading}>Loading...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
-  if (!data?.partners || !data?.prices) return null;
+  if (!data?.partners || !data?.prices) return <div>No data available</div>;
 
-  const totalPartners = data.partners?.length || 0;
-  const totalValue = data.partners?.reduce((sum, partner) => 
-    sum + (partner.amount * (data.prices?.[0]?.usdPrice || 0)), 0) || 0;
+  const totalPartners = data.partners.length;
+  const totalValue = data.partners.reduce((sum, partner) => {
+    const price = data.prices[0]?.usdPrice || 0;
+    return sum + (partner.amount * price);
+  }, 0);
+
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  const newPartners = data.partners?.filter(partner => 
-    new Date(partner.createdAt) > sevenDaysAgo)?.length || 0;
+  const newPartners = data.partners.filter(partner => 
+    new Date(partner.createdAt) > sevenDaysAgo).length;
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
