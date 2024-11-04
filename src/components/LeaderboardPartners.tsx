@@ -95,7 +95,7 @@ const LeaderboardPartners: FC = () => {
               width={34} 
               height={34} 
               alt="Partner avatar" 
-              src={`https://avatars.dicebear.com/api/identicon/${partner.address}.svg`}
+              src="/profile_default.png"
               className={styles.avatarImage} 
             />
             <div className={styles.textParent}>
