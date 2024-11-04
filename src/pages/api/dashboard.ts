@@ -405,8 +405,8 @@ export default async function handler(
         }
 
         const trustScores = partners.reduce((acc, partner) => {
-          const trustResult = calculateTrustScoreWithTier(partner.amount);
-          acc[partner.owner] = trustResult.score;
+          // Default all trust scores to 0 for now
+          acc[partner.owner] = 0;
           return acc;
         }, {} as Record<string, number>);
 

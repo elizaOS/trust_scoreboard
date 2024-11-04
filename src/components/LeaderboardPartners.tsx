@@ -79,25 +79,36 @@ const LeaderboardPartners: FC = () => {
       {partners.map((partner) => (
         <div key={partner.address} className={partner.rank % 2 === 0 ? styles.row : styles.row1}>
           <div className={styles.text}>{partner.rank}</div>
-          <div className={styles.rowChild}>
-            <Image 
-              width={34} 
-              height={34} 
-              alt="Partner avatar" 
-              src={`https://avatars.dicebear.com/api/identicon/${partner.address}.svg`} 
-            />
-          </div>
           <div className={styles.textParent}>
-            <div className={styles.text1}>{partner.displayAddress}</div>
+            <div className={styles.rowChild}>
+              <Image 
+                width={34} 
+                height={34} 
+                alt="Partner avatar" 
+                src={`https://avatars.dicebear.com/api/identicon/${partner.address}.svg`}
+                className={styles.avatarImage} 
+              />
+              <div className={styles.text1}>{partner.displayAddress}</div>
+            </div>
             <div className={styles.text2}>Partner</div>
           </div>
-          <div className={styles.instanceParent}>
-            <div className={styles.textWrapper}>
+          <div className={styles.textWrapper}>
+            {partner.trustScore === 0 ? (
+              <div className={styles.imageWrapper}>
+                <Image 
+                  src="/null.png"
+                  alt="Null trust score"
+                  width={34}
+                  height={34}
+                  className={styles.trustScoreImage}
+                />
+              </div>
+            ) : (
               <div className={styles.text3}>{partner.trustScore.toFixed(1)}</div>
-            </div>
-            <div className={styles.textWrapper}>
-              <div className={styles.text3}>{partner.holdings.toLocaleString()}</div>
-            </div>
+            )}
+          </div>
+          <div className={styles.text3}>
+            {partner.holdings.toLocaleString()}
           </div>
         </div>
       ))}

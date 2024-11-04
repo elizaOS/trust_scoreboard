@@ -50,7 +50,8 @@ const SocialButton: FC<SocialButtonProps> = ({ provider }) => {
 };
 
 export const Socials: FC = () => {
-  const providers = ['GitHub', 'Discord', 'Twitter'];
+  // Commented out GitHub and Twitter, only using Discord for now
+  const providers = ['Discord']; // ['GitHub', 'Discord', 'Twitter'];
 
   return (
     <div>
