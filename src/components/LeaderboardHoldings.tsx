@@ -51,17 +51,17 @@ const LeaderboardHoldings: FC = () => {
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Rank</th>
-            <th>Asset</th>
-            <th>Holdings</th>
-            <th>Percentage</th>
+            <th className={styles.rankColumn}>Rank</th>
+            <th className={styles.assetColumn}>Asset</th>
+            <th className={styles.holdingsColumn}>Holdings</th>
+            <th className={styles.percentageColumn}>Percentage</th>
           </tr>
         </thead>
         <tbody>
           {holdings.map((dao) => (
             <tr key={dao.rank} className={styles.row}>
-              <td>{dao.rank}</td>
-              <td>
+              <td className={styles.rankColumn}>{dao.rank}</td>
+              <td className={styles.assetColumn}>
                 <div className={styles.daoInfo}>
                   <Image 
                     src={dao.imageUrl} 
@@ -73,8 +73,8 @@ const LeaderboardHoldings: FC = () => {
                   <span>{dao.name}</span>
                 </div>
               </td>
-              <td>{dao.holdings}</td>
-              <td>{dao.percentage}</td>
+              <td className={styles.holdingsColumn}>{dao.holdings}</td>
+              <td className={styles.percentageColumn}>{dao.percentage}</td>
             </tr>
           ))}
         </tbody>

@@ -2,16 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=SF+Compact+Rounded:wght@400;600&display=swap');
+:root {
+  --font-family-base: "SF Compact Round", "SF Compact Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
 
 body {
-  	margin: 0; line-height: normal;
+  margin: 0;
+  line-height: normal;
+  font-family: var(--font-family-base);
 }
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'SF Compact Rounded', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: var(--font-family-base);
   background-color: #E8E3D5;
   min-height: 100vh;
   line-height: normal;
@@ -24,7 +29,7 @@ a {
 
 * {
   box-sizing: border-box;
-  font-family: 'SF Compact Rounded', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: var(--font-family-base);
 }
 
 /* example: override wallet button style */

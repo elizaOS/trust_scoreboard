@@ -5,6 +5,7 @@ interface TokenInfo {
   name: string;
   symbol: string;
   balance: number;
+  decimals: number;
   price_info?: {
     total_price: number;
   }
@@ -14,6 +15,7 @@ interface HeliusResponse {
   result: {
     items: {
       token_info: TokenInfo;
+      amount?: number;
     }[];
     nativeBalance: {
       total_price: number;
@@ -25,6 +27,7 @@ interface DAOHolding {
   rank: number;
   name: string;
   holdings: string;
+  value: string;
   percentage: string;
   imageUrl: string;
 }
@@ -75,11 +78,14 @@ export default async function handler(
     const holdings = data.result.items.map((item, index) => {
       const tokenInfo = item.token_info;
       const tokenValue = tokenInfo.price_info?.total_price || 0;
-      
+      const tokenAmount = item.amount || 0; // Get raw token amount
+      const formattedAmount = formatTokenAmount(tokenAmount, tokenInfo.decimals); // Need to implement this
+
       return {
         rank: index + 1,
         name: tokenInfo.symbol || tokenInfo.name,
-        holdings: formatCurrency(tokenValue),
+        holdings: `${formattedAmount} ${tokenInfo.symbol}`, // Show amount with symbol
+        value: formatCurrency(tokenValue), // Keep monetary value
         percentage: calculatePercentage(tokenValue, totalValue),
         imageUrl: `/images/tokens/${tokenInfo.symbol || 'default'}.png`,
       };
@@ -103,4 +109,9 @@ function formatCurrency(amount: number): string {
 function calculatePercentage(amount: number, total: number): string {
   if (!total) return '0%';
   return `${((amount / total) * 100).toFixed(2)}%`;
+}
+
+// Helper function to format token amounts
+function formatTokenAmount(amount: number, decimals = 18): string {
+  return (amount / Math.pow(10, decimals)).toFixed(4);
 }

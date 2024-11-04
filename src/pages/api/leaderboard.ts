@@ -2,9 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getAllPartners, type Partner } from './partners';
 
-const COINGECKO_API = 'https://api.coingecko.com/api/v3';
-const API_KEY = process.env.NEXT_PUBLIC_CG_API;
-const SOLANA_PLATFORM_ID = 'solana';
+const HELIUS_API = `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_SOLANA_API}`;
 const TOKEN_ADDRESSES = [
   'HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC',
   'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnypump'
@@ -26,6 +24,30 @@ interface ErrorResponse {
   statusCode: number;
 }
 
+async function getTokenPrice(address: string): Promise<number> {
+  try {
+    const response = await fetch(HELIUS_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        id: 'price-fetch',
+        method: 'getAsset',
+        params: {
+          id: address,
+          displayOptions: { showFungible: true }
+        }
+      })
+    });
+
+    const { result } = await response.json();
+    return result?.token_info?.price_info?.price_per_token || 0;
+  } catch (error) {
+    console.error(`Error fetching price for ${address}:`, error);
+    return 0;
+  }
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ErrorResponse | { partners: Partner[]; prices: any[] }>) {
   try {
     if (req.method !== 'GET') {
@@ -39,17 +61,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     // Fetch token prices from CoinGecko
-    const pricesRes = await fetch(`${COINGECKO_API}/simple/token_price/${SOLANA_PLATFORM_ID}?contract_addresses=${TOKEN_ADDRESSES.join(',')}&vs_currencies=usd&x_cg_pro_api_key=${API_KEY}`);
-    const pricesData = await pricesRes.json();
-
-    if (!pricesRes.ok) {
-      return res.status(500).json({ message: 'Failed to fetch token prices', statusCode: 500 });
-    }
-
-    const prices: TokenPrice[] = TOKEN_ADDRESSES.map((address) => ({
-      address,
-      usd: pricesData[address]?.usd || 0,
-    }));
+    const prices: TokenPrice[] = await Promise.all(
+      TOKEN_ADDRESSES.map(async (address) => ({
+        address,
+        usd: await getTokenPrice(address),
+      }))
+    );
 
     return res.status(200).json({ partners, prices });
   } catch (error) {

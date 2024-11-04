@@ -9,6 +9,7 @@
     border-radius: 8px;
     max-width: 1000px;
     margin: 20px auto;
+    font: SF Compact Rounded;
   }
   
   .registry-header {
@@ -24,6 +25,7 @@
     background-color: #e0e0e0;
     padding: 20px;
     border-radius: 8px;
+    font: SF Compact Rounded;
   }
   
   .registry-form {
@@ -31,6 +33,7 @@
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
+    font: SF Compact Rounded;
   }
   
   .registry-section {
@@ -40,12 +43,14 @@
     background-color: #d3d3d3;
     border-radius: 8px;
     width: 45%;
+    font: SF Compact Rounded;
   }
   
   .registry-label {
     color: #333;
     font-weight: bold;
     margin-bottom: 10px;
+    font: SF Compact Rounded;
   }
   
   .registry-input {
@@ -56,6 +61,7 @@
     border-radius: 4px;
     margin-bottom: 15px;
     width: 100%;
+    font: SF Compact Rounded;
   }
   
   .registry-button {
@@ -67,6 +73,7 @@
     cursor: pointer;
     margin-top: 10px;
     align-self: center;
+    font: SF Compact Rounded;
   }
   
   .registry-button:disabled {

@@ -1,13 +1,15 @@
 .number {
     position: relative;
-    line-height: 42px;
+    line-height: 32px;
     font-weight: 600;
 }
+
 .text {
     position: relative;
     line-height: 22px;
     font-weight: 600;
 }
+
 .button {
     width: 110px;
     border-radius: 14px;
@@ -25,15 +27,8 @@
     transition: background-color 0.2s ease;
 }
 
-.button:active,
-.button.active {
-    background-color: #B5AD94;
-}
 
-.button:hover {
-    background-color: #B5AD94;
-    opacity: 0.8;
-}
+
 .button1 {
     width: 110px;
     border-radius: 14px;
@@ -51,6 +46,7 @@
     cursor: pointer;
     color: #9b8d7d;
 }
+
 .buttonParent {
     border-radius: 14px;
     background-color: #e8e3d6;
@@ -60,22 +56,14 @@
     align-items: center;
     justify-content: flex-start;
 }
-.instanceWrapper {
-    align-self: stretch;
-    border-radius: 18px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    text-align: center;
-    font-size: 16px;
-    color: #fff;
-}
+
+
 .number1 {
     position: relative;
     line-height: 32px;
     font-weight: 600;
 }
+
 .numberAndBadge {
     align-self: stretch;
     display: flex;
@@ -83,12 +71,14 @@
     align-items: flex-end;
     justify-content: flex-start;
 }
+
 .heading {
     position: relative;
     line-height: 140%;
     text-transform: uppercase;
     font-weight: 600;
 }
+
 .headingWrapper {
     align-self: stretch;
     display: flex;
@@ -99,18 +89,22 @@
     color: rgba(255, 255, 255, 0.7);
     font-family: 'Open Runde';
 }
+
 .numberAndBadgeParent {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
 }
-.frameContainer {
+
+.container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
+    font-family: var(--font-family-base);
 }
+
 .instanceParent {
     align-self: stretch;
     display: flex;
@@ -119,8 +113,17 @@
     justify-content: flex-start;
     gap: 24px;
 }
+
 .frameWrapper {
-    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.container {
+    width: 100%;
+    position: relative;
     border-radius: 14px;
     background: linear-gradient(180deg, #f98c13, #ffaf03);
     display: flex;
@@ -128,9 +131,13 @@
     align-items: flex-start;
     justify-content: flex-start;
     padding: 18px;
+    box-sizing: border-box;
+    text-align: left;
     font-size: 24px;
-    color: #f5f5f5;
+    color: #ffffff;
+    font-family: var(--font-family-base);
 }
+
 .numberParent {
     width: 100%;
     position: relative;
@@ -144,5 +151,76 @@
     text-align: left;
     font-size: 34px;
     color: #242424;
-    font-family: 'SF Compact Rounded';
+    font-family: var(--font-family-base);
+}
+
+.container {
+    width: 100%;
+    padding: 18px;
+}
+
+.statsGrid {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 24px;
+}
+
+.statCard {
+    width: 100%;
+    position: relative;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #f98c13, #ffaf03);
+    padding: 18px;
+    box-sizing: border-box;
+}
+
+/* Add these classes to your existing CSS file */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: linear-gradient(180deg, #f98c13, #ffaf03);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.table th,
+.table td {
+    padding: 18px;
+    text-align: left;
+    border: none;
+    color: #fff;
+    font-family: var(--font-family-base);
+}
+
+.table th {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #fff;
+    background: transparent;
+    font-family: var(--font-family-base);
+}
+
+.table td {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+/* Add responsive behavior */
+@media (max-width: 768px) {
+    .statsGrid {
+        flex-direction: column;
+    }
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
 }

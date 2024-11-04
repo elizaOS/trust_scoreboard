@@ -4,6 +4,7 @@
     line-height: 140%;
     text-transform: uppercase;
     font-weight: 600;
+    color: #000000;
 }
 .heading1 {
     position: relative;
@@ -30,7 +31,7 @@
     padding: 14px 24px;
     gap: 14px;
     font-size: 12px;
-    color: #9b8d7d;
+    color: #000000;
     font-family: 'Open Runde';
 }
 .text {
@@ -39,7 +40,7 @@
     letter-spacing: -0.43px;
     line-height: 22px;
     font-weight: 600;
-    color: #9b8d7d;
+    color: #000000;
     text-align: center;
     display: inline-block;
     flex-shrink: 0;
@@ -63,7 +64,7 @@
     font-size: 14px;
     line-height: 14px;
     font-weight: 600;
-    color: #9b8d7d;
+    color: #000000;
 }
 .textParent {
     flex: 1;
@@ -133,7 +134,7 @@
     gap: 2px;
     text-align: left;
     font-size: 16px;
-    color: #3c3626;
+    color: #000000;
     font-family: 'SF Compact Rounded';
 }
 
@@ -168,6 +169,4 @@
   object-fit: cover;
 }
 
-.row:hover {
-  background-color: #f5f5f5;
-}
+
