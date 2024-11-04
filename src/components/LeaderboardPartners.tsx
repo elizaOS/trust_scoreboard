@@ -70,7 +70,9 @@ const LeaderboardPartners: FC = () => {
   return (
     <div className={styles.frameParent}>
       <div className={styles.headingParent}>
-        <div className={styles.heading}>PARTNER</div>
+        <div className={styles.heading}>
+          PARTNER
+        </div>
         <div className={styles.heading}></div>
         <div className={styles.heading2}>TRUST SCORE</div>
         <div className={styles.heading3}>HOLDINGS</div>
@@ -79,27 +81,27 @@ const LeaderboardPartners: FC = () => {
       {partners.map((partner) => (
         <div key={partner.address} className={partner.rank % 2 === 0 ? styles.row : styles.row1}>
           <div className={styles.text}>{partner.rank}</div>
-          <div className={styles.textParent}>
-            <div className={styles.rowChild}>
-              <Image 
-                width={34} 
-                height={34} 
-                alt="Partner avatar" 
-                src={`https://avatars.dicebear.com/api/identicon/${partner.address}.svg`}
-                className={styles.avatarImage} 
-              />
+          <div className={styles.rowChild}>
+            <Image 
+              width={34} 
+              height={34} 
+              alt="Partner avatar" 
+              src={`https://avatars.dicebear.com/api/identicon/${partner.address}.svg`}
+              className={styles.avatarImage} 
+            />
+            <div className={styles.textParent}>
               <div className={styles.text1}>{partner.displayAddress}</div>
+              <div className={styles.text2}>Partner</div>
             </div>
-            <div className={styles.text2}>Partner</div>
           </div>
           <div className={styles.textWrapper}>
             {partner.trustScore === 0 ? (
               <div className={styles.imageWrapper}>
                 <Image 
-                  src="/null.png"
+                  src="/null.svg"
                   alt="Null trust score"
-                  width={34}
-                  height={34}
+                  width={20}
+                  height={20}
                   className={styles.trustScoreImage}
                 />
               </div>
