@@ -98,25 +98,25 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
         {!publicKey ? (
           <>
             {renderMetricItem('-', 'TRUST SCORE')}
-            {renderMetricItem('-', 'TOTAL WORTH')}
+            {/* {renderMetricItem('-', 'TOTAL WORTH')} */}
             {renderMetricItem('-', 'RANK')}
           </>
         ) : isLoading ? (
           <>
             {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'TRUST SCORE')}
-            {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'TOTAL WORTH')}
+            {/* {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'TOTAL WORTH')} */}
             {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'RANK')}
           </>
         ) : error ? (
           <>
             {renderMetricItem('-', 'TRUST SCORE')}
-            {renderMetricItem('-', 'TOTAL WORTH')}
+            {/* {renderMetricItem('-', 'TOTAL WORTH')} */}
             {renderMetricItem('-', 'RANK')}
           </>
         ) : (
           <>
             {renderMetricItem(trustScore.toFixed(1), 'TRUST SCORE')}
-            {renderMetricItem(formatCurrency(totalWorth), 'TOTAL WORTH')}
+            {/* {renderMetricItem(formatCurrency(totalWorth), 'TOTAL WORTH')} */}
             {renderMetricItem(rank || '-', 'RANK')}
           </>
         )}

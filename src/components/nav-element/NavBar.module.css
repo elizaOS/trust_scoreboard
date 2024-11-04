@@ -1,0 +1,28 @@
+.nav {
+    width: 100%;
+    background: transparent;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .profileLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #242424;
+    font-family: 'SF Compact Rounded', sans-serif;
+    font-weight: 500;
+  }
+  
+  .profileImage {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  @media (max-width: 768px) {
+    .nav {
+      padding: 12px;
+    }
+  }

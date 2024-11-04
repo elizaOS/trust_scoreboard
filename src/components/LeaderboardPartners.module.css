@@ -8,7 +8,7 @@
 
 .headingParent {
     display: grid;
-    grid-template-columns: auto 3fr 2fr 2fr;
+    grid-template-columns: 50px 3fr 2fr 2fr;
     align-items: center;
     padding: 12px 16px;
     gap: 16px;
@@ -34,7 +34,7 @@
 
 .row, .row1 {
     display: grid;
-    grid-template-columns: auto 3fr 2fr 2fr;
+    grid-template-columns: 5px 3fr 5fr 2fr;
     align-items: center;
     padding: 8px 16px;
     gap: 16px;
@@ -55,7 +55,7 @@
     font-size: 22px;
     font-weight: 600;
     color: #9B8D7D;
-    text-align: right;
+    text-align: left;
 }
 
 .rowChild {
@@ -119,7 +119,40 @@
 
 @media (max-width: 768px) {
     .headingParent, .row, .row1 {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        padding: 8px;
+        grid-template-columns: 12px 1fr 0.8fr 0.8fr;
+        padding: 8px 12px;
+        gap: 12px;
+    }
+
+    .text {
+        font-size: 16px;
+        padding-left: 4px;
+    }
+
+    .text1 {
+        font-size: 14px;
+    }
+
+    .text2 {
+        font-size: 12px;
+    }
+
+    .text3 {
+        font-size: 14px;
+    }
+
+    .rowChild {
+        gap: 6px;
+        margin-left: -4px;
+    }
+
+    .avatarImage {
+        width: 28px;
+        height: 28px;
+        margin-right: 6px;
+    }
+
+    .textParent {
+        gap: 2px;
     }
 }
