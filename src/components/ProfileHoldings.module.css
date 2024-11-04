@@ -140,6 +140,58 @@
 .container {
   width: 100%;
   padding: 20px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 12px 8px;
+    overflow-x: hidden;
+  }
+
+  .holdingsTable {
+    width: calc(100% - 16px);
+    margin: 0 8px;
+  }
+
+  .holdingCell {
+    padding: 12px 8px;
+  }
+
+  .valueCell {
+    padding: 12px 8px;
+  }
+
+  .allocationCell {
+    padding: 12px 8px;
+  }
+
+  .tableHeader {
+    padding: 8px;
+  }
+
+  /* Adjust the holding info layout */
+  .holdingInfo {
+    gap: 8px;
+  }
+
+  .rankNumber {
+    min-width: 20px;
+    font-size: 18px;
+  }
+
+  .tokenLogo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .tokenName {
+    font-size: 14px;
+  }
+
+  .tokenAmount {
+    font-size: 12px;
+  }
 }
 
 .holdingsTable {
