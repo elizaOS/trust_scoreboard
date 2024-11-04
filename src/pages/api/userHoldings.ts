@@ -1,92 +1,108 @@
 // api/userHoldings.ts
-import { PublicKey } from '@solana/web3.js';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-interface TokenHolding {
-  name: string;
-  amount: number;
-  allocation: number;
-  price: number;
-  value: number;
-}
+const HELIUS_API = `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_SOLANA_API}`;
 
-interface TokenResponse {
-  holdings: TokenHolding[];
-  error?: string;
-}
-
-const HELIUS_API_KEY = process.env.NEXT_PUBLIC_SOLANA_API;
 const TOKENS = {
   DEGENAI: {
-    address: 'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnyai16z',
-    totalSupply: 999994411.71,
+    address: 'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnypump',
+    symbol: 'DEGENAI',
+    decimals: 9
   },
   AI16Z: {
     address: 'HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC',
-    totalSupply: 1099999775.54,
+    symbol: 'AI16Z',
+    decimals: 9
   }
 };
 
-async function getTokenPrices() {
-  try {
-    const response = await fetch('/api/tokenPrices');
-    const data = await response.json();
-    return data.prices.reduce((acc: {[key: string]: number}, item: {address: string, usdPrice: number}) => {
-      acc[item.address] = item.usdPrice;
-      return acc;
-    }, {});
-  } catch (error) {
-    console.error('Failed to fetch token prices:', error);
-    return {};
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
-}
 
-export async function getUserHoldings(walletAddress: string): Promise<TokenResponse> {
-  if (!HELIUS_API_KEY) return { holdings: [], error: 'API key not found' };
+  const walletAddress = req.query.wallet as string;
+  if (!walletAddress) {
+    return res.status(400).json({ error: 'Wallet address is required' });
+  }
+
+  if (!process.env.NEXT_PUBLIC_SOLANA_API) {
+    return res.status(500).json({ error: 'Solana API key not configured' });
+  }
 
   try {
-    // Fetch token prices first
-    const tokenPrices = await getTokenPrices();
-
-    const response = await fetch(`https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`, {
+    console.log('Fetching holdings for wallet:', walletAddress);
+    
+    const response = await fetch(HELIUS_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         jsonrpc: '2.0',
-        id: 'my-id',
+        id: 'tokens-query',
         method: 'searchAssets',
         params: {
           ownerAddress: walletAddress,
           tokenType: 'fungible',
+          mintAccounts: [TOKENS.DEGENAI.address, TOKENS.AI16Z.address],
           displayOptions: {
-            showNativeBalance: false,
-          },
+            showFungible: true,
+            showNativeBalance: true
+          }
         },
       }),
     });
 
-    const { result } = await response.json();
-    const holdings: TokenHolding[] = [];
+    if (!response.ok) {
+      throw new Error(`Helius API error: ${response.status}`);
+    }
 
-    // Process results
-    for (const item of result.items) {
-      if (item.id === TOKENS.DEGENAI.address || item.id === TOKENS.AI16Z.address) {
-        const amount = Number(item.token_info?.amount || 0);
-        const isPump = item.id === TOKENS.DEGENAI.address;
-        const totalSupply = isPump ? TOKENS.DEGENAI.totalSupply : TOKENS.AI16Z.totalSupply;
-        const price = tokenPrices[item.id] || 0;
+    const data = await response.json();
+    console.log('Helius response:', JSON.stringify(data, null, 2));
 
-        holdings.push({
-          name: item.token_info?.symbol || '',
-          amount,
-          allocation: (amount / totalSupply) * 100,
-          price,
-          value: amount * price
-        });
+    if (data.error) {
+      throw new Error(data.error.message || 'Failed to fetch token data');
+    }
+
+    const holdings = [];
+    
+    if (data.result?.items) {
+      for (const item of data.result.items) {
+        const tokenInfo = item.token_info || {};
+        const decimals = item.id === TOKENS.DEGENAI.address ? 
+          TOKENS.DEGENAI.decimals : TOKENS.AI16Z.decimals;
+        
+        const amount = Number(tokenInfo.amount || 0) / Math.pow(10, decimals);
+        const price = tokenInfo.price_info?.price_per_token || 0;
+        const value = amount * price;
+        
+        if (amount > 0) {
+          holdings.push({
+            name: item.id === TOKENS.DEGENAI.address ? 'DEGENAI' : 'AI16Z',
+            amount,
+            price,
+            value,
+            allocation: 0
+          });
+        }
       }
     }
 
-    return { holdings };
+    // Calculate allocations
+    const totalValue = holdings.reduce((sum, h) => sum + h.value, 0);
+    holdings.forEach(h => {
+      h.allocation = totalValue > 0 ? (h.value / totalValue) * 100 : 0;
+    });
+
+    console.log('Processed holdings:', holdings);
+    return res.status(200).json({ holdings });
+    
   } catch (error) {
-    return { holdings: [], error: 'Failed to fetch holdings' };
+    console.error('API error:', error);
+    return res.status(500).json({ 
+      error: error instanceof Error ? error.message : 'Failed to fetch holdings'
+    });
   }
 }

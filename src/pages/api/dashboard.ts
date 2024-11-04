@@ -147,21 +147,20 @@ async function getUserHoldings(walletAddress: string): Promise<TokenHolding[]> {
   try {
     console.log('Fetching holdings for wallet:', walletAddress);
     
-    // Fetch token balances using getAssetsByOwner
+    // Use searchAssets instead of getAssetsByOwner
     const response = await fetch(HELIUS_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         jsonrpc: '2.0',
         id: 'my-id',
-        method: 'getAssetsByOwner',
+        method: 'searchAssets',
         params: {
           ownerAddress: walletAddress,
-          page: 1,
-          limit: 1000,
+          tokenType: 'fungible',
           displayOptions: {
-            showFungible: true,
-          }
+            showNativeBalance: true,
+          },
         },
       }),
     });
@@ -173,50 +172,49 @@ async function getUserHoldings(walletAddress: string): Promise<TokenHolding[]> {
     const prices = await getTokenPrices();
     console.log('Token prices:', prices);
 
-    const priceMap = prices.reduce((acc, { address, usdPrice }) => {
-      acc[address] = usdPrice;
-      return acc;
-    }, {} as Record<string, number>);
-
-    // Initialize holdings array
     const holdings: TokenHolding[] = [];
-    // Process AI16Z token
-    const ai16zHolding = data.result.items?.find((item: any) => 
-      item.id === TOKENS.AI16Z.address
-    );
-    if (ai16zHolding) {
-      const amount = Number(ai16zHolding.token_info?.amount || 0) / Math.pow(10, DECIMALS);
-      const price = priceMap[TOKENS.AI16Z.address] || 0;
-      const value = amount * price;
-      holdings.push({
-        name: 'ai16z',
-        amount,
-        allocation: (amount / TOKENS.AI16Z.totalSupply) * 100,
-        price,
-        value
+
+    // Process all items from searchAssets response
+    if (data.result?.items) {
+      data.result.items.forEach((item: any) => {
+        const tokenAddress = item.id;
+        const tokenInfo = item.token_info;
+        
+        // Check if it's AI16Z
+        if (tokenAddress === TOKENS.AI16Z.address) {
+          const amount = Number(tokenInfo?.amount || 0) / Math.pow(10, DECIMALS);
+          const price = prices.find(p => p.address === TOKENS.AI16Z.address)?.usdPrice || 0;
+          holdings.push({
+            name: 'AI16Z',
+            amount,
+            price,
+            value: amount * price,
+            allocation: 0 // Will be calculated later
+          });
+        }
+        
+        // Check if it's DEGENAI
+        if (tokenAddress === TOKENS.DEGENAI.address) {
+          const amount = Number(tokenInfo?.amount || 0) / Math.pow(10, DECIMALS);
+          const price = prices.find(p => p.address === TOKENS.DEGENAI.address)?.usdPrice || 0;
+          holdings.push({
+            name: 'DEGENAI',
+            amount,
+            price,
+            value: amount * price,
+            allocation: 0 // Will be calculated later
+          });
+        }
       });
     }
 
-    // Process DEGENAI token
-    const ai16zToken = data.result.items?.find((item: any) => 
-      item.id === TOKENS.DEGENAI.address
-    );
-    if (ai16zToken) {
-      const amount = Number(ai16zToken.token_info?.amount || 0) / Math.pow(10, DECIMALS);
-      const price = priceMap[TOKENS.DEGENAI.address] || 0;
-      const value = amount * price;
-      holdings.push({
-        name: 'degenai',
-        amount,
-        allocation: (amount / TOKENS.DEGENAI.totalSupply) * 100,
-        price,
-        value
-      });
-    }
+    // Calculate allocations
+    const totalValue = holdings.reduce((sum, h) => sum + h.value, 0);
+    holdings.forEach(holding => {
+      holding.allocation = totalValue > 0 ? (holding.value / totalValue) * 100 : 0;
+    });
 
     console.log('Processed holdings:', holdings);
-
-    // Sort by value descending
     return holdings.sort((a, b) => b.value - a.value);
 
   } catch (error) {
