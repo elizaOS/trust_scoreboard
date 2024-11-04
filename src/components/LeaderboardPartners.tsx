@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { useState, useEffect } from 'react'; 
 import Image from "next/image";
 import styles from './LeaderboardPartners.module.css';
+import { useMediaQuery } from 'react-responsive';
 
 interface Partner {
   rank: number;
@@ -12,11 +13,19 @@ interface Partner {
 }
 
 const LeaderboardPartners: FC = () => {
+  const isMobile = useMediaQuery({ maxWidth: 768 });
   const [partners, setPartners] = useState<Partner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 3;
+
+  const formatAddress = (address: string) => {
+    if (isMobile) {
+      return `${address.slice(0, 3)}...${address.slice(-2)}`;
+    }
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +47,7 @@ const LeaderboardPartners: FC = () => {
           .map((partner, index) => ({
             rank: index + 1,
             address: partner.owner,
-            displayAddress: `${partner.owner.slice(0, 6)}...${partner.owner.slice(-4)}`,
+            displayAddress: formatAddress(partner.owner),
             trustScore: data.trustScores?.[partner.owner] || 0,
             holdings: partner.amount
           }));
@@ -49,7 +58,6 @@ const LeaderboardPartners: FC = () => {
         console.error('Fetch error:', err);
         setError(err.message);
         
-        // Retry logic
         if (retryCount < MAX_RETRIES) {
           setTimeout(() => {
             setRetryCount(prev => prev + 1);
@@ -61,7 +69,7 @@ const LeaderboardPartners: FC = () => {
     };
 
     fetchData();
-  }, [retryCount]);
+  }, [retryCount, isMobile]);
 
   const formatHoldings = (value: number): string => {
     if (value >= 1000000) {

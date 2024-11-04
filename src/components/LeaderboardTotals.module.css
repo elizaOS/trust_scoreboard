@@ -207,7 +207,6 @@
 
 .statsContainer {
     width: 100%;
-    max-width: 1200px;
     margin: 0 auto;
     background: linear-gradient(180deg, #f98c13, #ffaf03);
     border-radius: 14px;
@@ -216,7 +215,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 4px;
     box-sizing: border-box;
     overflow: hidden;
 }
