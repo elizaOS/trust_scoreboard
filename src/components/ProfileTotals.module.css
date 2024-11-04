@@ -55,8 +55,9 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-bottom: 24px;
-    gap: 24px;
+    margin: 24px 0 16px 0;
+    gap: 12px;
+    padding: 4px;
 }
 .instanceWrapper {
     align-self: stretch;
@@ -202,10 +203,10 @@
     width: 100%;
     background: linear-gradient(to right, rgba(156, 149, 132, 0.95), rgba(115, 107, 85, 0.95));
     border-radius: 16px;
-    padding: 16px;
+    padding: 12px;
     display: flex;
-    justify-content: space-between;
-    gap: 80px;
+    justify-content: space-around;
+    gap: 8px;
     box-sizing: border-box;
     backdrop-filter: blur(10px);
 }
@@ -214,23 +215,51 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+    padding: 4px;
 }
 
 .metricValue {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 32px;
+    font-size: 20px;
     font-weight: 600;
     color: #FFFFFF;
     line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .metricLabel {
     font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.7);
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .metricsBar {
+        padding: 8px;
+        gap: 4px;
+        margin: 0 8px;
+        background: linear-gradient(to right, rgba(156, 149, 132, 1), rgba(115, 107, 85, 1));
+    }
+
+    .metricValue {
+        font-size: 16px;
+    }
+
+    .metricLabel {
+        font-size: 9px;
+    }
+
+    .buttonParent {
+        margin: 24px 8px 16px 8px;
+    }
 }
 

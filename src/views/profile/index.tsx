@@ -48,7 +48,7 @@ const ProfileView: FC = () => {
         )}
       </div>
       
-      <div className="flex justify-center w-full">
+      <div className="flex justify-center w-full" style={{ padding: '0 16px', maxWidth: '600px' }}>
         <ProfileTotals onViewChange={handleViewChange} />
       </div>
 

@@ -1,16 +1,30 @@
 .container {
+    width: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    font-family: 'SF Compact Rounded', sans-serif;
-  }
-  
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    font-family: 'SF Compact Rounded', sans-serif;
-  }
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.content {
+    width: 100%;
+    max-width: 600px;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+    
+    .content {
+        width: 100%;
+        padding: 0;
+    }
+}

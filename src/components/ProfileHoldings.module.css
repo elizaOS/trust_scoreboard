@@ -151,18 +151,20 @@
 .tableHeader {
   text-align: left;
   padding: 10px;
-  color: #3C3626;
+  color: #9b8d7d;
   font-weight: 700;
   font-size: 14px;
 }
 
 .tableRow {
-  background: #e8e3d6;
+  background: #EDE9DE;
   margin-bottom: 8px;
+  border-radius: 14px;
+  overflow: hidden;
 }
 
 .tableRow:nth-child(odd) {
-  background: transparent;
+  background: #E8E3D6;
 }
 
 .holdingCell {
@@ -175,30 +177,52 @@
   gap: 12px;
 }
 
+.rankNumber {
+  color: #9B8D7D;
+  font-size: 22px;
+  font-weight: 600;
+  min-width: 24px;
+}
+
 .tokenLogo {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .holdingDetails {
   display: flex;
   flex-direction: column;
+  gap: 0px;
 }
 
 .tokenName {
-  font-weight: 700;
-  color: #3C3626;
+  font-weight: 600;
+  color: #242424;
+  font-size: 16px;
+  line-height: 1.2;
 }
 
 .tokenAmount {
-  color: #3C3626;
-  font-weight: 700;
+  color: #9B8D7D;
   font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
 }
 
-.allocationCell, .valueCell {
-  padding: 16px;
-  font-weight: 700;
-  color: black;
+.allocationCell {
+  font-weight: 600;
+  color: #242424;
+  font-size: 16px;
+  text-align: right;
+}
+
+.valueCell {
+  font-weight: 600;
+  color: #242424;
+  font-size: 16px;
+  text-align: right;
 }
 
 .amountCell,
@@ -211,6 +235,7 @@
 .totalRow {
   border-top: 2px solid #eee;
   font-weight: bold;
+  font: #9b8d7d;
 }
 
 .totalLabel {
@@ -227,4 +252,15 @@
 .priceCell {
   color: #666;
   font-size: 0.9em;
+}
+
+/* Add border radius to first and last cells in each row */
+.holdingCell:first-child {
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+}
+
+.valueCell:last-child {
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
 }

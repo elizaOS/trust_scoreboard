@@ -19,6 +19,7 @@ interface DashboardData {
     name: string;
     amount: number;
     price: number;
+    value: number;
   }[];
   trustScores: {
     [key: string]: number;
@@ -43,10 +44,24 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
       
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/dashboard?wallet=${publicKey.toString()}`);
-        if (!response.ok) throw new Error('Failed to fetch data');
-        const dashboardData = await response.json();
-        setData(dashboardData);
+        // Fetch holdings data
+        const holdingsResponse = await fetch(`/api/userHoldings?wallet=${publicKey.toString()}`);
+        if (!holdingsResponse.ok) throw new Error('Failed to fetch holdings data');
+        const holdingsData = await holdingsResponse.json();
+
+        // Fetch dashboard data
+        const dashboardResponse = await fetch(`/api/dashboard?wallet=${publicKey.toString()}`);
+        if (!dashboardResponse.ok) throw new Error('Failed to fetch dashboard data');
+        const dashboardData = await dashboardResponse.json();
+        
+        // Combine the data
+        const combinedData: DashboardData = {
+          partners: dashboardData.partners || [],
+          userHoldings: holdingsData.holdings || [],
+          trustScores: dashboardData.trustScores || {}
+        };
+        
+        setData(combinedData);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError(err instanceof Error ? err.message : 'Unknown error');
@@ -61,12 +76,15 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
   const calculateMetrics = () => {
     if (!data || !publicKey) return { trustScore: 0, totalWorth: 0, rank: 0 };
 
-    const totalWorth = data.userHoldings?.reduce((sum, holding) => {
-      return sum + (holding.amount * holding.price);
-    }, 0) || 0;
+    // Calculate total worth from holdings
+    const totalWorth = data.userHoldings
+      ?.filter(holding => ['ai16z', 'degenai'].includes(holding.name.toLowerCase()))
+      .reduce((sum, holding) => sum + holding.value, 0) || 0;
 
+    // Get trust score from dashboard data
     const trustScore = data.trustScores?.[publicKey.toString()] || 0;
 
+    // Calculate rank from partners data
     const allPartners = [...(data.partners || [])];
     const userIndex = allPartners
       .sort((a, b) => b.amount - a.amount)
@@ -76,14 +94,17 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
     return { trustScore, totalWorth, rank };
   };
 
-  const { trustScore, totalWorth, rank } = calculateMetrics();
-
-  const formatCurrency = (value: number) => {
+  const formatValue = (value: number): string => {
     if (value >= 1000000) {
       return `$${(value / 1000000).toFixed(2)}m`;
+    } else if (value >= 1000) {
+      return `$${(value / 1000).toFixed(2)}k`;
+    } else {
+      return `$${value.toFixed(2)}`;
     }
-    return `$${value.toLocaleString()}`;
   };
+
+  const { trustScore, totalWorth, rank } = calculateMetrics();
 
   const renderMetricItem = (value: React.ReactNode, label: string) => (
     <div className={styles.metricItem}>
@@ -94,29 +115,44 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
 
   return (
     <div>
+      <div className={styles.buttonParent}>
+        <button
+          className={activeView === 'profile' ? styles.button1 : styles.button}
+          onClick={() => handleViewChange('profile')}
+        >
+          Profile
+        </button>
+        <button
+          className={activeView === 'holdings' ? styles.button1 : styles.button}
+          onClick={() => handleViewChange('holdings')}
+        >
+          Holdings
+        </button>
+      </div>
+      
       <div className={styles.metricsBar}>
         {!publicKey ? (
           <>
             {renderMetricItem('-', 'TRUST SCORE')}
-            {/* {renderMetricItem('-', 'TOTAL WORTH')} */}
+            {renderMetricItem('-', 'AUM')}
             {renderMetricItem('-', 'RANK')}
           </>
         ) : isLoading ? (
           <>
             {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'TRUST SCORE')}
-            {/* {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'TOTAL WORTH')} */}
+            {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'AUM')}
             {renderMetricItem(<div className="animate-pulse bg-gray-300 h-8 w-20 rounded"></div>, 'RANK')}
           </>
         ) : error ? (
           <>
             {renderMetricItem('-', 'TRUST SCORE')}
-            {/* {renderMetricItem('-', 'TOTAL WORTH')} */}
+            {renderMetricItem('-', 'AUM')}
             {renderMetricItem('-', 'RANK')}
           </>
         ) : (
           <>
             {renderMetricItem(trustScore.toFixed(1), 'TRUST SCORE')}
-            {/* {renderMetricItem(formatCurrency(totalWorth), 'TOTAL WORTH')} */}
+            {renderMetricItem(formatValue(totalWorth), 'AUM')}
             {renderMetricItem(rank || '-', 'RANK')}
           </>
         )}
