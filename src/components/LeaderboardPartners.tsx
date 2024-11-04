@@ -63,6 +63,15 @@ const LeaderboardPartners: FC = () => {
     fetchData();
   }, [retryCount]);
 
+  const formatHoldings = (value: number): string => {
+    if (value >= 1000000) {
+      return `${(value / 1000000).toFixed(2)}M`;
+    } else if (value >= 1000) {
+      return `${(value / 1000).toFixed(2)}K`;
+    }
+    return value.toFixed(2);
+  };
+
   if (isLoading) return <div>Loading partners...</div>;
   if (error) return <div>Error loading partners. Retrying... ({retryCount}/{MAX_RETRIES})</div>;
   if (!partners?.length) return <div>No partners found</div>;
@@ -110,7 +119,7 @@ const LeaderboardPartners: FC = () => {
             )}
           </div>
           <div className={styles.text3}>
-            {partner.holdings.toLocaleString()}
+            {formatHoldings(partner.holdings)}
           </div>
         </div>
       ))}
