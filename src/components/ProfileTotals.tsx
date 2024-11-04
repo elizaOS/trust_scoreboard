@@ -1,97 +1,129 @@
 import type { NextPage } from 'next';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
 import styles from './ProfileTotals.module.css';
-
-interface TokenPrice {
-  address: string;
-  usdPrice: number;
-}
-
-interface Partner {
-  owner: string;
-  amount: number;
-}
 
 type View = 'profile' | 'holdings';
 
 interface ProfileTotalsProps {
-  onViewChange?: (view: View) => void; // Make optional
+  onViewChange?: (view: View) => void;
 }
 
-const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }) => { // Add default empty function
-  const [data, setData] = useState<any>(null);
+interface DashboardData {
+  partners: {
+    owner: string;
+    amount: number;
+    createdAt: string;
+  }[];
+  userHoldings: {
+    name: string;
+    amount: number;
+    price: number;
+  }[];
+  trustScores: {
+    [key: string]: number;
+  };
+}
+
+const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }) => {
+  const { publicKey } = useWallet();
+  const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const buttonStyles = {
-    container: "flex space-x-2 mb-4",
-    button: (isActive: boolean) => `
-      px-4 py-2 rounded-lg transition-colors
-      ${isActive 
-        ? 'bg-[#B5AD95] text-white' 
-        : 'bg-[#E8E3D6] text-[#B5AD95]'}
-    `
-  };
+  const [activeView, setActiveView] = useState<View>('profile');
 
   const handleViewChange = useCallback((view: View) => {
-    if (onViewChange) { // Add safety check
-      onViewChange(view);
-    }
+    setActiveView(view);
+    onViewChange(view);
   }, [onViewChange]);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!publicKey) return;
+      
       setIsLoading(true);
       try {
-        const response = await fetch('/api/dashboard');
-        if (!response.ok) {
-          throw new Error('API error');
-        }
-
+        const response = await fetch(`/api/dashboard?wallet=${publicKey.toString()}`);
+        if (!response.ok) throw new Error('Failed to fetch data');
         const dashboardData = await response.json();
         setData(dashboardData);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : 'Unknown error');
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [publicKey]);
 
-  const calculateTotalValue = () => {
-    if (!data?.prices?.length || !data?.partners?.length) return 0;
-    const price = data.prices[0].usdPrice;
-    const totalHoldings = data.partners.reduce((sum, partner) => sum + partner.amount, 0);
-    return price * totalHoldings;
+  const calculateMetrics = () => {
+    if (!data || !publicKey) return { trustScore: 0, totalWorth: 0, rank: 0 };
+
+    // Calculate total worth (AUM)
+    const totalWorth = data.userHoldings?.reduce((sum, holding) => {
+      return sum + (holding.amount * holding.price);
+    }, 0) || 0;
+
+    // Get trust score
+    const trustScore = data.trustScores?.[publicKey.toString()] || 0;
+
+    // Calculate rank based on holdings amount
+    const allPartners = [...(data.partners || [])];
+    const userIndex = allPartners
+      .sort((a, b) => b.amount - a.amount)
+      .findIndex(partner => partner.owner === publicKey?.toString());
+    const rank = userIndex === -1 ? 0 : userIndex + 1;
+
+    return { trustScore, totalWorth, rank };
+  };
+
+  const { trustScore, totalWorth, rank } = calculateMetrics();
+
+  const formatCurrency = (value: number) => {
+    if (value >= 1000000) {
+      return `$${(value / 1000000).toFixed(2)}m`;
+    }
+    return `$${value.toLocaleString()}`;
   };
 
   return (
     <div>
-      <div className={buttonStyles.container}>
+      <div className={styles.buttonParent}>
         <button
-          className={buttonStyles.button(true)}
+          className={activeView === 'profile' ? styles.button1 : styles.button}
           onClick={() => handleViewChange('profile')}
         >
           Profile
         </button>
         <button
-          className={buttonStyles.button(false)}
+          className={activeView === 'holdings' ? styles.button1 : styles.button}
           onClick={() => handleViewChange('holdings')}
         >
           Holdings
         </button>
       </div>
       
-      {isLoading ? (
+      {!publicKey ? (
+        <div className="text-center text-gray-500">Connect wallet to view metrics</div>
+      ) : isLoading ? (
         <div>Loading...</div>
       ) : error ? (
         <div>Error: {error}</div>
       ) : (
-        <div className={styles.totalsContainer}>
-          <div className={styles.totalValue}>
-            Total Value: ${calculateTotalValue().toLocaleString()}
+        <div className={styles.metricsBar}>
+          <div className={styles.metricItem}>
+            <div className={styles.metricValue}>{trustScore.toFixed(1)}</div>
+            <div className={styles.metricLabel}>TRUST SCORE</div>
+          </div>
+          <div className={styles.metricItem}>
+            <div className={styles.metricValue}>{formatCurrency(totalWorth)}</div>
+            <div className={styles.metricLabel}>TOTAL WORTH</div>
+          </div>
+          <div className={styles.metricItem}>
+            <div className={styles.metricValue}>#{rank || '-'}</div>
+            <div className={styles.metricLabel}>RANK</div>
           </div>
         </div>
       )}

@@ -1,26 +1,24 @@
 import { FC } from 'react';
 import Link from "next/link";
-import dynamic from 'next/dynamic';
 import React, { useState } from "react";
 import Image from 'next/image';
-import { useAutoConnect } from '../../contexts/AutoConnectProvider';
-import NetworkSwitcher from '../NetworkSwitcher';
+import { useWallet } from '@solana/wallet-adapter-react';
 import NavElement from '.';
 import { useSession } from "next-auth/react";
 
-const WalletMultiButtonDynamic = dynamic(
-  async () => (await import('@solana/wallet-adapter-react-ui')).WalletMultiButton,
-  { ssr: false }
-);
+const truncateAddress = (address: string, length: number = 4): string => {
+  if (!address) return '';
+  return `${address.slice(0, length)}..${address.slice(-length)}`;
+};
 
 export const AppBar: React.FC = () => {
-  const { autoConnect, setAutoConnect } = useAutoConnect();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { data: session } = useSession();
+  const { publicKey } = useWallet();
+
   return (
     <div>
-      {/* NavBar / Header */}
-      <div className="navbar flex h-20 flex-row md:mb-2 text-black bg-[#E8E3D5] text-neutral-content ">
+      <div className="navbar flex h-20 flex-row md:mb-2 text-black bg-[#E8E3D5] text-neutral-content">
         <div className="navbar-start align-items-center">
           <div className="hidden sm:inline w-22 h-22 md:p-2 ml-10">
             <Link href="/" passHref className="text-secondary hover:text-white">
@@ -30,21 +28,17 @@ export const AppBar: React.FC = () => {
                 width={24}
                 height={24}
                 priority
-                className="h-6 w-auto" // Adjust size as needed while maintaining aspect ratio
+                className="h-6 w-auto"
               />
             </Link>
           </div>
-          <WalletMultiButtonDynamic className="btn-ghost btn-sm relative flex md:hidden text-lg" onClick={() => window.location.href = '/profile'} />
         </div>
 
-        {/* Nav Links */}
-        {/* Wallet & Settings */}
         <div className="navbar-end">
           <div className="hidden md:inline-flex align-items-center text-black justify-items gap-6">
-           {/* <NavElement label="Home" href="/splash" navigationStarts={() => setIsNavOpen(false)} /> */}
             {session?.user?.image ? (
-              <div className="flex items-center">
-                <Link href="/profile">
+              <div className="flex items-center gap-2 bg-[#e8e3d6] px-4 py-2 rounded-full">
+                <Link href="/profile" className="flex items-center gap-2">
                   <Image 
                     src={session.user.image} 
                     alt="Profile" 
@@ -52,9 +46,14 @@ export const AppBar: React.FC = () => {
                     height={32}
                     className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80"
                     onError={(e) => {
-                      e.currentTarget.src = "/default-avatar.png"; // Fallback image
+                      e.currentTarget.src = "/default-avatar.png"
                     }}
                   />
+                  {publicKey && (
+                    <span className="text-[#9a8c7c] font-medium">
+                      {truncateAddress(publicKey.toString())}
+                    </span>
+                  )}
                 </Link>
               </div>
             ) : (
@@ -64,7 +63,6 @@ export const AppBar: React.FC = () => {
                 navigationStarts={() => setIsNavOpen(false)} 
               />
             )}
-            <WalletMultiButtonDynamic className="btn-ghost btn-sm rounded-btn text-lg mr-6" />
           </div>
           <label htmlFor="my-drawer" className="btn-gh items-center justify-between md:hidden mr-6" onClick={() => setIsNavOpen(!isNavOpen)}>
             <div className="HAMBURGER-ICON space-y-2.5 ml-5">

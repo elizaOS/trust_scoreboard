@@ -56,9 +56,9 @@ const ProfileView: FC = () => {
       <div className={`${styles.content} text-left`}>
         {currentView === 'profile' ? (
           <>
-            <h1 className="text-left text-black font-display text-2xl mb-4">Socials</h1>
+           
             <Socials />
-            <h1 className="text-left font-display text-black text-2xl mb-4 mt-8">Wallets</h1>
+            
             <ProfileWallets />
           </>
         ) : (

@@ -1,6 +1,6 @@
 .number {
     position: relative;
-    line-height: 42px;
+    line-height: 32px;
     font-weight: 600;
 }
 .instanceChild {
@@ -29,6 +29,7 @@
     box-sizing: border-box;
     max-width: 600px;
     cursor: pointer;
+    color: #9b8d7d;
 }
 .button1 {
     width: 110px;
@@ -54,6 +55,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    margin-bottom: 16px;
 }
 .instanceWrapper {
     align-self: stretch;
@@ -115,16 +117,10 @@
     gap: 24px;
 }
 .frameWrapper {
-    align-self: stretch;
-    border-radius: 14px;
-    background: linear-gradient(180deg, #9c9584, #736b55);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 18px;
-    font-size: 24px;
-    color: #f5f5f5;
 }
 .numberParent {
     width: 100%;
@@ -140,5 +136,99 @@
     font-size: 34px;
     color: #242424;
     font-family: 'SF Compact Rounded';
+}
+
+.frameParent {
+  width: 100%;
+  position: relative;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #9c9584, #736b55);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 18px;
+  box-sizing: border-box;
+  text-align: left;
+  font-size: 24px;
+  color: #f5f5f5;
+  font-family: 'SF Compact Rounded';
+}
+
+.instanceParent {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.frameWrapper {
+  flex: 1;
+  background: #F8F7F4;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.numberAndBadgeParent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.numberAndBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.number {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1C1C1C;
+}
+
+.heading {
+  font-size: 0.875rem;
+  color: #666666;
+  text-transform: uppercase;
+}
+
+.metricsBar {
+  width: 100%;
+  background: linear-gradient(to right, rgba(156, 149, 132, 0.95), rgba(115, 107, 85, 0.95));
+  border-radius: 16px;
+  padding: 20px 32px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 80px;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+}
+
+.metricItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metricValue {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.metricLabel {
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 

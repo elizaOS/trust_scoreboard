@@ -53,13 +53,16 @@ export const Socials: FC = () => {
   const providers = ['GitHub', 'Discord', 'Twitter'];
 
   return (
-    <div className={styles.socialContainer}>
-      {providers.map((provider) => (
-        <SocialButton
-          key={provider}
-          provider={provider}
-        />
-      ))}
+    <div>
+      <h2 className={styles.title}>Socials</h2>
+      <div className={styles.buttonParent}>
+        {providers.map((provider) => (
+          <SocialButton
+            key={provider}
+            provider={provider}
+          />
+        ))}
+      </div>
     </div>
   );
 };

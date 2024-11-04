@@ -50,17 +50,11 @@
     transition: all 0.2s ease;
 }
 .buttonParent {
-    align-self: stretch;
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    gap: 8px;
-    text-align: center;
-    font-size: 16px;
-    color: #fff;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
 }
 .numberParent {
     width: 100%;
@@ -84,16 +78,15 @@
     opacity: 0.9;
     color: #fff;
 }
-.socialContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 16px;
-    max-width: 600px;
-    margin: 0 auto;
-}
 .providerIcon {
     margin-right: 12px;
     width: 20px;
     height: 20px;
+}
+.title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #242424;
+    margin-bottom: 8px;
+    font-family: 'SF Compact Rounded';
 }

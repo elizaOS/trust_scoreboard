@@ -15,6 +15,8 @@ const LeaderboardPartners: FC = () => {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,12 +28,10 @@ const LeaderboardPartners: FC = () => {
         }
         const data = await response.json();
         
-        if (!data.partners || !Array.isArray(data.partners)) {
-          console.error('Invalid data structure:', data);
-          throw new Error('Invalid partners data format');
+        if (!data.partners?.length || !data.trustScores) {
+          throw new Error('Invalid or empty data received');
         }
 
-        // Filter and sort partners by amount
         const sortedPartners = data.partners
           .filter(partner => partner && partner.amount >= 100000)
           .sort((a, b) => b.amount - a.amount)
@@ -44,20 +44,28 @@ const LeaderboardPartners: FC = () => {
           }));
 
         setPartners(sortedPartners);
+        setError(null);
       } catch (err: any) {
         console.error('Fetch error:', err);
         setError(err.message);
+        
+        // Retry logic
+        if (retryCount < MAX_RETRIES) {
+          setTimeout(() => {
+            setRetryCount(prev => prev + 1);
+          }, 1000 * (retryCount + 1));
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [retryCount]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!partners || partners.length === 0) return <div>No partners found</div>;
+  if (isLoading) return <div>Loading partners...</div>;
+  if (error) return <div>Error loading partners. Retrying... ({retryCount}/{MAX_RETRIES})</div>;
+  if (!partners?.length) return <div>No partners found</div>;
 
   return (
     <div className={styles.frameParent}>

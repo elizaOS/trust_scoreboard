@@ -273,29 +273,32 @@ async function getDAOHoldings() {
 
     const data = await response.json();
     
-    if (!data.result?.items) {
-      throw new Error('Invalid response format from Helius API');
+    // Better error handling and default values
+    if (!data?.result) {
+      console.warn('Empty result from Helius API');
+      return [];
     }
 
+    const items = data.result.items || [];
     const totalValue = data.result.nativeBalance?.total_price || 0;
     
-    return data.result.items.map((item: any, index: number) => {
+    return items.map((item: any, index: number) => {
       const tokenInfo = item.token_info || {};
       const tokenValue = tokenInfo.price_info?.total_price || 0;
-      const tokenAmount = item.amount || 0;
+      const tokenAmount = Number(item.amount || 0);
       
       return {
         rank: index + 1,
         name: tokenInfo.symbol || tokenInfo.name || 'Unknown',
-        holdings: `${tokenAmount.toLocaleString(undefined, {
+        holdings: tokenAmount.toLocaleString(undefined, {
           minimumFractionDigits: 0,
           maximumFractionDigits: tokenInfo.decimals || 6
-        })} ${tokenInfo.symbol || ''}`,
-        value: new Intl.NumberFormat('en-US', {
+        }),
+        value: tokenValue.toLocaleString('en-US', {
           style: 'currency',
           currency: 'USD'
-        }).format(tokenValue),
-        percentage: ((tokenValue / totalValue) * 100).toFixed(2) + '%',
+        }),
+        percentage: totalValue > 0 ? ((tokenValue / totalValue) * 100).toFixed(2) + '%' : '0%',
         imageUrl: `/images/tokens/${tokenInfo.symbol || 'default'}.png`,
       };
     });
@@ -305,7 +308,7 @@ async function getDAOHoldings() {
   }
 }
 
-// Main API Handler
+// Main API Handler with retry logic
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -314,44 +317,67 @@ export default async function handler(
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  try {
-    const walletAddress = req.query.wallet as string;
-    
-    // Fetch all data concurrently with error handling
-    const [partnersResult, holdingsResult, pricesResult, userHoldingsResult] = await Promise.allSettled([
-      getAllPartners(),
-      getDAOHoldings(),
-      getTokenPrices(),
-      walletAddress ? getUserHoldings(walletAddress) : Promise.resolve(undefined)
-    ]);
+  const MAX_RETRIES = 3;
+  let attempt = 0;
+  
+  while (attempt < MAX_RETRIES) {
+    try {
+      const walletAddress = req.query.wallet as string;
+      
+      // Add timeouts to Promise.allSettled
+      const timeout = (promise: Promise<any>, ms: number) => {
+        return Promise.race([
+          promise,
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout')), ms)
+          )
+        ]);
+      };
 
-    // Handle potential failures
-    const partners = partnersResult.status === 'fulfilled' ? partnersResult.value : [];
-    const holdings = holdingsResult.status === 'fulfilled' ? holdingsResult.value : [];
-    const prices = pricesResult.status === 'fulfilled' ? pricesResult.value : [];
-    const userHoldings = userHoldingsResult.status === 'fulfilled' ? userHoldingsResult.value : undefined;
+      const [partnersResult, holdingsResult, pricesResult, userHoldingsResult] = await Promise.allSettled([
+        timeout(getAllPartners(), 10000),
+        timeout(getDAOHoldings(), 10000),
+        timeout(getTokenPrices(), 10000),
+        walletAddress ? timeout(getUserHoldings(walletAddress), 10000) : Promise.resolve(undefined)
+      ]);
 
-    // Calculate trust scores
-    const trustScores = partners.reduce((acc, partner) => {
-      const trustResult = calculateTrustScoreWithTier(partner.amount);
-      acc[partner.owner] = trustResult.score;
-      return acc;
-    }, {} as Record<string, number>);
+      // Validate results
+      const partners = partnersResult.status === 'fulfilled' ? partnersResult.value : [];
+      const holdings = holdingsResult.status === 'fulfilled' ? holdingsResult.value : [];
+      const prices = pricesResult.status === 'fulfilled' ? pricesResult.value : [];
+      const userHoldings = userHoldingsResult.status === 'fulfilled' ? userHoldingsResult.value : undefined;
 
-    const response: DashboardResponse = {
-      partners,
-      holdings,
-      prices,
-      trustScores,
-      ...(userHoldings && { userHoldings })
-    };
+      // Ensure we have minimum required data
+      if (!partners.length || !prices.length) {
+        throw new Error('Missing critical data');
+      }
 
-    res.status(200).json(response);
-  } catch (error) {
-    console.error('Dashboard API Error:', error);
-    res.status(500).json({ 
-      error: 'Failed to fetch dashboard data',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    });
+      const trustScores = partners.reduce((acc, partner) => {
+        const trustResult = calculateTrustScoreWithTier(partner.amount);
+        acc[partner.owner] = trustResult.score;
+        return acc;
+      }, {} as Record<string, number>);
+
+      const response: DashboardResponse = {
+        partners,
+        holdings,
+        prices,
+        trustScores,
+        ...(userHoldings && { userHoldings })
+      };
+
+      return res.status(200).json(response);
+    } catch (error) {
+      attempt++;
+      if (attempt === MAX_RETRIES) {
+        console.error('Dashboard API Error after retries:', error);
+        return res.status(500).json({ 
+          error: 'Failed to fetch dashboard data',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
+      // Wait before retrying
+      await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+    }
   }
 }
