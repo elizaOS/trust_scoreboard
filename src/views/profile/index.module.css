@@ -5,10 +5,12 @@
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
+    font-family: 'SF Compact Rounded', sans-serif;
   }
   
   .content {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    font-family: 'SF Compact Rounded', sans-serif;
   }

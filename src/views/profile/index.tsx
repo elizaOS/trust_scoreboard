@@ -23,22 +23,22 @@ const ProfileView: FC = () => {
 
   return (
     <div className={`${styles.container} text-left`}>
-      <div className="flex flex-col items-center mb-8">
-      <h1 className="font-display text-2xl mt-4 mx-4 text-black">Profile</h1>
+      <div className="flex flex-col items-center">
+        <h1 className="font-display text-2xl mt-4 mx-4 text-black" style={{ fontFamily: 'SF Compact Rounded, sans-serif', marginBottom: '24px' }}>Profile</h1>
         {status === 'loading' ? (
           <div className="w-20 h-20 rounded-full bg-gray-200 animate-pulse" />
         ) : session?.user?.image ? (
           <Image
             src={session.user.image}
             alt="Profile"
-            width={80}
-            height={80}
+            width={100}
+            height={100}
             className="rounded-full"
             priority
           />
         ) : (
           <Image
-            src="/default-avatar.png"
+            src="/profile_default.png"
             alt="Default Profile"
             width={80}
             height={80}
@@ -46,19 +46,16 @@ const ProfileView: FC = () => {
             priority
           />
         )}
-        
       </div>
       
-      <div className="flex justify-center w-full mb-8">
+      <div className="flex justify-center w-full">
         <ProfileTotals onViewChange={handleViewChange} />
       </div>
 
       <div className={`${styles.content} text-left`}>
         {currentView === 'profile' ? (
           <>
-           
             <Socials />
-            
             <ProfileWallets />
           </>
         ) : (

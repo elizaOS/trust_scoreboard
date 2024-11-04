@@ -61,15 +61,12 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
   const calculateMetrics = () => {
     if (!data || !publicKey) return { trustScore: 0, totalWorth: 0, rank: 0 };
 
-    // Calculate total worth (AUM)
     const totalWorth = data.userHoldings?.reduce((sum, holding) => {
       return sum + (holding.amount * holding.price);
     }, 0) || 0;
 
-    // Get trust score
     const trustScore = data.trustScores?.[publicKey.toString()] || 0;
 
-    // Calculate rank based on holdings amount
     const allPartners = [...(data.partners || [])];
     const userIndex = allPartners
       .sort((a, b) => b.amount - a.amount)
@@ -90,7 +87,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
 
   return (
     <div>
-      <div className={styles.buttonParent}>
+      {/* <div className={styles.buttonParent}>
         <button
           className={activeView === 'profile' ? styles.button1 : styles.button}
           onClick={() => handleViewChange('profile')}
@@ -103,7 +100,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
         >
           Holdings
         </button>
-      </div>
+      </div> */}
       
       {!publicKey ? (
         <div className="text-center text-gray-500">Connect wallet to view metrics</div>
@@ -122,7 +119,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
             <div className={styles.metricLabel}>TOTAL WORTH</div>
           </div>
           <div className={styles.metricItem}>
-            <div className={styles.metricValue}>#{rank || '-'}</div>
+            <div className={styles.metricValue}>{rank || '-'}</div>
             <div className={styles.metricLabel}>RANK</div>
           </div>
         </div>
