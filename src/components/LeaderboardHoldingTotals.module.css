@@ -224,3 +224,54 @@
         overflow-x: auto;
     }
 }
+
+.statsContainer {
+  width: 100%;
+  background: linear-gradient(180deg, #f98c13, #ffaf03);
+  border-radius: 24px;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 80px;
+  box-sizing: border-box;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statValue {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.5px;
+}
+
+.loading, .error {
+  width: 100%;
+  padding: 24px;
+  text-align: center;
+  background: linear-gradient(180deg, #f98c13, #ffaf03);
+  border-radius: 24px;
+  color: #FFFFFF;
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .statsContainer {
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px;
+  }
+}

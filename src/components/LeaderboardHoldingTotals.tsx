@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import styles from './LeaderboardTotals.module.css';
+import styles from './LeaderboardHoldingTotals.module.css';
 
 interface DashboardData {
   partners: {
@@ -51,11 +51,10 @@ const LeaderboardHoldingTotals: NextPage = () => {
   if (error) return <div className={styles.error}>{error}</div>;
   if (!data?.partners || !data?.prices || !data?.holdings) return null;
 
-  // Calculate market cap
+  // Calculate metrics
   const helpPrice = data.prices.find(p => p.address === HELP_ADDRESS)?.usdPrice || 0;
   const marketCap = helpPrice * HELP_TOTAL_SUPPLY;
   
-  // Calculate total value from holdings
   const totalValue = data.holdings.reduce((sum, holding) => {
     const value = parseFloat(holding.value.replace(/[$,]/g, ''));
     return sum + (isNaN(value) ? 0 : value);
@@ -65,33 +64,24 @@ const LeaderboardHoldingTotals: NextPage = () => {
   const newPartners = data.partners?.filter(partner => 
     new Date(partner.createdAt) > sevenDaysAgo)?.length || 0;
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
-  };
-
   return (
-    <div className={styles.container}>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>MARKET CAP</th>
-            <th>AUM</th>
-            <th>New Partners (7d)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{formatCurrency(marketCap)}</td>
-            <td>{formatCurrency(totalValue)}</td>
-            <td>{newPartners}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div className={styles.statsContainer}>
+      <div className={styles.statItem}>
+        <div className={styles.statValue}>
+          ${(marketCap / 1000000).toFixed(2)}m
+        </div>
+        <div className={styles.statLabel}>MARKET CAP</div>
+      </div>
+      <div className={styles.statItem}>
+        <div className={styles.statValue}>
+          ${(totalValue / 1000000).toFixed(2)}m
+        </div>
+        <div className={styles.statLabel}>AUM</div>
+      </div>
+      <div className={styles.statItem}>
+        <div className={styles.statValue}>+{newPartners}</div>
+        <div className={styles.statLabel}>NEW PARTNERS (7D)</div>
+      </div>
     </div>
   );
 };

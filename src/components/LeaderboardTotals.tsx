@@ -23,20 +23,8 @@ const LeaderboardTotals: NextPage = () => {
     const fetchData = async () => {
       try {
         const response = await fetch('/api/dashboard');
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
+        if (!response.ok) throw new Error('Failed to fetch data');
         const result = await response.json();
-        
-        if (!result.partners || !Array.isArray(result.partners)) {
-          console.error('Invalid partners data:', result);
-          throw new Error('Invalid partners data format');
-        }
-        if (!result.prices || !Array.isArray(result.prices)) {
-          console.error('Invalid prices data:', result);
-          throw new Error('Invalid prices data format');
-        }
-
         setData(result);
       } catch (err) {
         console.error('Fetch error:', err);
@@ -48,47 +36,54 @@ const LeaderboardTotals: NextPage = () => {
     fetchData();
   }, []);
 
-  if (isLoading) return <div className={styles.loading}>Loading...</div>;
-  if (error) return <div className={styles.error}>{error}</div>;
-  if (!data?.partners || !data?.prices) return <div>No data available</div>;
+  const calculateMetrics = () => {
+    if (!data?.partners) return {
+      totalPartners: 0,
+      totalWorth: 0,
+      newPartners: 0
+    };
 
-  const totalPartners = data.partners.length;
-  const totalValue = data.partners.reduce((sum, partner) => {
-    const price = data.prices[0]?.usdPrice || 0;
-    return sum + (partner.amount * price);
-  }, 0);
+    // Total number of partners
+    const totalPartners = data.partners.length;
 
-  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  const newPartners = data.partners.filter(partner => 
-    new Date(partner.createdAt) > sevenDaysAgo).length;
+    // Calculate total worth from all partners
+    const totalWorth = data.partners.reduce((sum, partner) => sum + partner.amount, 0);
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
+    // Calculate new partners in last 7 days
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const newPartners = data.partners.filter(partner => 
+      new Date(partner.createdAt) > sevenDaysAgo
+    ).length;
+
+    return {
+      totalPartners,
+      totalWorth,
+      newPartners
+    };
   };
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  const { totalPartners, totalWorth, newPartners } = calculateMetrics();
+
   return (
-    <div className={styles.container}>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Total Partners</th>
-            <th>Total Value</th>
-            <th>New Partners (7d)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{totalPartners.toLocaleString()}</td>
-            <td>{formatCurrency(totalValue)}</td>
-            <td>{newPartners}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div className={styles.statsContainer}>
+      <div className={styles.statItem}>
+        <div className={styles.statValue}>{totalPartners.toLocaleString()}</div>
+        <div className={styles.statLabel}>PARTNERS</div>
+      </div>
+      <div className={styles.statItem}>
+        <div className={styles.statValue}>
+          ${(totalWorth / 1000000).toFixed(2)}m
+        </div>
+        <div className={styles.statLabel}>TOTAL WORTH</div>
+      </div>
+      <div className={styles.statItem}>
+        <div className={styles.statValue}>+{newPartners.toLocaleString()}</div>
+        <div className={styles.statLabel}>NEW PARTNERS (7D)</div>
+      </div>
     </div>
   );
 };
