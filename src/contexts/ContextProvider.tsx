@@ -22,7 +22,9 @@ const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     
     // Force mainnet-beta
     const network = WalletAdapterNetwork.Mainnet;
-    const endpoint = useMemo(() => clusterApiUrl(network), []);
+    const endpoint = useMemo(() => {
+      return clusterApiUrl(network);
+    }, [network]);
 
     console.log('Network:', network);
 
