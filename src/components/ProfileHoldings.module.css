@@ -200,3 +200,31 @@
   font-weight: 700;
   color: black;
 }
+
+.amountCell,
+.priceCell,
+.valueCell {
+  text-align: right;
+  padding: 1rem;
+}
+
+.totalRow {
+  border-top: 2px solid #eee;
+  font-weight: bold;
+}
+
+.totalLabel {
+  text-align: right;
+  padding: 1rem;
+}
+
+.totalValue {
+  text-align: right;
+  padding: 1rem;
+  color: #0070f3;
+}
+
+.priceCell {
+  color: #666;
+  font-size: 0.9em;
+}

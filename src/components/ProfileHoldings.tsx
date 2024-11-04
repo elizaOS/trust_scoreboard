@@ -11,16 +11,6 @@ interface TokenHolding {
   value: number;
 }
 
-const TOKEN_ADDRESSES = {
-  'AI16Z': 'HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC',
-  'DEGENAI': 'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnypump'
-};
-
-const TOKEN_LOGOS: { [key: string]: string } = {
-  'AI16Z': '/ai16z.png',
-  'DEGENAI': '/degenai.png'
-};
-
 const ProfileHoldings: FC = () => {
   const { publicKey } = useWallet();
   const [holdings, setHoldings] = useState<TokenHolding[]>([]);
@@ -35,23 +25,26 @@ const ProfileHoldings: FC = () => {
       setError(null);
       
       try {
+        console.log('Fetching holdings for wallet:', publicKey.toString());
         const response = await fetch(`/api/userHoldings?wallet=${publicKey.toString()}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch holdings');
-        }
-        
         const data = await response.json();
-        console.log('API response:', data);
+        console.log('Raw API response:', data);
 
         if (data.error) {
           throw new Error(data.error);
         }
 
+        if (!data.holdings) {
+          console.error('No holdings data in response:', data);
+          throw new Error('Invalid response format');
+        }
+
+        // The data.holdings array is already in the format we need
         const validHoldings = data.holdings
           .filter(holding => holding.amount > 0)
           .sort((a, b) => b.value - a.value);
 
-        console.log('Final holdings:', validHoldings);
+        console.log('Processed holdings:', validHoldings);
         setHoldings(validHoldings);
       } catch (err) {
         console.error('Fetch error:', err);
@@ -65,15 +58,15 @@ const ProfileHoldings: FC = () => {
   }, [publicKey]);
 
   if (isLoading) {
-    return <div className="text-center">Loading holdings...</div>;
+    return <div className="text-center py-4">Loading holdings...</div>;
   }
 
   if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
+    return <div className="text-red-500 py-4">Error: {error}</div>;
   }
 
   if (!publicKey) {
-    return <div>Please connect your wallet to view holdings</div>;
+    return <div className="text-center py-4">Please connect your wallet to view holdings</div>;
   }
 
   return (
@@ -81,15 +74,17 @@ const ProfileHoldings: FC = () => {
       <table className={styles.holdingsTable}>
         <thead>
           <tr>
-            <th className={styles.tableHeader}>HOLDING</th>
+            <th className={styles.tableHeader}>TOKEN</th>
+            <th className={styles.tableHeader}>AMOUNT</th>
+            <th className={styles.tableHeader}>PRICE</th>
             <th className={styles.tableHeader}>ALLOCATION</th>
             <th className={styles.tableHeader}>VALUE</th>
           </tr>
         </thead>
         <tbody>
-          {holdings.length === 0 ? (
+          {!holdings || holdings.length === 0 ? (
             <tr>
-              <td colSpan={3} className="text-center py-4">
+              <td colSpan={5} className="text-center py-4">
                 No holdings found
               </td>
             </tr>
@@ -98,29 +93,41 @@ const ProfileHoldings: FC = () => {
               <tr key={index} className={`${styles.tableRow} ${index % 2 === 1 ? styles.alternateRow : ''}`}>
                 <td className={styles.holdingCell}>
                   <div className={styles.holdingInfo}>
-                    <Image 
-                      src={TOKEN_LOGOS[holding.name] || '/default-token.png'}
-                      alt={`${holding.name} logo`}
-                      width={32}
-                      height={32}
-                      className={styles.tokenLogo}
-                    />
                     <div className={styles.holdingDetails}>
                       <div className={styles.tokenName}>{holding.name}</div>
-                      <div className={styles.tokenAmount}>
-                        {holding.amount.toLocaleString()}
-                      </div>
                     </div>
                   </div>
                 </td>
+                <td className={styles.amountCell}>
+                  {holding.amount.toLocaleString(undefined, {
+                    maximumFractionDigits: 9
+                  })}
+                </td>
+                <td className={styles.priceCell}>
+                  ${holding.price > 0 ? holding.price.toFixed(4) : '0.0000'}
+                </td>
                 <td className={styles.allocationCell}>
-                  {holding.allocation.toFixed(1)}%
+                  {holding.allocation > 0 ? holding.allocation.toFixed(1) : '0.0'}%
                 </td>
                 <td className={styles.valueCell}>
-                  ${holding.value.toLocaleString()}
+                  ${holding.value > 0 ? holding.value.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  }) : '0.00'}
                 </td>
               </tr>
             ))
+          )}
+          {holdings && holdings.length > 0 && (
+            <tr className={styles.totalRow}>
+              <td colSpan={4} className={styles.totalLabel}>Total Value</td>
+              <td className={styles.totalValue}>
+                ${holdings.reduce((sum, h) => sum + h.value, 0).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
+              </td>
+            </tr>
           )}
         </tbody>
       </table>
