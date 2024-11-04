@@ -12,18 +12,8 @@ interface TokenHolding {
 }
 
 const TOKEN_LOGOS: { [key: string]: string } = {
-  'HELP': '/ai16z.png',
-  'PUMP': '/degenai.png'
-};
-
-// Add debug logging function
-const getTokenLogo = (tokenName: string): string => {
-  const normalizedName = tokenName.toUpperCase();
-  const logoPath = TOKEN_LOGOS[normalizedName];
-  console.log('Token name:', tokenName);
-  console.log('Normalized name:', normalizedName);
-  console.log('Logo path:', logoPath);
-  return logoPath || '/ai16z.png'; // Fallback image
+  'ai16z': '/ai16z.png',
+  'degenai': '/degenai.png'
 };
 
 const ProfileHoldings: FC = () => {
@@ -44,11 +34,14 @@ const ProfileHoldings: FC = () => {
         const data = await response.json();
         
         if (data.error) {
+          console.error('API Error:', data.error);
           setError(data.error);
         } else {
+          console.log('Received holdings:', data.userHoldings);
           setHoldings(data.userHoldings || []);
         }
       } catch (err) {
+        console.error('Fetch error:', err);
         setError('Failed to fetch holdings');
       } finally {
         setIsLoading(false);
@@ -71,11 +64,10 @@ const ProfileHoldings: FC = () => {
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       <table className={styles.holdingsTable}>
         <thead>
           <tr>
-            <th className={styles.tableHeader}></th> {/* Empty header for icons */}
             <th className={styles.tableHeader}>HOLDING</th>
             <th className={styles.tableHeader}>ALLOCATION</th>
             <th className={styles.tableHeader}>VALUE</th>
@@ -83,43 +75,34 @@ const ProfileHoldings: FC = () => {
         </thead>
         <tbody>
           {holdings.map((holding, index) => (
-            <tr key={index} className={styles.tableRow}>
-              <td className={`${styles.tableCell} ${styles.iconCell}`}>
-                <Image 
-                  src={getTokenLogo(holding.name)}
-                  alt={`${holding.name} logo`}
-                  width={24}
-                  height={24}
-                  className={styles.tokenLogo}
-                  priority // Add priority to ensure early loading
-                />
-              </td>
-              <td className={styles.tableCell}>
-                <div className={styles.amount}>
-                  {holding.name}
-                  <div className="text-sm text-gray-600">
-                    {holding.amount.toLocaleString()} tokens
+            <tr key={index} className={`${styles.tableRow} ${index % 2 === 1 ? styles.alternateRow : ''}`}>
+              <td className={styles.holdingCell}>
+                <div className={styles.holdingInfo}>
+                  <Image 
+                    src={TOKEN_LOGOS[holding.name] || '/default-token.png'}
+                    alt={`${holding.name} logo`}
+                    width={32}
+                    height={32}
+                    className={styles.tokenLogo}
+                  />
+                  <div className={styles.holdingDetails}>
+                    <div className={styles.tokenName}>{holding.name}</div>
+                    <div className={styles.tokenAmount}>
+                      {holding.amount.toLocaleString()}
+                    </div>
                   </div>
                 </div>
               </td>
-              <td className={`${styles.tableCell} ${styles.allocation}`}>
-                {holding.allocation.toFixed(2)}%
+              <td className={styles.allocationCell}>
+                {holding.allocation}%
               </td>
-              <td className={`${styles.tableCell} ${styles.value}`}>
-                <div>${holding.price.toFixed(4)}</div>
-                <div className="text-sm text-gray-600">
-                  ${holding.value.toFixed(2)}
-                </div>
+              <td className={styles.valueCell}>
+                ${(holding.value / 1000000).toFixed(2)}m
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {holdings.length === 0 && (
-        <div className="text-center text-gray-500 mt-4">
-          No tokens found in wallet
-        </div>
-      )}
     </div>
   );
 };

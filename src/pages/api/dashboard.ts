@@ -1,4 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import NodeCache from 'node-cache';
+
+// Create cache instance with 30 minute TTL
+const cache = new NodeCache({ 
+  stdTTL: 1800, // 30 minutes in seconds
+  checkperiod: 120 // Check for expired keys every 2 minutes
+});
+
+const CACHE_KEY = 'dashboard_data';
 
 // Constants
 const HELIUS_API = `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_SOLANA_API}`;
@@ -112,6 +121,7 @@ async function getTokenPrices() {
     ]);
 
     const [helpData, pumpData] = await Promise.all(responses.map(r => r.json()));
+    console.log('Price data:', { help: helpData, pump: pumpData });
 
     return [
       {
@@ -135,45 +145,81 @@ async function getTokenPrices() {
 // Add function to get user holdings
 async function getUserHoldings(walletAddress: string): Promise<TokenHolding[]> {
   try {
+    console.log('Fetching holdings for wallet:', walletAddress);
+    
+    // Fetch token balances using getAssetsByOwner
     const response = await fetch(HELIUS_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         jsonrpc: '2.0',
         id: 'my-id',
-        method: 'searchAssets',
+        method: 'getAssetsByOwner',
         params: {
           ownerAddress: walletAddress,
-          tokenType: 'fungible',
-          displayOptions: { 
+          page: 1,
+          limit: 1000,
+          displayOptions: {
             showFungible: true,
-            showNativeBalance: false 
-          },
+          }
         },
       }),
     });
 
-    const { result } = await response.json();
+    const data = await response.json();
+    console.log('Raw balance response:', data);
+
+    // Get token prices
+    const prices = await getTokenPrices();
+    console.log('Token prices:', prices);
+
+    const priceMap = prices.reduce((acc, { address, usdPrice }) => {
+      acc[address] = usdPrice;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Initialize holdings array
     const holdings: TokenHolding[] = [];
 
-    for (const item of result.items) {
-      if (item.id === TOKENS.PUMP.address || item.id === TOKENS.HELP.address) {
-        const amount = Number(item.token_info?.amount || 0) / Math.pow(10, DECIMALS);
-        const isPump = item.id === TOKENS.PUMP.address;
-        const totalSupply = isPump ? TOKENS.PUMP.totalSupply : TOKENS.HELP.totalSupply;
-        const price = item.token_info?.price_info?.price_per_token || 0;
-
-        holdings.push({
-          name: item.token_info?.symbol || '',
-          amount,
-          allocation: (amount / totalSupply) * 100,
-          price,
-          value: amount * price
-        });
-      }
+    // Process HELP token
+    const helpToken = data.result.items?.find((item: any) => 
+      item.id === TOKENS.HELP.address
+    );
+    if (helpToken) {
+      const amount = Number(helpToken.token_info?.amount || 0) / Math.pow(10, DECIMALS);
+      const price = priceMap[TOKENS.HELP.address] || 0;
+      const value = amount * price;
+      holdings.push({
+        name: 'ai16z',
+        amount,
+        allocation: (amount / TOKENS.HELP.totalSupply) * 100,
+        price,
+        value
+      });
     }
 
-    return holdings;
+    // Process PUMP token
+    const pumpToken = data.result.items?.find((item: any) => 
+      item.id === TOKENS.PUMP.address
+    );
+    if (pumpToken) {
+      const amount = Number(pumpToken.token_info?.amount || 0) / Math.pow(10, DECIMALS);
+      const price = priceMap[TOKENS.PUMP.address] || 0;
+      const value = amount * price;
+      holdings.push({
+        name: 'degenai',
+        amount,
+        allocation: (amount / TOKENS.PUMP.totalSupply) * 100,
+        price,
+        value
+      });
+    }
+
+    console.log('Processed holdings:', holdings);
+
+    // Sort by value descending
+    return holdings.sort((a, b) => b.value - a.value);
+
   } catch (error) {
     console.error('Error fetching user holdings:', error);
     return [];
@@ -317,67 +363,88 @@ export default async function handler(
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const MAX_RETRIES = 3;
-  let attempt = 0;
-  
-  while (attempt < MAX_RETRIES) {
-    try {
-      const walletAddress = req.query.wallet as string;
-      
-      // Add timeouts to Promise.allSettled
-      const timeout = (promise: Promise<any>, ms: number) => {
-        return Promise.race([
-          promise,
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), ms)
-          )
-        ]);
-      };
-
-      const [partnersResult, holdingsResult, pricesResult, userHoldingsResult] = await Promise.allSettled([
-        timeout(getAllPartners(), 10000),
-        timeout(getDAOHoldings(), 10000),
-        timeout(getTokenPrices(), 10000),
-        walletAddress ? timeout(getUserHoldings(walletAddress), 10000) : Promise.resolve(undefined)
-      ]);
-
-      // Validate results
-      const partners = partnersResult.status === 'fulfilled' ? partnersResult.value : [];
-      const holdings = holdingsResult.status === 'fulfilled' ? holdingsResult.value : [];
-      const prices = pricesResult.status === 'fulfilled' ? pricesResult.value : [];
-      const userHoldings = userHoldingsResult.status === 'fulfilled' ? userHoldingsResult.value : undefined;
-
-      // Ensure we have minimum required data
-      if (!partners.length || !prices.length) {
-        throw new Error('Missing critical data');
-      }
-
-      const trustScores = partners.reduce((acc, partner) => {
-        const trustResult = calculateTrustScoreWithTier(partner.amount);
-        acc[partner.owner] = trustResult.score;
-        return acc;
-      }, {} as Record<string, number>);
-
-      const response: DashboardResponse = {
-        partners,
-        holdings,
-        prices,
-        trustScores,
-        ...(userHoldings && { userHoldings })
-      };
-
-      return res.status(200).json(response);
-    } catch (error) {
-      attempt++;
-      if (attempt === MAX_RETRIES) {
-        console.error('Dashboard API Error after retries:', error);
-        return res.status(500).json({ 
-          error: 'Failed to fetch dashboard data',
-          details: error instanceof Error ? error.message : 'Unknown error'
-        });
-      }
-      // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+  try {
+    // Check if we have cached data
+    const cachedData = cache.get(CACHE_KEY);
+    if (cachedData) {
+      console.log('Returning cached dashboard data');
+      return res.status(200).json(cachedData);
     }
+
+    // If no cached data, fetch fresh data
+    const MAX_RETRIES = 3;
+    let attempt = 0;
+    
+    while (attempt < MAX_RETRIES) {
+      try {
+        const walletAddress = req.query.wallet as string;
+        
+        const timeout = (promise: Promise<any>, ms: number) => {
+          return Promise.race([
+            promise,
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Timeout')), ms)
+            )
+          ]);
+        };
+
+        const [partnersResult, holdingsResult, pricesResult, userHoldingsResult] = await Promise.allSettled([
+          timeout(getAllPartners(), 10000),
+          timeout(getDAOHoldings(), 10000),
+          timeout(getTokenPrices(), 10000),
+          walletAddress ? timeout(getUserHoldings(walletAddress), 10000) : Promise.resolve(undefined)
+        ]);
+
+        const partners = partnersResult.status === 'fulfilled' ? partnersResult.value : [];
+        const holdings = holdingsResult.status === 'fulfilled' ? holdingsResult.value : [];
+        const prices = pricesResult.status === 'fulfilled' ? pricesResult.value : [];
+        const userHoldings = userHoldingsResult.status === 'fulfilled' ? userHoldingsResult.value : undefined;
+
+        if (!partners.length || !prices.length) {
+          throw new Error('Missing critical data');
+        }
+
+        const trustScores = partners.reduce((acc, partner) => {
+          const trustResult = calculateTrustScoreWithTier(partner.amount);
+          acc[partner.owner] = trustResult.score;
+          return acc;
+        }, {} as Record<string, number>);
+
+        const response: DashboardResponse = {
+          partners,
+          holdings,
+          prices,
+          trustScores,
+          ...(userHoldings && { userHoldings })
+        };
+
+        // Cache the response
+        cache.set(CACHE_KEY, response);
+        console.log('Cached fresh dashboard data');
+
+        return res.status(200).json(response);
+      } catch (error) {
+        attempt++;
+        if (attempt === MAX_RETRIES) {
+          console.error('Dashboard API Error after retries:', error);
+          return res.status(500).json({ 
+            error: 'Failed to fetch dashboard data',
+            details: error instanceof Error ? error.message : 'Unknown error'
+          });
+        }
+        await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+      }
+    }
+  } catch (error) {
+    console.error('Cache error:', error);
+    return res.status(500).json({ 
+      error: 'Server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
+}
+
+// Add function to manually clear cache if needed
+export function clearDashboardCache() {
+  cache.del(CACHE_KEY);
 }
