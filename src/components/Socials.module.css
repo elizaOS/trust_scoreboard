@@ -7,6 +7,7 @@
     position: relative;
     line-height: 22px;
     font-weight: 600;
+    margin: 0 24px;
 }
 .button {
     border-radius: 14px;
@@ -52,9 +53,10 @@
 .buttonParent {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: left;
     gap: 12px;
-    width: 100%;
+    width: calc(100% - 16px);
+    margin: 0 0px;
 }
 .numberParent {
     width: 100%;
@@ -63,7 +65,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 24px 24px;
+    padding: 0 8px;
     box-sizing: border-box;
     gap: 10px;
     max-width: 600px;
@@ -87,6 +89,18 @@
     font-size: 24px;
     font-weight: 600;
     color: #242424;
-    margin-bottom: 8px;
+    padding: 24px 0px 10px;
+    margin: 0 0px;
     font-family: 'SF Compact Rounded';
+}
+
+@media (max-width: 768px) {
+    .numberParent {
+        padding: 0 8px;  /* Match metricsBar margin */
+    }
+    
+    .title {
+        margin: 24px 0px 16px 24px;  /* Add spacing between sections */
+        font-family: 'SF Compact Rounded';
+    }
 }

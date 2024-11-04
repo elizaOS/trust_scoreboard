@@ -23,7 +23,7 @@
     flex-shrink: 0;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: left;
     justify-content: center;
     padding: 8px 14px;
     box-sizing: border-box;
@@ -203,10 +203,10 @@
     width: 100%;
     background: linear-gradient(to right, rgba(156, 149, 132, 0.95), rgba(115, 107, 85, 0.95));
     border-radius: 16px;
-    padding: 12px;
+    padding: 20px;
     display: flex;
     justify-content: space-around;
-    gap: 8px;
+    gap: 80px;
     box-sizing: border-box;
     backdrop-filter: blur(10px);
 }
@@ -214,7 +214,7 @@
 .metricItem {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     gap: 2px;
     flex: 1;
     min-width: 0;
@@ -227,35 +227,37 @@
     font-weight: 600;
     color: #FFFFFF;
     line-height: 1.2;
-    text-align: center;
+    text-align: left;
     white-space: nowrap;
 }
 
 .metricLabel {
     font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.7);
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    text-align: center;
+    text-align: left;
     white-space: nowrap;
 }
 
 @media (max-width: 768px) {
     .metricsBar {
-        padding: 8px;
-        gap: 4px;
-        margin: 0 8px;
+        padding: 18px;
+        gap: 60px;
+        margin: 0 0px;
         background: linear-gradient(to right, rgba(156, 149, 132, 1), rgba(115, 107, 85, 1));
     }
 
     .metricValue {
-        font-size: 16px;
+        font-size: 20px;
+        text-align: left;
     }
 
     .metricLabel {
-        font-size: 9px;
+        font-size: 12px;
+        text-align: left;
     }
 
     .buttonParent {

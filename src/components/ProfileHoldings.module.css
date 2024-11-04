@@ -145,29 +145,19 @@
 
 @media (max-width: 768px) {
   .container {
-    padding: 12px 8px;
+    padding: 24px 8px;
     overflow-x: hidden;
   }
 
   .holdingsTable {
-    width: calc(100% - 16px);
-    margin: 0 8px;
+    width: 100%;
   }
 
-  .holdingCell {
-    padding: 12px 8px;
-  }
-
-  .valueCell {
-    padding: 12px 8px;
-  }
-
-  .allocationCell {
-    padding: 12px 8px;
-  }
-
+  .holdingCell,
+  .valueCell,
+  .allocationCell,
   .tableHeader {
-    padding: 8px;
+    padding: 12px 8px;
   }
 
   /* Adjust the holding info layout */
