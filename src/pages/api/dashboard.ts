@@ -12,11 +12,11 @@ const CACHE_KEY = 'dashboard_data';
 // Constants
 const HELIUS_API = `https://mainnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_SOLANA_API}`;
 const TOKENS = {
-  PUMP: {
-    address: 'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnypump',
+  DEGENAI: {
+    address: 'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnyai16z',
     totalSupply: 999994411.71,
   },
-  HELP: {
+  AI16Z: {
     address: 'HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC',
     totalSupply: 1099999775.54,
   }
@@ -55,7 +55,7 @@ interface DashboardResponse {
   userHoldings?: TokenHolding[];
 }
 
-// Add new helper function for trust score calculation with tiers
+// Add new ai16zer function for trust score calculation with tiers
 const calculateTrustScoreWithTier = (amount: number): TrustScoreResult => {
   const rawScore = amount === 0 ? 0 : Math.min(100, (amount / MIN_AMOUNT) * 10);
   const score = Number(rawScore.toFixed(1));
@@ -93,10 +93,10 @@ async function getTokenPrices() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           jsonrpc: '2.0',
-          id: 'help-price',
+          id: 'ai16z-price',
           method: 'getAsset',
           params: {
-            id: TOKENS.HELP.address,
+            id: TOKENS.AI16Z.address,
             displayOptions: {
               showFungible: true
             }
@@ -108,10 +108,10 @@ async function getTokenPrices() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           jsonrpc: '2.0',
-          id: 'pump-price',
+          id: 'degenai-price',
           method: 'getAsset',
           params: {
-            id: TOKENS.PUMP.address,
+            id: TOKENS.DEGENAI.address,
             displayOptions: {
               showFungible: true
             }
@@ -120,17 +120,17 @@ async function getTokenPrices() {
       })
     ]);
 
-    const [helpData, pumpData] = await Promise.all(responses.map(r => r.json()));
-    console.log('Price data:', { help: helpData, pump: pumpData });
+    const [ai16zData, degenAiData] = await Promise.all(responses.map(r => r.json()));
+    console.log('Price data:', { ai16z: ai16zData, degenAi: degenAiData });
 
     return [
       {
-        address: TOKENS.HELP.address,
-        usdPrice: helpData.result?.token_info?.price_info?.price_per_token || 0
+        address: TOKENS.AI16Z.address,
+        usdPrice: ai16zData.result?.token_info?.price_info?.price_per_token || 0
       },
       {
-        address: TOKENS.PUMP.address,
-        usdPrice: pumpData.result?.token_info?.price_info?.price_per_token || 0
+        address: TOKENS.DEGENAI.address,
+        usdPrice: ai16zData.result?.token_info?.price_info?.price_per_token || 0
       }
     ];
   } catch (error) {
@@ -180,36 +180,35 @@ async function getUserHoldings(walletAddress: string): Promise<TokenHolding[]> {
 
     // Initialize holdings array
     const holdings: TokenHolding[] = [];
-
-    // Process HELP token
-    const helpToken = data.result.items?.find((item: any) => 
-      item.id === TOKENS.HELP.address
+    // Process AI16Z token
+    const ai16zHolding = data.result.items?.find((item: any) => 
+      item.id === TOKENS.AI16Z.address
     );
-    if (helpToken) {
-      const amount = Number(helpToken.token_info?.amount || 0) / Math.pow(10, DECIMALS);
-      const price = priceMap[TOKENS.HELP.address] || 0;
+    if (ai16zHolding) {
+      const amount = Number(ai16zHolding.token_info?.amount || 0) / Math.pow(10, DECIMALS);
+      const price = priceMap[TOKENS.AI16Z.address] || 0;
       const value = amount * price;
       holdings.push({
         name: 'ai16z',
         amount,
-        allocation: (amount / TOKENS.HELP.totalSupply) * 100,
+        allocation: (amount / TOKENS.AI16Z.totalSupply) * 100,
         price,
         value
       });
     }
 
-    // Process PUMP token
-    const pumpToken = data.result.items?.find((item: any) => 
-      item.id === TOKENS.PUMP.address
+    // Process DEGENAI token
+    const ai16zToken = data.result.items?.find((item: any) => 
+      item.id === TOKENS.DEGENAI.address
     );
-    if (pumpToken) {
-      const amount = Number(pumpToken.token_info?.amount || 0) / Math.pow(10, DECIMALS);
-      const price = priceMap[TOKENS.PUMP.address] || 0;
+    if (ai16zToken) {
+      const amount = Number(ai16zToken.token_info?.amount || 0) / Math.pow(10, DECIMALS);
+      const price = priceMap[TOKENS.DEGENAI.address] || 0;
       const value = amount * price;
       holdings.push({
         name: 'degenai',
         amount,
-        allocation: (amount / TOKENS.PUMP.totalSupply) * 100,
+        allocation: (amount / TOKENS.DEGENAI.totalSupply) * 100,
         price,
         value
       });
@@ -242,7 +241,7 @@ async function getAllPartners(): Promise<Partner[]> {
           id: "helius-test",
           method: "getTokenAccounts",
           params: {
-            mint: TOKENS.HELP.address,
+            mint: TOKENS.AI16Z.address,
             limit: 1000,
             displayOptions: {
               showZeroBalance: false
@@ -292,7 +291,7 @@ async function getAllPartners(): Promise<Partner[]> {
       .values()
     ).sort((a, b) => b.amount - a.amount);
 
-    console.log(`Found ${uniqueHolders.length} unique holders with > ${MIN_AMOUNT} HELP`);
+    console.log(`Found ${uniqueHolders.length} unique holders with > ${MIN_AMOUNT} AI16Z`);
     return uniqueHolders;
   } catch (error) {
     console.error("Error fetching partner accounts:", error);

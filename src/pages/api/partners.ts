@@ -13,7 +13,7 @@ interface Partner {
   trustScore?: number;  // Make optional since it's calculated later
 }
 
-// Add helper function for address truncation
+// Add ai16zer function for address truncation
 const truncateAddress = (address: string): string => {
   if (!address) return '';
   return `${address.slice(0, 4)}...${address.slice(-4)}`;

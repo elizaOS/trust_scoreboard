@@ -6,7 +6,7 @@ const API_KEY = process.env.NEXT_PUBLIC_CG_API;
 const SOLANA_PLATFORM_ID = 'solana';
 const TOKEN_ADDRESSES = [
   'HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC',
-  'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnypump'
+  'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnyai16z'
 ];
 
 interface TokenPrice {

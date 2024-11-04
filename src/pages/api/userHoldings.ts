@@ -16,11 +16,11 @@ interface TokenResponse {
 
 const HELIUS_API_KEY = process.env.NEXT_PUBLIC_SOLANA_API;
 const TOKENS = {
-  PUMP: {
-    address: 'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnypump',
+  DEGENAI: {
+    address: 'Gu3LDkn7Vx3bmCzLafYNKcDxv2mH7YN44NJZFXnyai16z',
     totalSupply: 999994411.71,
   },
-  HELP: {
+  AI16Z: {
     address: 'HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC',
     totalSupply: 1099999775.54,
   }
@@ -69,10 +69,10 @@ export async function getUserHoldings(walletAddress: string): Promise<TokenRespo
 
     // Process results
     for (const item of result.items) {
-      if (item.id === TOKENS.PUMP.address || item.id === TOKENS.HELP.address) {
+      if (item.id === TOKENS.DEGENAI.address || item.id === TOKENS.AI16Z.address) {
         const amount = Number(item.token_info?.amount || 0);
-        const isPump = item.id === TOKENS.PUMP.address;
-        const totalSupply = isPump ? TOKENS.PUMP.totalSupply : TOKENS.HELP.totalSupply;
+        const isPump = item.id === TOKENS.DEGENAI.address;
+        const totalSupply = isPump ? TOKENS.DEGENAI.totalSupply : TOKENS.AI16Z.totalSupply;
         const price = tokenPrices[item.id] || 0;
 
         holdings.push({
