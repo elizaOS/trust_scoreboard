@@ -74,7 +74,6 @@
     font-weight: 600;
     color: #242424;
     margin: 24px 0px 10px 0px;
-    font-family: 'SF Compact Rounded';
 }
 .buttonParent {
     display: flex;
@@ -83,7 +82,6 @@
     gap: 12px;
     width: 100%;
     margin: 0 0px;
-    font-family: 'SF Compact Rounded';
 }
 
 @media (max-width: 768px) {
@@ -93,10 +91,8 @@
     
     .title {
         margin: 24px 0 16px 24px;  /* Add spacing between sections */
-        font-family: 'SF Compact Rounded';
     }
     .buttonParent {
         margin: 0 24px;
-        font-family: 'SF Compact Rounded';
     }
 }
