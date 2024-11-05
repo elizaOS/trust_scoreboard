@@ -94,7 +94,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    padding: 8px 14px;
+    padding: 0px 14px;
     box-sizing: border-box;
     gap: 8px;
     max-width: 600px;
@@ -128,7 +128,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 8px 24px;
+    padding: 24px 0px;
     box-sizing: border-box;
     gap: 2px;
     text-align: left;
@@ -138,13 +138,15 @@
 }
 
 .container {
-  width: 100%;
-  padding: 20px;
+  width: 700px;
+  padding: 24px 0 0 0;
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
   .container {
+    width: 100%;
     padding: 24px 8px;
     overflow-x: hidden;
   }
