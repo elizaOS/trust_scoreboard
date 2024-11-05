@@ -112,15 +112,9 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
       <div className={styles.metricValue}>
         {label === 'TRUST SCORE' && value === '0.0' ? (
           <div className={styles.tooltipContainer}>
-            <Image 
-              src="/null.svg"
-              alt="Null trust score"
-              width={20}
-              height={20}
-              className={styles.trustScoreImage}
-            />
+            <span className={styles.metricText}>-</span>
             <span className={styles.tooltip}>
-              AI Marc is Calculating Your Trust
+              Your Trust Score is Not Yet Calculated
             </span>
           </div>
         ) : (

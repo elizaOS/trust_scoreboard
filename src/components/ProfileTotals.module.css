@@ -272,6 +272,14 @@
     justify-content: center;
 }
 
+.metricText {
+    font-size: 34px;
+    line-height: 42px;
+    font-weight: 600;
+    font-family: 'SF Compact Rounded';
+    color: #FFFFFF;
+}
+
 .tooltip {
     visibility: hidden;
     position: absolute;
@@ -304,11 +312,5 @@
     border-width: 5px;
     border-style: solid;
     border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
-}
-
-.trustScoreImage {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
 }
 

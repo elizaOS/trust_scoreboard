@@ -14,9 +14,8 @@ interface DashboardData {
   }[];
 }
 
-// Add AI16Z token constant
 const AI16Z_ADDRESS = 'HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC';
-const DECIMALS = 1_000_000_000; // 9 decimals for Solana tokens
+const DECIMALS = 1_000_000_000;
 
 const LeaderboardTotals: NextPage = () => {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -27,9 +26,7 @@ const LeaderboardTotals: NextPage = () => {
     const fetchData = async () => {
       try {
         const response = await fetch('/api/dashboard');
-        if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
-        }
+        if (!response.ok) throw new Error('Failed to fetch data');
         const result = await response.json();
         setData(result);
       } catch (err) {
@@ -51,39 +48,49 @@ const LeaderboardTotals: NextPage = () => {
 
     const totalPartners = data.partners.length;
     const helpPrice = data.prices.find(p => p.address === AI16Z_ADDRESS)?.usdPrice || 0;
-    const totalWorth = data.partners.reduce((sum, partner) => {
-      return sum + partner.amount * helpPrice;
-    }, 0);
+    const totalWorth = data.partners.reduce((sum, partner) => sum + partner.amount * helpPrice, 0);
+    const newPartners = data.partners.filter(partner => 
+      new Date(partner.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    ).length;
 
-    return {
-      totalPartners,
-      totalWorth,
-      newPartners: data.partners.filter(partner => 
-        new Date(partner.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-      ).length
-    };
+    return { totalPartners, totalWorth, newPartners };
   };
 
-  if (isLoading) return <div className={styles.loading}>Loading...</div>;
-  if (error) return <div className={styles.error}>Error: {error}</div>;
+  const renderMetric = (value: string | number, label: string) => (
+    <div className={styles.numberAndBadgeParent}>
+      <div className={styles.numberAndBadge}>
+        <div className={styles.number}>{value}</div>
+      </div>
+      <div className={styles.headingWrapper}>
+        <div className={styles.heading}>{label}</div>
+      </div>
+    </div>
+  );
 
   const metrics = calculateMetrics();
 
   return (
-    <div className={styles.statsContainer}>
-      <div className={styles.statItem}>
-        <div className={styles.statValue}>{metrics.totalPartners.toLocaleString()}</div>
-        <div className={styles.statLabel}>PARTNERS</div>
-      </div>
-      <div className={styles.statItem}>
-        <div className={styles.statValue}>
-          ${(metrics.totalWorth / 1000000).toFixed(2)}m
-        </div>
-        <div className={styles.statLabel}>TOTAL WORTH</div>
-      </div>
-      <div className={styles.statItem}>
-        <div className={styles.statValue}>+{metrics.newPartners.toLocaleString()}</div>
-        <div className={styles.statLabel}>NEW PARTNERS (7D)</div>
+    <div className={styles.frameParent}>
+      <div className={styles.instanceParent}>
+        {isLoading ? (
+          <>
+            {renderMetric(<div className="animate-pulse bg-gray-300 h-8 w-24 rounded" />, 'PARTNERS')}
+            {renderMetric(<div className="animate-pulse bg-gray-300 h-8 w-24 rounded" />, 'TOTAL WORTH')}
+            {renderMetric(<div className="animate-pulse bg-gray-300 h-8 w-24 rounded" />, 'NEW PARTNERS (7D)')}
+          </>
+        ) : error ? (
+          <>
+            {renderMetric('-', 'PARTNERS')}
+            {renderMetric('-', 'TOTAL WORTH')}
+            {renderMetric('-', 'NEW PARTNERS (7D)')}
+          </>
+        ) : (
+          <>
+            {renderMetric(metrics.totalPartners.toLocaleString(), 'PARTNERS')}
+            {renderMetric(`$${(metrics.totalWorth / 1000000).toFixed(2)}m`, 'TOTAL WORTH')}
+            {renderMetric(`+${metrics.newPartners}`, 'NEW PARTNERS (7D)')}
+          </>
+        )}
       </div>
     </div>
   );
