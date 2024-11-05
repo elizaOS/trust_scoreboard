@@ -4,13 +4,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 0 8px;
+    padding: 32px 16px;
 }
 
 .content {
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -19,62 +18,31 @@
     line-height: 42px;
     font-weight: 600;
     color: #242424;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 }
 
-.buttonParent {
-    border-radius: 14px;
-    background-color: #e8e3d6;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    align-items: left;
-    justify-content: flex-start;
-    padding: 4px;
-    margin-bottom: 24px;
+.section {
+    margin-bottom: 32px;
+    width: 100%;
 }
 
-.button {
-    width: 110px;
-    border-radius: 14px;
-    background-color: #b5ad94;
-    height: 38px;
-    overflow: hidden;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 14px;
-    box-sizing: border-box;
-    max-width: 600px;
-    color: #FFFFFF;
-}
-
-.button1 {
-    width: 110px;
-    border-radius: 14px;
-    background-color: transparent;
-    height: 38px;
-    overflow: hidden;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 14px;
-    box-sizing: border-box;
-    max-width: 600px;
-    cursor: pointer;
-    color: #9b8d7d;
+.leaderboardWrapper {
+    position: relative;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 0;
+        padding: 24px 16px;
     }
     
     .content {
-        padding: 0 8px;
+        padding: 0;
+    }
+    
+    .title {
+        font-size: 28px;
+        line-height: 36px;
+        margin-bottom: 24px;
     }
 }
