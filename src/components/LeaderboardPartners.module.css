@@ -8,7 +8,7 @@
 
 .headingParent {
     display: grid;
-    grid-template-columns: 50px 3fr 1fr 1fr;
+    grid-template-columns: 55px 3fr 1fr 1fr;
     align-items: center;
     padding: 12px 16px;
     gap: 16px;
@@ -34,10 +34,10 @@
 
 .row, .row1 {
     display: grid;
-    grid-template-columns: 5px 3fr 5fr 2fr;
+    grid-template-columns: 55px 3fr 1fr ;
     align-items: center;
     padding: 8px 16px;
-    gap: 16px;
+    gap: 10px;
     color: black;
     border-radius: 14px;
     width: 100%;
@@ -52,15 +52,18 @@
 }
 
 .text {
-    font-size: 22px;
+    font-size: 16px;
     font-weight: 600;
     color: #9B8D7D;
-    text-align: left;
+    margin-right: 1rem;
+    /* text-align: right; */
+    /* min-width: 55px; */
 }
 
 .rowChild {
     display: flex;
     align-items: center;
+    
 }
 
 .avatarImage {
@@ -74,7 +77,7 @@
 .textParent {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
 }
 
 .text1 {
@@ -86,7 +89,7 @@
 .text2 {
     color: #9B8D7D;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .textWrapper {
@@ -148,7 +151,6 @@
     opacity: 1;
 }
 
-/* Optional: Add a small arrow at the bottom of tooltip */
 .tooltip::after {
     content: '';
     position: absolute;
@@ -162,7 +164,6 @@
 
 @media (max-width: 768px) {
     .headingParent, .row, .row1 {
-        grid-template-columns: 12px 1fr 0.8fr 0.8fr;
         padding: 8px 12px;
         gap: 12px;
     }
@@ -196,6 +197,6 @@
     }
 
     .textParent {
-        gap: 2px;
+        gap: 0px;
     }
 }

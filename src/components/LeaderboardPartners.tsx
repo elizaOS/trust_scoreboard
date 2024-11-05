@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect } from 'react';
 import Image from "next/image";
 import styles from './LeaderboardPartners.module.css';
 import { useMediaQuery } from 'react-responsive';
@@ -36,7 +36,7 @@ const LeaderboardPartners: FC = () => {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
-        
+
         if (!data.partners?.length || !data.trustScores) {
           throw new Error('Invalid or empty data received');
         }
@@ -57,7 +57,7 @@ const LeaderboardPartners: FC = () => {
       } catch (err: any) {
         console.error('Fetch error:', err);
         setError(err.message);
-        
+
         if (retryCount < MAX_RETRIES) {
           setTimeout(() => {
             setRetryCount(prev => prev + 1);
@@ -109,7 +109,7 @@ const LeaderboardPartners: FC = () => {
         <div className={styles.heading2}>TRUST SCORE</div>
         <div className={styles.heading3}>HOLDINGS</div>
       </div>
-      
+
       {isLoading ? (
         Array(5).fill(0).map((_, index) => renderSkeletonRow(index))
       ) : error ? (
@@ -121,14 +121,14 @@ const LeaderboardPartners: FC = () => {
       ) : (
         partners.map((partner) => (
           <div key={partner.address} className={partner.rank % 2 === 0 ? styles.row : styles.row1}>
-            <div className={styles.text}>{partner.rank}</div>
             <div className={styles.rowChild}>
-              <Image 
-                width={34} 
-                height={34} 
-                alt="Partner avatar" 
+              <div className={styles.text}>{partner.rank}</div>
+              <Image
+                width={34}
+                height={34}
+                alt="Partner avatar"
                 src="/profile_default.png"
-                className={styles.avatarImage} 
+                className={styles.avatarImage}
               />
               <div className={styles.textParent}>
                 <div className={styles.text1}>{partner.displayAddress}</div>
@@ -138,15 +138,15 @@ const LeaderboardPartners: FC = () => {
             <div className={styles.textWrapper}>
               {partner.trustScore === 0 ? (
                 <div className={styles.tooltipContainer}>
-                  <Image 
+                  <Image
                     src="/null.svg"
                     alt="Null trust score"
-                    width={20}
-                    height={20}
+                    width={15}
+                    height={15}
                     className={styles.trustScoreImage}
                   />
                   <span className={styles.tooltip}>
-                  AI Marc is Calculating Trust
+                    AI Marc is Calculating Trust
                   </span>
                 </div>
               ) : (
