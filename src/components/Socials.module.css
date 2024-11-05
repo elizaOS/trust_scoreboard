@@ -55,11 +55,11 @@
     flex-direction: row;
     align-items: left;
     gap: 12px;
-    width: 100%;
-    margin: 0;
+    width: calc(100% - 48px);
+    margin: 0 24px;
 }
 .numberParent {
-    width: 100%;
+    width: calc(100% - 48px);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -71,6 +71,7 @@
     text-align: left;
     font-size: 18px;
     color: #242424;
+    margin: 0 24px;
 }
 .userName {
     margin-left: 8px;
@@ -88,19 +89,21 @@
     font-weight: 600;
     color: #242424;
     padding: 24px 0px 10px;
-    margin: 0;
+    margin: 0 24px;
 }
 
 @media (max-width: 768px) {
     .numberParent {
-        padding: 0;  /* Match metricsBar margin */
+        padding: 0;
+        width: calc(100% - 48px);
+        margin: 0 24px;
     }
     
     .title {
-        margin: 24px 0px 16px 24px;  /* Add spacing between sections */
+        margin: 24px;
     }
     .buttonParent {
+        width: calc(100% - 48px);
         margin: 0 24px;
-        font-family: 'SF Compact Rounded';
     }
 }
