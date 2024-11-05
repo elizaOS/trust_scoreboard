@@ -137,7 +137,7 @@ const LeaderboardPartners: FC = () => {
             </div>
             <div className={styles.textWrapper}>
               {partner.trustScore === 0 ? (
-                <div className={styles.imageWrapper}>
+                <div className={styles.tooltipContainer}>
                   <Image 
                     src="/null.svg"
                     alt="Null trust score"
@@ -145,6 +145,9 @@ const LeaderboardPartners: FC = () => {
                     height={20}
                     className={styles.trustScoreImage}
                   />
+                  <span className={styles.tooltip}>
+                  AI Marc is Calculating Your Trust
+                  </span>
                 </div>
               ) : (
                 <div className={styles.text3}>{partner.trustScore.toFixed(1)}</div>

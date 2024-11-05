@@ -103,4 +103,8 @@
         margin: 24px 0px 16px 24px;  /* Add spacing between sections */
         font-family: 'SF Compact Rounded';
     }
+    .buttonParent {
+        margin: 0 24px;
+        font-family: 'SF Compact Rounded';
+    }
 }
