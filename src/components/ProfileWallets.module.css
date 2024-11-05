@@ -89,9 +89,9 @@
     }
     
     .title {
-        margin: 24px 0 16px 0;
+        margin: 24px;
     }
     .buttonParent {
-        margin: 0;
+        margin: 24px;
     }
 }

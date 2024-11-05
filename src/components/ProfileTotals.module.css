@@ -61,10 +61,9 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin: 24px auto 16px auto;
-    gap: 12px;
+    margin: 24px 0 16px 0;
     padding: 4px;
-    width: 800px;
+    width: 100%;
 }
 
 .metricsBar {
@@ -83,7 +82,7 @@
     font-size: 24px;
     color: #fff;
     font-family: 'SF Compact Rounded';
-    margin: 0 auto;
+    margin: 0;
 }
 
 .metricItem {
@@ -157,14 +156,14 @@
 
 @media (max-width: 768px) {
     .metricsBar {
-        width: 100%;
         padding: 16px;
-        gap: 16px;
-        margin: 0 8px;
+        margin: 0;
+        width: 100%;
     }
 
     .buttonParent {
-        margin: 24px 8px 16px 8px;
+        margin: 24px 0 16px 0;
+        width: 100%;
     }
 }
 
