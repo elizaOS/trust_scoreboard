@@ -55,8 +55,8 @@
     flex-direction: row;
     align-items: left;
     gap: 12px;
-    width: calc(100% - 16px);
-    margin: 0 0px;
+    width: 100%;
+    margin: 0;
 }
 .numberParent {
     width: 100%;
@@ -65,10 +65,9 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 0 8px;
+    padding: 0;
     box-sizing: border-box;
     gap: 10px;
-    max-width: 600px;
     text-align: left;
     font-size: 18px;
     color: #242424;
@@ -89,13 +88,12 @@
     font-weight: 600;
     color: #242424;
     padding: 24px 0px 10px;
-    margin: 0 0px;
-    
+    margin: 0;
 }
 
 @media (max-width: 768px) {
     .numberParent {
-        padding: 0 8px;  /* Match metricsBar margin */
+        padding: 0;  /* Match metricsBar margin */
     }
     
     .title {

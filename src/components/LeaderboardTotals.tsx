@@ -74,9 +74,9 @@ const LeaderboardTotals: NextPage = () => {
       <div className={styles.instanceParent}>
         {isLoading ? (
           <>
-            {renderMetric(<div className="animate-pulse bg-gray-300 h-8 w-24 rounded" />, 'PARTNERS')}
-            {renderMetric(<div className="animate-pulse bg-gray-300 h-8 w-24 rounded" />, 'TOTAL WORTH')}
-            {renderMetric(<div className="animate-pulse bg-gray-300 h-8 w-24 rounded" />, 'NEW PARTNERS (7D)')}
+            {renderMetric('-', 'PARTNERS')}
+            {renderMetric('-', 'TOTAL WORTH')} 
+            {renderMetric('-', 'NEW PARTNERS (7D)')}
           </>
         ) : error ? (
           <>
