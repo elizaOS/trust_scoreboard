@@ -89,8 +89,6 @@ const LeaderboardPartners: FC = () => {
 
   return (
     <div className={styles.frameParent}>
-
-
       {isLoading ? (
         <Loader />
       ) : error ? (

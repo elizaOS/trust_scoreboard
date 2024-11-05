@@ -1,5 +1,6 @@
 .frameParent {
-    width: 100%;
+    width: 579px; /* Set default width */
+    max-width: 100%; 
     position: relative;
     border-radius: 14px;
     background: linear-gradient(180deg, #f98c13, #ffaf03);
@@ -65,6 +66,10 @@
 }
 
 @media (max-width: 768px) {
+    .frameParent {
+        width: 100%; 
+        padding: 16px;
+    }
     .instanceParent {
         flex-direction: row;
         gap: 4px;
