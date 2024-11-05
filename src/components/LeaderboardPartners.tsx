@@ -128,8 +128,8 @@ const LeaderboardPartners: FC = () => {
                       <Image
                         src="/null.svg"
                         alt="Null trust score"
-                        width={15}
-                        height={15}
+                        width={20}
+                        height={20}
                         className={styles.trustScoreImage}
                       />
                       <span className={styles.tooltip}>

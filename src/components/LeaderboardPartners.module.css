@@ -34,7 +34,7 @@
 
 .row, .row1 {
     display: grid;
-    grid-template-columns: 55px 3fr 1fr ;
+    grid-template-columns: 55px 3fr 1fr;
     align-items: center;
     padding: 8px 16px;
     gap: 10px;
@@ -57,8 +57,6 @@
     font-weight: 600;
     color: #9B8D7D;
     margin-right: 1rem;
-    /* text-align: right; */
-    /* min-width: 55px; */
 }
 
 .rowChild {
@@ -72,13 +70,12 @@
     height: 34px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 8px;
+    margin-right: 14px;
 }
 
 .textParent {
     display: flex;
     flex-direction: column;
-    gap: 2px;
 }
 
 .text1 {
@@ -116,8 +113,8 @@
 }
 
 .trustScoreImage {
-    width: 34px;
-    height: 34px;
+    width: 20px;
+    height: 20px;
     object-fit: contain;
     margin-left: auto;
 }
