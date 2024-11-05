@@ -146,7 +146,7 @@ const LeaderboardPartners: FC = () => {
                     className={styles.trustScoreImage}
                   />
                   <span className={styles.tooltip}>
-                  AI Marc is Calculating Your Trust
+                  AI Marc is Calculating Trust
                   </span>
                 </div>
               ) : (

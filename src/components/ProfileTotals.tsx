@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { useCallback, useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import styles from './ProfileTotals.module.css';
+import Image from 'next/image';
 
 type View = 'profile' | 'holdings';
 
@@ -108,7 +109,24 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
 
   const renderMetricItem = (value: React.ReactNode, label: string) => (
     <div className={styles.metricItem}>
-      <div className={styles.metricValue}>{value}</div>
+      <div className={styles.metricValue}>
+        {label === 'TRUST SCORE' && value === '0.0' ? (
+          <div className={styles.tooltipContainer}>
+            <Image 
+              src="/null.svg"
+              alt="Null trust score"
+              width={20}
+              height={20}
+              className={styles.trustScoreImage}
+            />
+            <span className={styles.tooltip}>
+              AI Marc is Calculating Your Trust
+            </span>
+          </div>
+        ) : (
+          value
+        )}
+      </div>
       <div className={styles.metricLabel}>{label}</div>
     </div>
   );
