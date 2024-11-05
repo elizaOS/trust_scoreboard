@@ -50,7 +50,7 @@ export const AppBar: React.FC = () => {
 
   return (
     <div>
-      <div className="navbar flex h-20 flex-row md:mb-2 text-black bg-[#E8E3D5] text-neutral-content">
+      <div className="navbar flex h-20 flex-row md:mb-2 text-black bg-[#F1EDE3] text-neutral-content">
         <div className="navbar-start align-items-center">
           <div className="w-22 h-22 md:p-2 ml-4 md:ml-10">
             <Link href="/" passHref className="text-secondary hover:text-white">
