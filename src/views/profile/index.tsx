@@ -9,6 +9,7 @@ import ProfileHoldings from '../../components/ProfileHoldings';
 import styles from './index.module.css';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { PiUserCircleDashedThin } from "react-icons/pi";
 
 type View = 'profile' | 'holdings';
 
@@ -37,17 +38,13 @@ const ProfileView: FC = () => {
             priority
           />
         ) : (
-          <Image
-            src="/profile_default.png"
-            alt="Default Profile"
-            width={80}
-            height={80}
-            className="rounded-full"
-            priority
-          />
+          <div className="w-28 h-28 rounded-full bg-[#ded8c7] flex justify-center items-center">
+            <PiUserCircleDashedThin className="w-20 h-20" />
+          </div>
+
         )}
       </div>
-      
+
       <div className="flex justify-center w-full" style={{ padding: '0 16px', maxWidth: '600px' }}>
         <ProfileTotals onViewChange={handleViewChange} />
       </div>
