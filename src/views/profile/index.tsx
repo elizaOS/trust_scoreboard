@@ -25,7 +25,7 @@ const ProfileView: FC = () => {
   return (
     <div className={`${styles.container} text-left`}>
       <div className="flex flex-col items-center">
-        <h1 className={`${styles.title} font-display font-bold text-2xl mt-4 mx-6 text-black`}>Profile</h1>
+        <h1 className={`${styles.title} font-display  text-2xl mt-4 mx-6 text-black`}>Profile</h1>
         {status === 'loading' ? (
           <div className="w-20 h-20 rounded-full bg-gray-200 animate-pulse" />
         ) : session?.user?.image ? (

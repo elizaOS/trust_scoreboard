@@ -2,14 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.cdnfonts.com/css/sf-compact-display');
+
 :root {
-  --font-family-base: "SF Compact Round", "SF Compact Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-family-base:'SF Compact Display', sans-serif;
+                                                
 }
 
 body {
   margin: 0;
   line-height: normal;
-  font-family: var(--font-family-base);
+  font-family: var(--font-family-base) !important;
 }
 
 html,

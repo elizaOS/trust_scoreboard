@@ -19,8 +19,9 @@
   line-height: 42px;
   font-weight: 600;
   color: #242424;
-  font-weight: bold;
   margin-bottom: 24px;
+  font-family: 'SF Compact Display', sans-serif;
+                                                
 }
 
 @media (max-width: 768px) {

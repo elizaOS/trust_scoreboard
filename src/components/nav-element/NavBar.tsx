@@ -68,6 +68,7 @@ export const AppBar: React.FC = () => {
         {
           session?.user && (<button className="
       text-white
+      font-sans
       font-semibold
       bg-[#F98C13]
       rounded-xl

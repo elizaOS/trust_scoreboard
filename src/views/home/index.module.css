@@ -17,9 +17,11 @@
 .title {
     font-size: 34px;
     line-height: 42px;
-    font-weight: 600;
+    font-weight: 400;
     color: #242424;
     margin-bottom: 32px;
+    font-family: var(--font-family-base)
+                                                
 }
 
 .section {
