@@ -49,7 +49,7 @@ export const AppBar: React.FC = () => {
   );
 
   return (
-    <div className=" flex flex-row items-center justify-between h-auto md:h-20 text-black bg-[#E8E3D5] text-neutral-content my-2">
+    <div className=" flex flex-row items-center justify-between h-auto md:h-20 text-black bg-[#F1EDE3] text-neutral-content my-2">
       <div className="flex items-center">
         <div className="w-22 h-22 md:p-2 ml-4 md:ml-10">
           <Link href="/" passHref className="text-secondary hover:text-white">
