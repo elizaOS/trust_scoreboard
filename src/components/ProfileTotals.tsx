@@ -126,7 +126,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
   );
 
   return (
-    <div>
+    <div className='w-full'>
       <div className={styles.buttonParent}>
         <button
           className={activeView === 'profile' ? styles.button1 : styles.button}

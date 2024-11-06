@@ -7,7 +7,7 @@
     position: relative;
     line-height: 22px;
     font-weight: 600;
-    margin: 0 24px;
+    margin: 0 14px;
 }
 .button {
     border-radius: 14px;
@@ -18,9 +18,9 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 8px 14px;
+    padding: 8px 0px;
     box-sizing: border-box;
-    max-width: 600px;
+    max-width: 300px;
     transition: all 0.2s ease;
 }
 
@@ -41,7 +41,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 8px 14px;
+    padding: 8px 0px;
     box-sizing: border-box;
     max-width: 600px;
 }

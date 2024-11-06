@@ -18,6 +18,7 @@
     font-weight: 600;
 }
 
+
 .button {
     width: 110px;
     border-radius: 14px;
@@ -34,12 +35,13 @@
     max-width: 600px;
     cursor: pointer;
     color: #9b8d7d;
+    transition: background-color 0.3s ease, color 0.3s ease; 
 }
 
 .button1 {
     width: 110px;
     border-radius: 14px;
-    background-color: #b5ad94;
+    background-color: #B5AD94;
     height: 38px;
     overflow: hidden;
     flex-shrink: 0;
@@ -51,23 +53,35 @@
     box-sizing: border-box;
     max-width: 600px;
     color: #fff;
+    transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+
+.button:hover {
+    background-color: rgba(155, 141, 125, 0.1); 
+    color: #B5AD94;
+}
+
+.button1:hover {
+    background-color: #AFA785; 
 }
 
 .buttonParent {
-    border-radius: 14px;
-    background-color: #e8e3d6;
+    border-radius: 18px;
+    background-color: #ded8c7; 
     overflow: hidden;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin: 24px 24px 16px 24px;
+    margin: 24px auto 16px; 
     padding: 4px;
-    width: calc(100% - 48px);
+    width: 230px;
 }
 
 .metricsBar {
-    width: calc(100% - 48px);
+    width: 579px; 
+    max-width: 100%; 
     position: relative;
     background: linear-gradient(180deg, #9c9584, #736b55);
     border-radius: 14px;
@@ -81,8 +95,8 @@
     text-align: left;
     font-size: 24px;
     color: #fff;
-    font-family: 'SF Compact Rounded';
-    margin: 0 24px;
+    font-family: var(--font-family-base);
+    /* margin: 0 24px; */
 }
 
 .metricItem {
@@ -110,7 +124,6 @@
     text-transform: uppercase;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.7);
-    font-family: 'Open Runde';
 }
 
 .tooltipContainer {
@@ -158,12 +171,10 @@
     .metricsBar {
         padding: 16px;
         margin: 24 24px;
-        width: calc(100% - 48px);
+        width: 100%; 
     }
 
-    .buttonParent {
-        margin: 24px 24px 16px 24px;
-        width: calc(100% - 48px);
-    }
+
+     
 }
 
