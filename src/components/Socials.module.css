@@ -23,6 +23,7 @@
     box-sizing: border-box;
     max-width: 300px;
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
 .button.active {
