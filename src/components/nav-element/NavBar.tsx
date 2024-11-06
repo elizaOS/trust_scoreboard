@@ -67,6 +67,9 @@ export const AppBar: React.FC = () => {
         </div>
 
         <div className="navbar-end">
+          <button className='py-2 px-4 bg-[#F98C13] rounded-xl'>
+            Become Partner
+          </button>
           <div className="flex items-center justify-end gap-6 px-4">
             <ProfileElement />
           </div>
