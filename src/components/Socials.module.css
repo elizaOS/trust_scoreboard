@@ -8,6 +8,7 @@
     line-height: 22px;
     font-weight: 600;
     margin: 0 14px;
+    
 }
 .button {
     border-radius: 14px;
@@ -74,7 +75,7 @@
     margin: 0 24px;
 }
 .userName {
-    margin-left: 8px;
+    margin: 0 8px;
     font-size: 14px;
     opacity: 0.9;
     color: #fff;
