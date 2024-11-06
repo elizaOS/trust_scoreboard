@@ -37,7 +37,7 @@ const SocialButton: FC<SocialButtonProps> = ({ provider }) => {
     >
       <div className={styles.text}>
         {isThisProviderActive 
-          ? `Connected to ${provider}` 
+          ? `Disconnect ${provider}` 
           : `Connect with ${provider}`}
       </div>
       {isThisProviderActive && session?.user?.name && (
