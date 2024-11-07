@@ -2099,19 +2099,13 @@
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.5.tgz"
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
 
-"@types/react@^18.0.27":
-  version "18.0.27"
-  resolved "https://registry.npmjs.org/@types/react/-/react-18.0.27.tgz"
-  integrity sha512-3vtRKHgVxu3Jp9t718R9BuzoD4NcQ8YJ5XRzsSKxNDiDonD2MXIT1TmSkenxuCycZJoQT5d2vE8LwWJxBC1gmA==
+"@types/react@^18.3.12":
+  version "18.3.12"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.12.tgz#99419f182ccd69151813b7ee24b792fe08774f60"
+  integrity sha512-D2wOSq/d6Agt28q7rSI3jhU7G6aiuzljDGZ2hTZHIkrTLUI+AF3WMeKkEZ9nN2fkBAlcktT6vcZjDFiIhMYEQw==
   dependencies:
     "@types/prop-types" "*"
-    "@types/scheduler" "*"
     csstype "^3.0.2"
-
-"@types/scheduler@*":
-  version "0.16.2"
-  resolved "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
-  integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
 "@types/uuid@8.3.4", "@types/uuid@^8.3.4":
   version "8.3.4"
@@ -5928,10 +5922,10 @@ react@16.13.1:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
 
-react@^18.2.0:
-  version "18.2.0"
-  resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
-  integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
+react@^18.3.1:
+  version "18.3.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.3.1.tgz#49ab892009c53933625bd16b2533fc754cab2891"
+  integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==
   dependencies:
     loose-envify "^1.1.0"
 
