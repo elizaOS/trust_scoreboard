@@ -87,7 +87,7 @@
     justify-content: flex-start;
     font-size: 12px;
     color: rgba(255, 255, 255, 0.7);
-    font-family: 'Open Runde';
+    font-family: var(--font-family-base);
 }
 
 .numberAndBadgeParent {
@@ -243,7 +243,7 @@
 }
 
 .statValue {
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-family-base);
   font-size: 36px;
   font-weight: 700;
   color: #FFFFFF;
@@ -251,7 +251,7 @@
 }
 
 .statLabel {
-  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-family-base);
   font-size: 14px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.9);
@@ -265,7 +265,7 @@
   background: linear-gradient(180deg, #f98c13, #ffaf03);
   border-radius: 24px;
   color: #FFFFFF;
-  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-family-base);
 }
 
 @media (max-width: 768px) {

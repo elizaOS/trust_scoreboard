@@ -12,7 +12,7 @@
     align-items: center;
     text-decoration: none;
     color: #242424;
-    font-family: 'SF Compact Rounded', sans-serif;
+    font-family: var(--font-family-base);
     font-weight: 500;
   }
   
