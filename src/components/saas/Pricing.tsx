@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import Link from 'next/link';
 import styles from './Pricing.module.css';
 import GetStarted from './GetStarted';
 
@@ -91,6 +92,12 @@ const Pricing: FC = () => {
         {pricingTiers.map((tier, index) => (
           <PricingCard key={index} {...tier} />
         ))}
+      </div>
+      <div className={styles.creditsCTA}>
+        <p>Need more?</p>
+        <Link href="/credits" className={styles.creditsButton}>
+          Buy Credits
+        </Link>
       </div>
     </div>
   );

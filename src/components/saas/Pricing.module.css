@@ -195,3 +195,51 @@
         padding: 4px 8px;
     }
 }
+
+.creditsCTA {
+    margin-top: 64px;
+    text-align: center;
+    padding: 32px;
+    font-weight: bold;
+    background-color: #E8E3D6;
+    border-radius: 12px;
+    width: 100%;
+}
+
+.creditsCTA p {
+    font-size: 18px;
+    color: #242424;
+    margin-bottom: 16px;
+}
+
+.creditsButton {
+    display: inline-block;
+    padding: 14px 32px;
+    background-color: #F98C12;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 16px;
+}
+
+.creditsButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(249, 140, 18, 0.3);
+}
+
+@media (max-width: 768px) {
+    .creditsCTA {
+        margin-top: 48px;
+        padding: 24px 16px;
+    }
+
+    .creditsCTA p {
+        font-size: 16px;
+    }
+
+    .creditsButton {
+        padding: 12px 24px;
+    }
+}
