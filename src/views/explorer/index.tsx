@@ -6,14 +6,14 @@ import ScoreCard from '../../components/Trust/ScoreCard';
 // Mock user data
 const mockUserProfile = {
   address: "GxkXGe3YcqBdEgBrBh19X3wkLkgJXK2jA4k4nioW2Yg",
-  discordUsername: "degenai",
+  discordUsername: "futjr",
   discordImage: "/profile_default.png", // Replace with actual default image path
   followers: 0,
   following: 0,
   netWorth: 74831.94,
   solBalance: 43.77886026,
   ai16zBalance: 22,
-  scoreRank: 1
+  scoreRank: 140
 };
 
 const ExplorerView: FC = () => {

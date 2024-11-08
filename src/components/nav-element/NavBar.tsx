@@ -71,7 +71,7 @@ export const NavBar: React.FC = () => {
       <form onSubmit={handleSearch} className={styles.searchContainer}>
         <input
           type="text"
-          placeholder="Search by wallet address..."
+          placeholder="Search by Wallet Address or Discord Name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className={styles.searchInput}
