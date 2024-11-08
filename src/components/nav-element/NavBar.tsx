@@ -3,8 +3,8 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Image from 'next/image';
 import { useWallet } from '@solana/wallet-adapter-react';
-import NavElement from '.';
 import { useSession } from "next-auth/react";
+import styles from './NavBar.module.css';
 
 const truncateAddress = (address: string, length: number = 4): string => {
   if (!address) return '';
@@ -17,10 +17,17 @@ const truncateAddress = (address: string, length: number = 4): string => {
 export const NavBar: React.FC = () => {
   const { data: session } = useSession();
   const { publicKey } = useWallet();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle search logic here
+    console.log('Search query:', searchQuery);
+  };
 
   const ProfileElement = () => (
-    <div className="flex items-center gap-2 bg-[#EDE9DE] px-4 py-2 rounded-full">
-      <Link href="/profile" className="flex items-center gap-2">
+    <div className={styles.profileContainer}>
+      <Link href="/profile" className={styles.profileLink}>
         {session?.user?.image ? (
           <>
             <Image
@@ -28,86 +35,77 @@ export const NavBar: React.FC = () => {
               alt="Profile"
               width={32}
               height={32}
-              className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80"
+              className={styles.profileImage}
               onError={(e) => {
                 e.currentTarget.src = "/default-avatar.png"
               }}
             />
             {publicKey && (
-              <span className="text-[#9a8c7c] font-medium text-sm md:text-base">
+              <span className={styles.walletAddress}>
                 {truncateAddress(publicKey.toString())}
               </span>
             )}
           </>
         ) : (
-          <span className="text-[#9a8c7c] font-medium">
-            Profile
-          </span>
+          <span className={styles.profileText}>Profile</span>
         )}
       </Link>
     </div>
   );
 
   return (
-    <div className=" flex flex-row items-center justify-between h-auto md:h-20 text-black bg-[#F1EDE3] text-neutral-content my-2">
-      <div className="flex items-center">
-        <div className="w-22 h-22 md:p-2 ml-4 md:ml-10">
-          <Link href="/" passHref className="text-secondary hover:text-white">
-            <Image
-              src="/logo.svg"
-              alt="Site Logo"
-              width={24}
-              height={24}
-              priority
-              className="h-6 w-auto"
-            />
-          </Link>
-        </div>
+    <div className={styles.navbar}>
+      <div className={styles.logoContainer}>
+        <Link href="/" passHref className={styles.logoLink}>
+          <Image
+            src="/logo.svg"
+            alt="Site Logo"
+            width={24}
+            height={24}
+            priority
+            className={styles.logo}
+          />
+        </Link>
       </div>
-      <div className=" flex flex-row items-center justify-end gap-4 md:gap-6 px-4">
+
+      <form onSubmit={handleSearch} className={styles.searchContainer}>
+        <input
+          type="text"
+          placeholder="Search by wallet address..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
+        />
+        <button type="submit" className={styles.searchButton}>
+          <Image
+            src="/search-icon.svg"
+            alt="Search"
+            width={20}
+            height={20}
+          />
+        </button>
+      </form>
+
+      <div className={styles.actionsContainer}>
         {session?.user && (
-          <a 
-            href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              text-white
-              font-semibold
-              bg-[#F98C13]
-              rounded-xl
-              transition
-              duration-300
-              ease-in-out
-              hover:bg-[#e07a0f]
-              text-sm px-3 py-[8px]
-              md:text-base md:px-4 md:py-[8px]
-              lg:text-lg lg:px-4 lg:py-[8px]"
-          >
-            Become Partner
-          </a>
+          <>
+            <a 
+              href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.actionButton}
+            >
+              Become Partner
+            </a>
+            <a 
+              href="/explorer"
+              className={styles.actionButton}
+            >
+              Explorer
+            </a>
+          </>
         )}
-                {session?.user && (
-          <a 
-            href="/explorer"
-            className="
-              text-white
-              font-semibold
-              bg-[#F98C13]
-              rounded-xl
-              transition
-              duration-300
-              ease-in-out
-              hover:bg-[#e07a0f]
-              text-sm px-3 py-[8px]
-              md:text-base md:px-4 md:py-[8px]
-              lg:text-lg lg:px-4 lg:py-[8px]"
-          >
-            Explorer
-          </a>
-        )}
-        <div className="flex items-center justify-end gap-6">
-          <ProfileElement />
-        </div>
+        <ProfileElement />
       </div>
     </div>
   );

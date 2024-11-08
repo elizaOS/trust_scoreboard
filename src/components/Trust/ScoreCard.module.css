@@ -1,5 +1,5 @@
 .card {
-    background-color: #1A1D21;
+    background-color: #FA9737;
     border-radius: 0.75rem;
     padding: 1.5rem;
     transition: all 0.2s ease-in-out;
@@ -11,7 +11,8 @@
 }
 
 .title {
-    color: #9B8D7D;
+    color: #242424;
+    font-weight: 600;
     font-size: 0.875rem;
     margin-bottom: 0.5rem;
 }
@@ -24,6 +25,7 @@
 }
 
 .description {
-    color: #9B8D7D;
+    color: #242424;
+    font-weight: 400;
     font-size: 0.875rem;
 }

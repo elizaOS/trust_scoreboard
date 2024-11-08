@@ -83,8 +83,11 @@ const ExplorerView: FC = () => {
             </div>
           </div>
         </div>
-
+        <div className={styles.scoreCardsTitle}>
+            <h1>AI-16Z TRUST SCORE</h1>
+        </div>
         <div className={styles.scoreCards}>
+            
           <ScoreCard
             title="TRUST SCORE"
             value={85.5}
