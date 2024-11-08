@@ -2,18 +2,19 @@ import { FC, useState } from 'react';
 import Image from 'next/image';
 import styles from './index.module.css';
 import ScoreCard from '../../components/Trust/ScoreCard';
+import RecomendationsList from '../../components/Trust/RecomendationsList';
+import TrustScoreChart from '../../components/Trust/TrustScoreChart';
 
 // Mock user data
 const mockUserProfile = {
   address: "GxkXGe3YcqBdEgBrBh19X3wkLkgJXK2jA4k4nioW2Yg",
   discordUsername: "futjr",
-  discordImage: "/profile_default.png", // Replace with actual default image path
+  discordImage: "/profile_default.png",
   followers: 0,
   following: 0,
-  netWorth: 74831.94,
-  solBalance: 43.77886026,
-  ai16zBalance: 22,
-  scoreRank: 140
+  scoreRank: 140,
+  totalParticipants: 2481,
+  trustScore: 85.5
 };
 
 const ExplorerView: FC = () => {
@@ -23,24 +24,10 @@ const ExplorerView: FC = () => {
     try {
       await navigator.clipboard.writeText(mockUserProfile.address);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
-  };
-
-  const formatNumber = (num: number): string => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'decimal',
-      maximumFractionDigits: 2
-    }).format(num);
-  };
-
-  const formatCurrency = (num: number): string => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(num);
   };
 
   return (
@@ -87,43 +74,26 @@ const ExplorerView: FC = () => {
 
           <div className={styles.metricsGrid}>
             <div className={styles.metricCard}>
-              <p className={styles.metricLabel}>NET WORTH</p>
-              <p className={styles.metricValue}>{formatCurrency(mockUserProfile.netWorth)}</p>
-            </div>
-            <div className={styles.metricCard}>
-              <p className={styles.metricLabel}>SOL BALANCE</p>
-              <p className={styles.metricValue}>{formatNumber(mockUserProfile.solBalance)} SOL</p>
-            </div>
-            <div className={styles.metricCard}>
-              <p className={styles.metricLabel}>NUMBER OF ASSETS</p>
-              <p className={styles.metricValue}>{mockUserProfile.ai16zBalance}</p>
+              <p className={styles.metricLabel}>TRUST SCORE</p>
+              <p className={styles.metricValue}>{mockUserProfile.trustScore}</p>
+              <p className={styles.metricDescription}>Overall trust score based on multiple factors</p>
             </div>
             <div className={styles.metricCard}>
               <p className={styles.metricLabel}>SCORE RANK</p>
-              <p className={styles.metricValue}>#{mockUserProfile.scoreRank}</p>
+              <p className={styles.metricValue}>
+                #{mockUserProfile.scoreRank}
+                <span className={styles.totalRank}>/{mockUserProfile.totalParticipants}</span>
+              </p>
+              <p className={styles.metricDescription}>Current ranking among all users</p>
             </div>
           </div>
         </div>
-        <div className={styles.scoreCardsTitle}>
-            <h1>AI-16Z TRUST SCORE</h1>
-        </div>
-        <div className={styles.scoreCards}>
-            
-          <ScoreCard
-            title="TRUST SCORE"
-            value={85.5}
-            description="Overall trust score based on multiple factors"
-          />
-          <ScoreCard
-            title="RISK SCORE"
-            value={65.4}
-            description="Risk assessment of investment recommendations"
-          />
-          <ScoreCard
-            title="CONSISTENCY"
-            value={78.9}
-            description="Consistency of investment performance"
-          />
+
+        <div className={styles.chartSection}>
+          <h2 className={styles.sectionTitle}>Trust Score Trend</h2>
+          <div className={styles.chartCard}>
+            <TrustScoreChart />
+          </div>
         </div>
 
         <div className={styles.performanceSection}>
@@ -142,6 +112,11 @@ const ExplorerView: FC = () => {
               <div className={styles.performanceValue}>12.3%</div>
             </div>
           </div>
+        </div>
+
+        <div className={styles.transactionsSection}>
+          <h2 className={styles.sectionTitle}>Recommendations History</h2>
+          <RecomendationsList />
         </div>
       </main>
     </div>
