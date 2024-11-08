@@ -18,7 +18,7 @@ const creditPackages: CreditPackage[] = [
     price: 9,
     description: "For testing and small projects",
     features: [
-      "1,000 API Credits",
+      "1,000 API Request Credits",
       "30 Days Validity",
       "Basic Support",
       "Real-time Access",
