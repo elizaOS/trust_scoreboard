@@ -14,7 +14,7 @@ const truncateAddress = (address: string, length: number = 4): string => {
   return `${address.slice(0, length)}..${address.slice(-length)}`;
 };
 
-export const AppBar: React.FC = () => {
+export const NavBar: React.FC = () => {
   const { data: session } = useSession();
   const { publicKey } = useWallet();
 
@@ -84,6 +84,25 @@ export const AppBar: React.FC = () => {
               lg:text-lg lg:px-4 lg:py-[8px]"
           >
             Become Partner
+          </a>
+        )}
+                {session?.user && (
+          <a 
+            href="/explorer"
+            className="
+              text-white
+              font-semibold
+              bg-[#F98C13]
+              rounded-xl
+              transition
+              duration-300
+              ease-in-out
+              hover:bg-[#e07a0f]
+              text-sm px-3 py-[8px]
+              md:text-base md:px-4 md:py-[8px]
+              lg:text-lg lg:px-4 lg:py-[8px]"
+          >
+            Explorer
           </a>
         )}
         <div className="flex items-center justify-end gap-6">
