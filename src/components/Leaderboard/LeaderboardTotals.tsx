@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import styles from './LeaderboardTotals.module.css';
 
@@ -17,7 +17,7 @@ interface DashboardData {
 const AI16Z_ADDRESS = 'HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC';
 const DECIMALS = 1_000_000_000;
 
-const LeaderboardTotals: NextPage = () => {
+const LeaderboardTotals: FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
