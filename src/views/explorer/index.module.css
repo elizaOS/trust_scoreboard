@@ -57,12 +57,23 @@
 }
 
 .copyButton {
-    color: white;
-    transition: opacity 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border-radius: 4px;
 }
 
 .copyButton:hover {
-    opacity: 0.8;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.copyButton.copied {
+    background-color: rgba(52, 211, 153, 0.2);
 }
 
 .socialStats {

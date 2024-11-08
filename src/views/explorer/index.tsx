@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Image from 'next/image';
 import styles from './index.module.css';
 import ScoreCard from '../../components/Trust/ScoreCard';
@@ -17,6 +17,18 @@ const mockUserProfile = {
 };
 
 const ExplorerView: FC = () => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(mockUserProfile.address);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
   const formatNumber = (num: number): string => {
     return new Intl.NumberFormat('en-US', {
       style: 'decimal',
@@ -47,8 +59,17 @@ const ExplorerView: FC = () => {
               <h2 className={styles.username}>{mockUserProfile.discordUsername}</h2>
               <p className={styles.address}>
                 {mockUserProfile.address}
-                <button className={styles.copyButton}>
-                  <Image src="/copy-icon.svg" alt="Copy" width={16} height={16} />
+                <button 
+                  className={`${styles.copyButton} ${copied ? styles.copied : ''}`}
+                  onClick={handleCopy}
+                  title={copied ? "Copied!" : "Copy address"}
+                >
+                  <Image 
+                    src={copied ? "/check-icon.svg" : "/copy-icon.svg"} 
+                    alt={copied ? "Copied" : "Copy"} 
+                    width={16} 
+                    height={16} 
+                  />
                 </button>
               </p>
             </div>
