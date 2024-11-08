@@ -85,7 +85,7 @@ const Pricing: FC = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Simple, Transparent Pricing</h1>
-        <p className={styles.subtitle}>Choose the plan that's right for you</p>
+        <p className={styles.subtitle}>Choose the plan that&apos;s right for you</p>
       </div>
       <div className={styles.pricingGrid}>
         {pricingTiers.map((tier, index) => (
