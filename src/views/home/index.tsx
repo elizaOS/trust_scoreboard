@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styles from './index.module.css';
-import LeaderboardTotals from '../../components/LeaderboardTotals';
-import LeaderboardPartners from '../../components/LeaderboardPartners';
+import LeaderboardTotals from '../../components/leaderboard/LeaderboardTotals';
+import LeaderboardPartners from '../../components/leaderboard/LeaderboardPartners';
 
 export const HomeView: FC = () => {
   return (
