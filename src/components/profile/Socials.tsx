@@ -55,7 +55,7 @@ export const Socials: FC = () => {
 
   return (
     <div>
-      <h2 className={styles.title}>Socials</h2>
+      <h2 className={styles.title}>Discord</h2>
       <div className={styles.buttonParent}>
         {providers.map((provider) => (
           <SocialButton

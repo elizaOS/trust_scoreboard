@@ -178,3 +178,262 @@
      
 }
 
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
+  font-family: var(--font-family-base);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.userName {
+  font-size: 24px;
+  font-weight: 600;
+  color: #242424;
+}
+
+.userRole {
+  font-size: 16px;
+  color: #666;
+}
+
+.profileImage {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.metricCard {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.metricCard:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.metricHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.scoreCircle {
+  position: relative;
+  z-index: 1;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.rankText {
+  font-size: 24px;
+  font-weight: 600;
+  color: #4169E1;
+}
+
+.percentageValue {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 8px 0;
+}
+
+.success { color: #32CD32; }
+.transparency { color: #4169E1; }
+.shilling { color: #FF69B4; }
+
+.numberValue {
+  font-size: 32px;
+  font-weight: 600;
+  color: #8A2BE2;
+  margin: 8px 0;
+}
+
+.dateRange {
+  font-size: 12px;
+  color: #666;
+  margin-top: auto;
+  font-family: var(--font-family-base);
+}
+
+.subText {
+  font-size: 12px;
+  color: #666;
+  margin-top: auto;
+  font-family: var(--font-family-base);
+}
+
+@media (max-width: 768px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Trust Score Card */
+.trustScore {
+  background: linear-gradient(135deg, #F4A460 0%, #E67E22 100%);
+}
+
+.trustScore::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 10A50 50 0 0 1 110 60' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat;
+  opacity: 0.6;
+}
+
+/* Rank Card */
+.rank {
+  background: linear-gradient(135deg, #4169E1 0%, #2E4FD4 100%);
+}
+
+/* Make sure text remains visible on gradient backgrounds */
+.trustScore h3,
+.trustScore .dateRange,
+.trustScore .scoreCircle,
+.rank h3,
+.rank .dateRange,
+.rank .subText,
+.rank .rankText {
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.rankText {
+  font-size: 32px;
+  font-weight: 600;
+  font-family: var(--font-family-base);
+}
+
+/* Card Headers */
+.metricCard h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #242424;
+  margin: 0;
+  font-family: var(--font-family-base);
+}
+
+/* Values */
+.percentageValue {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 8px 0;
+  color: #242424;
+  font-family: var(--font-family-base);
+}
+
+.numberValue {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 8px 0;
+  color: #242424;
+  font-family: var(--font-family-base);
+}
+
+/* Date and subtext */
+.dateRange {
+  font-size: 12px;
+  color: #666;
+  margin-top: auto;
+  font-family: var(--font-family-base);
+}
+
+.subText {
+  font-size: 12px;
+  color: #666;
+  margin-top: auto;
+  font-family: var(--font-family-base);
+}
+
+/* Button styles */
+.buttonParent {
+  border-radius: 18px;
+  background-color: #ded8c7; 
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 24px auto;
+  padding: 4px;
+  width: 230px;
+  font-family: var(--font-family-base);
+}
+
+.button, .button1 {
+  width: 110px;
+  border-radius: 14px;
+  height: 38px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button {
+  background-color: transparent;
+  color: #9b8d7d;
+}
+
+.button1 {
+  background-color: #B5AD94;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .buttonParent {
+    width: 100%;
+    max-width: 230px;
+  }
+}
+

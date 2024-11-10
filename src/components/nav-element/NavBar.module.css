@@ -14,9 +14,9 @@
   flex-shrink: 0;
 }
 
-.logo {
-  height: 24px;
-  width: auto;
+.logoLink {
+  display: flex;
+  align-items: center;
 }
 
 .searchContainer {
@@ -45,18 +45,6 @@
   box-shadow: 0 0 0 2px rgba(249, 140, 19, 0.1);
 }
 
-.searchButton {
-  position: absolute;
-  right: 12px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .actionsContainer {
   display: flex;
   align-items: center;
@@ -71,6 +59,7 @@
   border-radius: 12px;
   font-size: 14px;
   transition: all 0.2s ease;
+  text-decoration: none;
   white-space: nowrap;
 }
 
@@ -82,43 +71,28 @@
   background-color: #EDE9DE;
   padding: 8px 16px;
   border-radius: 24px;
-}
-
-.profileLink {
   display: flex;
   align-items: center;
   gap: 8px;
   text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.profileContainer:hover {
+  background-color: #E5DFD3;
 }
 
 .profileImage {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.profileImage:hover {
-  opacity: 0.8;
-}
-
-.walletAddress {
-  color: #9a8c7c;
-  font-weight: 500;
-  font-size: 14px;
+  object-fit: cover;
 }
 
 .profileText {
   color: #9a8c7c;
   font-weight: 500;
-}
-
-@media (max-width: 1024px) {
-  .actionButton {
-    padding: 8px 12px;
-    font-size: 13px;
-  }
+  font-size: 14px;
 }
 
 @media (max-width: 768px) {
@@ -147,13 +121,7 @@
     padding: 6px 12px;
   }
 
-  .walletAddress {
+  .profileText {
     font-size: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .actionButton:not(:last-child) {
-    display: none;
   }
 }

@@ -1,0 +1,53 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 0;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.userName {
+  font-size: 24px;
+  font-weight: 600;
+  color: #242424;
+  margin: 0;
+}
+
+.userRole {
+  font-size: 14px;
+  color: #9B8D7D;
+  font-weight: 500;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileImage {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px 16px 0;
+  }
+  
+  .userName {
+    font-size: 20px;
+  }
+  
+  .userRole {
+    font-size: 12px;
+  }
+} 

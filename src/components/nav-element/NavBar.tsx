@@ -27,8 +27,8 @@ const NavBar: FC<NavBarProps> = () => {
           <Image
             src="/logo.svg"
             alt="Logo"
-            width={24}
-            height={24}
+            width={60}
+            height={60}
             priority
           />
         </Link>
@@ -46,13 +46,36 @@ const NavBar: FC<NavBarProps> = () => {
         </form>
       </div>
 
-      <div className={styles.navLinks}>
-        <Link href="/explorer" className={styles.navLink}>
+      <div className={styles.actionsContainer}>
+        <Link href="/explorer" className={styles.actionButton}>
           Explorer
         </Link>
-        {session && (
-          <Link href="/profile" className={styles.navLink}>
-            Profile
+        <a 
+          href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className={styles.actionButton}
+        >
+          Become Partner
+        </a>
+        {session ? (
+          <Link href="/profile" className={styles.profileContainer}>
+            <Image
+              src={session.user?.image || '/default-avatar.png'}
+              alt="Profile"
+              width={32}
+              height={32}
+              className={styles.profileImage}
+            />
+            {publicKey && (
+              <span className={styles.profileText}>
+                {`${publicKey.toString().slice(0, 4)}...${publicKey.toString().slice(-4)}`}
+              </span>
+            )}
+          </Link>
+        ) : (
+          <Link href="/api/auth/signin" className={styles.actionButton}>
+            Sign In
           </Link>
         )}
       </div>
