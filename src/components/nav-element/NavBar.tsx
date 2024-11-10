@@ -86,18 +86,65 @@ export const NavBar: React.FC = () => {
         </button>
       </form>
 
-      <div className={styles.actionsContainer}>
-        {session?.user && (
-          <>
-            <a 
-              href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.actionButton}
-            >
-              Become Partner
-            </a>
-            <Link href="/explorer">Explorer</Link>
+     <div className={styles.actionsContainer}>
+  {session?.user && (
+    <>
+      <Link
+        href="/saas"
+        className="
+          text-white
+          font-semibold
+          bg-[#242424]
+          rounded-xl
+          transition
+          duration-300
+          ease-in-out
+          hover:bg-[#363636]
+          text-sm px-3 py-[8px]
+          md:text-base md:px-4 md:py-[8px]
+          lg:text-lg lg:px-4 lg:py-[8px]"
+      >
+        API Access
+      </Link>
+      <Link 
+        href="/explorer"
+        className="
+          text-white
+          font-semibold
+          bg-[#242424]
+          rounded-xl
+          transition
+          duration-300
+          ease-in-out
+          hover:bg-[#363636]
+          text-sm px-3 py-[8px]
+          md:text-base md:px-4 md:py-[8px]
+          lg:text-lg lg:px-4 lg:py-[8px]"
+      >
+        Explorer
+      </Link>
+      <a 
+        href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="
+          text-white
+          font-semibold
+          bg-[#F98C13]
+          rounded-xl
+          transition
+          duration-300
+          ease-in-out
+          hover:bg-[#e07a0f]
+          text-sm px-3 py-[8px]
+          md:text-base md:px-4 md:py-[8px]
+          lg:text-lg lg:px-4 lg:py-[8px]"
+      >
+        Become Partner
+      </a>
+    </>
+  )}
+</div>
           </>
         )}
         <ProfileElement />

@@ -1,8 +1,11 @@
 import { FC, useState } from "react";
-import ProfileTotals from '../../components/Profile/ProfileTotals';
-import Socials from '../../components/Socials';
-import ProfileWallets from '../../components/Profile/ProfileWallets';
-import ProfileHoldings from '../../components/Profile/ProfileHoldings';
+import { SignMessage } from '../../components/SignMessage';
+import { SendTransaction } from '../../components/SendTransaction';
+import { SendVersionedTransaction } from '../../components/SendVersionedTransaction';
+import ProfileTotals from '../../components/profile/ProfileTotals';
+import Socials from '../../components/profile/Socials';
+import ProfileWallets from '../../components/profile/ProfileWallets';
+import ProfileHoldings from '../../components/profile/ProfileHoldings';
 import styles from './index.module.css';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
