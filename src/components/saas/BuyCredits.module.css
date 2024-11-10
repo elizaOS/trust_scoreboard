@@ -1,0 +1,165 @@
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 16px;
+    border-radius: 14px;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 0 16px;
+  }
+  
+  .title {
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: 600;
+    color: #242424;
+    margin-bottom: 12px;
+  }
+  
+  .subtitle {
+    font-size: clamp(14px, 4vw, 18px);
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .creditGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+    padding: 0 8px;
+  }
+  
+  .creditCard {
+    background-color: #E8E3D6;
+    border-radius: 12px;
+    padding: clamp(20px, 4vw, 32px);
+    color: black;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .highlighted {
+    background-color: #F98C12;
+    color: white;
+    position: relative;
+  }
+  
+  .popularBadge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #242424;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .tierName {
+    font-size: clamp(20px, 4vw, 24px);
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  
+  .credits {
+    font-size: clamp(32px, 6vw, 42px);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  
+  .price {
+    font-size: clamp(28px, 5vw, 36px);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  
+  .currency {
+    font-size: 0.6em;
+    vertical-align: super;
+    margin-right: 2px;
+  }
+  
+  .description {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: clamp(14px, 3vw, 16px);
+    opacity: 0.9;
+  }
+  
+  .features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+  }
+  
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: clamp(13px, 3vw, 14px);
+    line-height: 1.4;
+  }
+  
+  .checkmark {
+    color: #F98C12;
+    font-weight: bold;
+  }
+  
+  .highlighted .checkmark {
+    color: white;
+  }
+  
+  @media (max-width: 1024px) {
+    .creditGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 24px 12px;
+    }
+  
+    .creditGrid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  
+    .creditCard {
+      padding: 24px 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      padding: 16px 8px;
+    }
+  
+    .header {
+      margin-bottom: 24px;
+    }
+  
+    .creditGrid {
+      gap: 16px;
+    }
+  
+    .popularBadge {
+      font-size: 10px;
+      padding: 4px 8px;
+    }
+  }

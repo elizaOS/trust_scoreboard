@@ -66,25 +66,44 @@ export const AppBar: React.FC = () => {
       </div>
       <div className=" flex flex-row items-center justify-end gap-4 md:gap-6 px-4">
         {session?.user && (
-          <a 
-            href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              text-white
-              font-semibold
-              bg-[#F98C13]
-              rounded-xl
-              transition
-              duration-300
-              ease-in-out
-              hover:bg-[#e07a0f]
-              text-sm px-3 py-[8px]
-              md:text-base md:px-4 md:py-[8px]
-              lg:text-lg lg:px-4 lg:py-[8px]"
-          >
-            Become Partner
-          </a>
+          <>
+            <Link
+              href="/saas"
+              className="
+                text-white
+                font-semibold
+                bg-[#242424]
+                rounded-xl
+                transition
+                duration-300
+                ease-in-out
+                hover:bg-[#363636]
+                text-sm px-3 py-[8px]
+                md:text-base md:px-4 md:py-[8px]
+                lg:text-lg lg:px-4 lg:py-[8px]"
+            >
+              API Access
+            </Link>
+            <a 
+              href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                text-white
+                font-semibold
+                bg-[#F98C13]
+                rounded-xl
+                transition
+                duration-300
+                ease-in-out
+                hover:bg-[#e07a0f]
+                text-sm px-3 py-[8px]
+                md:text-base md:px-4 md:py-[8px]
+                lg:text-lg lg:px-4 lg:py-[8px]"
+            >
+              Become Partner
+            </a>
+          </>
         )}
         <div className="flex items-center justify-end gap-6">
           <ProfileElement />
