@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
 import Image from 'next/image';
 import styles from './index.module.css';
-import ScoreCard from '../../components/trust/ScoreCard';
-import RecomendationsList from '../../components/trust/RecomendationsList';
-import TrustScoreChart from '../../components/trust/TrustScoreChart';
+import ScoreCard from '../../components/Trust/ScoreCard';
+import RecomendationsList from '../../components/Trust/RecomendationsList';
+import TrustScoreChart from '../../components/Trust/TrustScoreChart';
 
 // Mock user data
 const mockUserProfile = {
