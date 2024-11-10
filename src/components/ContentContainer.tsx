@@ -1,6 +1,4 @@
 import { FC, ReactNode } from 'react';
-import Link from "next/link";
-import Text from './Text';
 import styles from './ContentContainer.module.css';
 
 interface Props {
