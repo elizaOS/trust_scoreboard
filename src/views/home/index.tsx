@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import styles from './index.module.css';
 import LeaderboardTotals from '../../components/leaderboard/LeaderboardTotals';
+import LeaderboardMedals from '../../components/leaderboard/LeaderboardMedals';
 import LeaderboardPartners from '../../components/leaderboard/LeaderboardPartners';
 
 export const HomeView: FC = () => {
@@ -8,12 +9,14 @@ export const HomeView: FC = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <h2 className={styles.title}>
-          Leaderboard
+          Trust Leaderboard
         </h2>
 
         <div className={styles.section}>
           <LeaderboardTotals />
         </div>
+
+        <LeaderboardMedals />
 
         <div className={styles.leaderboardWrapper}>
           <LeaderboardPartners />
