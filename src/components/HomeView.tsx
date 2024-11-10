@@ -1,8 +1,8 @@
 // FILE: src/views/HomeView.tsx
 import { FC, useState } from 'react';
-import LeaderboardTotals from './leaderboard/LeaderboardTotals';
-import LeaderboardPartners from './leaderboard/LeaderboardPartners';
-import LeaderboardHoldings from './leaderboard/LeaderboardHoldings';
+import LeaderboardTotals from '../components/leaderboard/LeaderboardTotals';
+import LeaderboardPartners from '../components/leaderboard/LeaderboardPartners';
+import LeaderboardHoldings from '../components/leaderboard/LeaderboardHoldings';
 
 export const HomeView: FC = () => {
   const [activeView, setActiveView] = useState<'partners' | 'holdings'>('partners');
