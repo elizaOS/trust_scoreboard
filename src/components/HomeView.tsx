@@ -1,8 +1,8 @@
 // FILE: src/views/HomeView.tsx
 import { FC, useState } from 'react';
-import LeaderboardTotals from '../components/Leaderboard/LeaderboardTotals';  // Remove curly braces
-import LeaderboardPartners from '../components/Leaderboard/LeaderboardPartners';  // Remove curly braces
-import LeaderboardHoldings from '../components/Leaderboard/LeaderboardHoldings';  // Remove curly braces
+import LeaderboardTotals from './leaderboard/LeaderboardTotals';
+import LeaderboardPartners from './leaderboard/LeaderboardPartners';
+import LeaderboardHoldings from './leaderboard/LeaderboardHoldings';
 
 export const HomeView: FC = () => {
   const [activeView, setActiveView] = useState<'partners' | 'holdings'>('partners');
