@@ -42,6 +42,7 @@
     border-radius: 14px;
     width: 100%;
     margin-bottom: 6px;
+    transition: background-color 0.2s ease;
 }
 
 /* .row {
@@ -197,4 +198,39 @@
     .textParent {
         gap: 0px;
     }
+}
+
+.currentUserRow {
+    background: #FFF5EC !important;
+    border: 1px solid #FFE4CC;
+    position: relative;
+    overflow: hidden;
+}
+
+.currentUserRow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #F98C13;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+}
+
+.currentUserRow .text1 {
+    color: #F98C13;
+}
+
+.currentUserRow .text2 {
+    color: #F98C13;
+}
+
+.row:hover, .row1:hover {
+    background: #F1EDE3;
+}
+
+.currentUserRow:hover {
+    background: #FFF5EC !important;
 }

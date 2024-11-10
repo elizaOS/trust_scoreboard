@@ -1,6 +1,8 @@
 import type { FC } from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import Image from "next/image";
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useSession } from 'next-auth/react';
 import styles from './LeaderboardPartners.module.css';
 import { useMediaQuery } from 'react-responsive';
 
@@ -12,9 +14,17 @@ interface Partner {
   displayAddress: string;
 }
 
+interface PartnerWithUser extends Partner {
+  isCurrentUser?: boolean;
+  discordName?: string;
+  discordImage?: string;
+}
+
 const LeaderboardPartners: FC = () => {
+  const { publicKey } = useWallet();
+  const { data: session } = useSession();
   const isMobile = useMediaQuery({ maxWidth: 768 });
-  const [partners, setPartners] = useState<Partner[]>([]);
+  const [partners, setPartners] = useState<PartnerWithUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -41,7 +51,7 @@ const LeaderboardPartners: FC = () => {
           throw new Error('Invalid or empty data received');
         }
 
-        const sortedPartners = data.partners
+        let sortedPartners = data.partners
           .filter(partner => partner && partner.amount >= 100000)
           .sort((a, b) => b.amount - a.amount)
           .map((partner, index) => ({
@@ -49,8 +59,20 @@ const LeaderboardPartners: FC = () => {
             address: partner.owner,
             displayAddress: formatAddress(partner.owner),
             trustScore: data.trustScores?.[partner.owner] || 0,
-            holdings: partner.amount
+            holdings: partner.amount,
+            isCurrentUser: publicKey ? partner.owner === publicKey.toString() : false,
+            discordName: partner.owner === publicKey?.toString() ? session?.user?.name : undefined,
+            discordImage: partner.owner === publicKey?.toString() ? session?.user?.image : undefined,
           }));
+
+        if (publicKey) {
+          const currentUserIndex = sortedPartners.findIndex(p => p.isCurrentUser);
+          if (currentUserIndex > -1) {
+            const currentUser = sortedPartners[currentUserIndex];
+            sortedPartners.splice(currentUserIndex, 1);
+            sortedPartners.unshift(currentUser);
+          }
+        }
 
         setPartners(sortedPartners);
         setError(null);
@@ -69,7 +91,7 @@ const LeaderboardPartners: FC = () => {
     };
 
     fetchData();
-  }, [retryCount, isMobile, formatAddress]);
+  }, [retryCount, isMobile, formatAddress, publicKey, session]);
 
   const formatHoldings = (value: number): string => {
     if (value >= 1000000) {
@@ -86,6 +108,50 @@ const LeaderboardPartners: FC = () => {
     </div>
   );
 
+  const renderPartnerRow = (partner: PartnerWithUser) => (
+    <div 
+      key={partner.address} 
+      className={`${partner.rank % 2 === 0 ? styles.row : styles.row1} ${partner.isCurrentUser ? styles.currentUserRow : ''}`}
+    >
+      <div className={styles.rowChild}>
+        <div className={styles.text}>{partner.rank}</div>
+        <Image
+          width={34}
+          height={34}
+          alt="Partner avatar"
+          src={partner.discordImage || "/profile_default.png"}
+          className={styles.avatarImage}
+        />
+        <div className={styles.textParent}>
+          <div className={styles.text1}>
+            {partner.discordName || partner.displayAddress}
+          </div>
+          <div className={styles.text2}>Partner</div>
+        </div>
+      </div>
+      <div className={styles.textWrapper}>
+        {partner.trustScore === 0 ? (
+          <div className={styles.tooltipContainer}>
+            <Image
+              src="/null.svg"
+              alt="Null trust score"
+              width={20}
+              height={20}
+              className={styles.trustScoreImage}
+            />
+            <span className={styles.tooltip}>
+              AI Marc is Calculating Trust
+            </span>
+          </div>
+        ) : (
+          <div className={styles.text3}>{partner.trustScore.toFixed(1)}</div>
+        )}
+      </div>
+      <div className={styles.text3}>
+        {formatHoldings(partner.holdings)}
+      </div>
+    </div>
+  );
 
   return (
     <div className={styles.frameParent}>
@@ -105,49 +171,8 @@ const LeaderboardPartners: FC = () => {
             <div className={styles.heading2}>TRUST SCORE</div>
             <div className={styles.heading3}>HOLDINGS</div>
           </div>
-          {
-            partners.map((partner) => (
-              <div key={partner.address} className={partner.rank % 2 === 0 ? styles.row : styles.row1}>
-                <div className={styles.rowChild}>
-                  <div className={styles.text}>{partner.rank}</div>
-                  <Image
-                    width={34}
-                    height={34}
-                    alt="Partner avatar"
-                    src="/profile_default.png"
-                    className={styles.avatarImage}
-                  />
-                  <div className={styles.textParent}>
-                    <div className={styles.text1}>{partner.displayAddress}</div>
-                    <div className={styles.text2}>Partner</div>
-                  </div>
-                </div>
-                <div className={styles.textWrapper}>
-                  {partner.trustScore === 0 ? (
-                    <div className={styles.tooltipContainer}>
-                      <Image
-                        src="/null.svg"
-                        alt="Null trust score"
-                        width={20}
-                        height={20}
-                        className={styles.trustScoreImage}
-                      />
-                      <span className={styles.tooltip}>
-                        AI Marc is Calculating Trust
-                      </span>
-                    </div>
-                  ) : (
-                    <div className={styles.text3}>{partner.trustScore.toFixed(1)}</div>
-                  )}
-                </div>
-                <div className={styles.text3}>
-                  {formatHoldings(partner.holdings)}
-                </div>
-              </div>
-            ))
-          }
+          {partners.map(renderPartnerRow)}
         </>
-
       )}
     </div>
   );
