@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -8,6 +9,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartOptions,
   Filler
 } from 'chart.js';
 
@@ -34,8 +36,8 @@ const mockData = {
   }
 };
 
-const TrustScoreChart = () => {
-  const options = {
+const TrustScoreChart: FC = () => {
+  const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -44,7 +46,7 @@ const TrustScoreChart = () => {
         labels: {
           color: '#242424',
           font: {
-            weight: '600' as const,
+            weight: 600
           }
         }
       },
@@ -52,18 +54,18 @@ const TrustScoreChart = () => {
     scales: {
       y: {
         grid: {
-          color: 'rgba(0, 0, 0, 0.1)',
+          color: '#E8E3D6'
         },
         ticks: {
-          color: '#242424',
+          color: '#242424'
         }
       },
       x: {
         grid: {
-          display: false,
+          color: '#E8E3D6'
         },
         ticks: {
-          color: '#242424',
+          color: '#242424'
         }
       }
     }

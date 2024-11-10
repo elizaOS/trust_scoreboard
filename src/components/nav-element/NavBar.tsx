@@ -97,12 +97,7 @@ export const NavBar: React.FC = () => {
             >
               Become Partner
             </a>
-            <a 
-              href="/explorer"
-              className={styles.actionButton}
-            >
-              Explorer
-            </a>
+            <Link href="/explorer">Explorer</Link>
           </>
         )}
         <ProfileElement />
