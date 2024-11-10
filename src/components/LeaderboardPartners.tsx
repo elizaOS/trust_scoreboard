@@ -69,7 +69,7 @@ const LeaderboardPartners: FC = () => {
     };
 
     fetchData();
-  }, [retryCount, isMobile]);
+  }, [formatAddress]);
 
   const formatHoldings = (value: number): string => {
     if (value >= 1000000) {
