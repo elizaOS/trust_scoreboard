@@ -1,28 +1,159 @@
-.nav {
-    width: 100%;
-    background: transparent;
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.navbar {
+  width: 100%;
+  height: auto;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #F1EDE3;
+  padding: 8px 16px;
+  gap: 16px;
+}
+
+.logoContainer {
+  flex-shrink: 0;
+}
+
+.logo {
+  height: 24px;
+  width: auto;
+}
+
+.searchContainer {
+  flex: 1;
+  max-width: 600px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  width: 100%;
+  height: 40px;
+  padding: 8px 40px 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #9B8D7D;
+  background-color: white;
+  font-size: 14px;
+  color: #242424;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #F98C13;
+  box-shadow: 0 0 0 2px rgba(249, 140, 19, 0.1);
+}
+
+.searchButton {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionsContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.actionButton {
+  background-color: #F98C13;
+  color: white;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.actionButton:hover {
+  background-color: #e07a0f;
+}
+
+.profileContainer {
+  background-color: #EDE9DE;
+  padding: 8px 16px;
+  border-radius: 24px;
+}
+
+.profileLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.profileImage {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.profileImage:hover {
+  opacity: 0.8;
+}
+
+.walletAddress {
+  color: #9a8c7c;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.profileText {
+  color: #9a8c7c;
+  font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+  .actionButton {
+    padding: 8px 12px;
+    font-size: 13px;
   }
-  
-  .profileLink {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #242424;
-    font-family: var(--font-family-base);
-    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    padding: 8px;
+    gap: 8px;
   }
-  
-  .profileImage {
-    border-radius: 50%;
-    object-fit: cover;
+
+  .searchContainer {
+    order: 3;
+    min-width: 100%;
+    margin-top: 8px;
   }
-  
-  @media (max-width: 768px) {
-    .nav {
-      padding: 12px;
-    }
+
+  .actionsContainer {
+    gap: 8px;
   }
+
+  .actionButton {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .profileContainer {
+    padding: 6px 12px;
+  }
+
+  .walletAddress {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .actionButton:not(:last-child) {
+    display: none;
+  }
+}

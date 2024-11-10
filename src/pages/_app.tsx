@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { FC } from 'react';
 import { SessionProvider } from 'next-auth/react';  // Import SessionProvider
 import { ContextProvider } from '../contexts/ContextProvider';
-import { AppBar } from '../components/nav-element/NavBar';
+import { NavBar } from '../components/nav-element/NavBar';
 import { ContentContainer } from '../components/ContentContainer';
 import { Footer } from '../components/Footer';
 import Notifications from '../components/Notification';
@@ -36,7 +36,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           <ContextProvider>
             <div className="flex flex-col min-h-screen">
               <Notifications />
-              <AppBar />
+              <NavBar />
               <main className="flex-1 flex justify-center">
                 <ContentContainer>
                   <Component {...pageProps} />

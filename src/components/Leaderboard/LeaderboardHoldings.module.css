@@ -1,0 +1,294 @@
+.heading {
+    flex: 1;
+    position: relative;
+    line-height: 140%;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #000000;
+}
+.heading1 {
+    position: relative;
+    line-height: 140%;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.heading2 {
+    width: 83px;
+    position: relative;
+    line-height: 140%;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: right;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.headingParent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 14px 24px;
+    gap: 14px;
+    font-size: 12px;
+    color: #000000;
+    font-family: var(--font-family-base);
+}
+.text {
+    width: 20px;
+    position: relative;
+    letter-spacing: -0.43px;
+    line-height: 22px;
+    font-weight: 600;
+    color: #000000;
+    text-align: center;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.image {
+    width: 34px;
+    position: relative;
+    border-radius: 50%;
+    height: 34px;
+    object-fit: cover;
+}
+.text1 {
+    align-self: stretch;
+    position: relative;
+    line-height: 22px;
+    font-weight: 600;
+}
+.text2 {
+    align-self: stretch;
+    position: relative;
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 600;
+    color: #000000;
+}
+.textParent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.text3 {
+    position: relative;
+    letter-spacing: -0.43px;
+    line-height: 22px;
+    font-weight: 600;
+}
+.textWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 4px 10px;
+}
+.instanceParent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+}
+.row {
+    width: 100%;
+    border-radius: 14px;
+    background-color: #e8e3d6;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 14px;
+    box-sizing: border-box;
+    gap: 8px;
+    max-width: 600px;
+}
+.row1 {
+    width: 100%;
+    border-radius: 14px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 14px;
+    box-sizing: border-box;
+    gap: 8px;
+    max-width: 600px;
+}
+.frameParent {
+    width: 100%;
+    position: relative;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 8px 24px;
+    box-sizing: border-box;
+    gap: 2px;
+    text-align: left;
+    font-size: 16px;
+    color: #000000;
+    font-family: var(--font-family-base);
+}
+
+.container {
+  width: 100%;
+  overflow-x: auto;
+  background: transparent;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: var(--font-family-base);
+  font-weight: bold;
+}
+
+.table th {
+  text-align: left;
+  padding: 1rem;
+  font-weight: bold;
+  border-bottom: 2px solid #eee;
+  color: #000000;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  color: #000000;
+}
+
+.row:hover {
+  background-color: transparent;
+}
+
+.daoInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.daoImage {
+  border-radius: 50%;
+}
+
+.rankColumn {
+  width: 80px;
+  text-align: center;
+}
+
+.assetColumn {
+  min-width: 200px;
+}
+
+.holdingsColumn {
+  width: 150px;
+  text-align: right;
+}
+
+.percentageColumn {
+  width: 120px;
+  text-align: right;
+}
+
+.daoInfo span {
+  font-family: var(--font-family-base);
+  font-weight: bold;
+}
+
+.headingParent {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 80px 1fr 150px 150px;
+    align-items: center;
+    padding: 14px 24px;
+    gap: 14px;
+    font-size: 12px;
+    color: #000000;
+    font-family: var(--font-family-base);
+    font-weight: bold;
+}
+
+.row, .row1 {
+    width: 100%;
+    border-radius: 14px;
+    display: grid;
+    grid-template-columns: 80px 1fr 150px 150px;
+    align-items: center;
+    padding: 8px 14px;
+    gap: 14px;
+    box-sizing: border-box;
+}
+
+.row {
+    background-color: #e8e3d6;
+}
+
+.row1 {
+    background-color: transparent;
+}
+
+.text {
+    text-align: center;
+    letter-spacing: -0.43px;
+    line-height: 22px;
+    font-weight: bold;
+}
+
+.daoInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.image {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.textParent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.text1 {
+    font-weight: bold;
+    line-height: 22px;
+}
+
+.text2 {
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: bold;
+    color: #666;
+}
+
+.instanceParent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.textWrapper {
+    text-align: right;
+    padding: 4px 10px;
+}
+
+.text3 {
+    letter-spacing: -0.43px;
+}
+
+

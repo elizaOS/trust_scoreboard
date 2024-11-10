@@ -1,0 +1,311 @@
+.heading {
+    flex: 1;
+    position: relative;
+    line-height: 140%;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.heading1 {
+    position: relative;
+    line-height: 140%;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.heading2 {
+    width: 83px;
+    position: relative;
+    line-height: 140%;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: right;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.headingParent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 14px 24px;
+    gap: 14px;
+    font-size: 12px;
+    color: #9b8d7d;
+    font-family: var(--font-family-base);
+}
+.text {
+    width: 20px;
+    position: relative;
+    letter-spacing: -0.43px;
+    line-height: 22px;
+    font-weight: 600;
+    color: #9b8d7d;
+    text-align: center;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.text1 {
+    align-self: stretch;
+    position: relative;
+    line-height: 22px;
+    font-weight: 600;
+}
+.text2 {
+    align-self: stretch;
+    position: relative;
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 600;
+    color: #9b8d7d;
+}
+.textParent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.text3 {
+    position: relative;
+    letter-spacing: -0.43px;
+    line-height: 22px;
+    font-weight: 600;
+}
+.textWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 4px 10px;
+}
+.instanceParent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+}
+.row {
+    width: 100%;
+    border-radius: 14px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0px 14px;
+    box-sizing: border-box;
+    gap: 8px;
+    max-width: 600px;
+}
+.image {
+    width: 34px;
+    position: relative;
+    border-radius: 50%;
+    height: 34px;
+    object-fit: cover;
+}
+.row1 {
+    width: 100%;
+    border-radius: 14px;
+    background-color: #e8e3d6;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 14px;
+    box-sizing: border-box;
+    gap: 8px;
+    max-width: 600px;
+}
+.frameParent {
+    width: 100%;
+    position: relative;
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 24px 0px;
+    box-sizing: border-box;
+    gap: 2px;
+    text-align: left;
+    font-size: 16px;
+    color: #3c3626;
+    font-family: var(--font-family-base);
+}
+
+.container {
+  width: calc(100% - 48px);
+  padding: 24px 0 0 0;
+  box-sizing: border-box;
+  margin: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: calc(100% - 48px);
+    padding: 24px 0;
+    overflow-x: hidden;
+    margin: 0 24px;
+  }
+
+  .holdingsTable {
+    width: 100%;
+  }
+
+  .holdingCell,
+  .valueCell,
+  .allocationCell,
+  .tableHeader {
+    padding: 12px 8px;
+  }
+
+  /* Adjust the holding info layout */
+  .holdingInfo {
+    gap: 8px;
+  }
+
+  .rankNumber {
+    min-width: 20px;
+    font-size: 18px;
+  }
+
+  .tokenLogo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .tokenName {
+    font-size: 14px;
+  }
+
+  .tokenAmount {
+    font-size: 12px;
+  }
+}
+
+.holdingsTable {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+.tableHeader {
+  text-align: left;
+  padding: 10px;
+  color: #9b8d7d;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.tableRow {
+  background: #EDE9DE;
+  margin-bottom: 8px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.tableRow:nth-child(odd) {
+  background: #E8E3D6;
+}
+
+.holdingCell {
+  padding: 16px;
+}
+
+.holdingInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rankNumber {
+  color: #9B8D7D;
+  font-size: 22px;
+  font-weight: 600;
+  min-width: 24px;
+}
+
+.tokenLogo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.holdingDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.tokenName {
+  font-weight: 600;
+  color: #242424;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.tokenAmount {
+  color: #9B8D7D;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.allocationCell {
+  font-weight: 600;
+  color: #242424;
+  font-size: 16px;
+  text-align: right;
+}
+
+.valueCell {
+  font-weight: 600;
+  color: #242424;
+  font-size: 16px;
+  text-align: right;
+}
+
+.amountCell,
+.priceCell,
+.valueCell {
+  text-align: right;
+  padding: 1rem;
+}
+
+.totalRow {
+  border-top: 2px solid #eee;
+  font-weight: bold;
+  font: #9b8d7d;
+}
+
+.totalLabel {
+  text-align: right;
+  padding: 1rem;
+}
+
+.totalValue {
+  text-align: right;
+  padding: 1rem;
+  color: #0070f3;
+}
+
+.priceCell {
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* Add border radius to first and last cells in each row */
+.holdingCell:first-child {
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+}
+
+.valueCell:last-child {
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
