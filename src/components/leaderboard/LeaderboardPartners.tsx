@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from "next/image";
 import styles from './LeaderboardPartners.module.css';
 import { useMediaQuery } from 'react-responsive';
@@ -20,12 +20,12 @@ const LeaderboardPartners: FC = () => {
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 3;
 
-  const formatAddress = (address: string) => {
+  const formatAddress = useCallback((address: string) => {
     if (isMobile) {
       return `${address.slice(0, 3)}...${address.slice(-2)}`;
     }
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
-  };
+  }, [isMobile]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,7 +69,7 @@ const LeaderboardPartners: FC = () => {
     };
 
     fetchData();
-  }, [formatAddress]);
+  }, [retryCount, isMobile, formatAddress]);
 
   const formatHoldings = (value: number): string => {
     if (value >= 1000000) {
