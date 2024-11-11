@@ -27,8 +27,14 @@ const ProfileView: FC = () => {
       <div className={`${styles.content} text-left`}>
         {currentView === 'profile' ? (
           <>
-            <Socials />
-            <ProfileWallets />
+            <div className={styles.rowContainer}>
+              <div className={styles.column}>
+                <Socials />
+              </div>
+              <div className={styles.column}>
+                <ProfileWallets />
+              </div>
+            </div>
             <ApiSection />
           </>
         ) : (

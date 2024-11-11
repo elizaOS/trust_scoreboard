@@ -9,12 +9,8 @@ export const HomeView: FC = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <h2 className={styles.title}>
-          Trust Leaderboard
+          Partner Leaderboard
         </h2>
-
-        <div className={styles.section}>
-          <LeaderboardTotals />
-        </div>
 
         <LeaderboardMedals />
 

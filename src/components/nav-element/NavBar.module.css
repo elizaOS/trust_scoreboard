@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #F1EDE3;
+  background-color: #202120;
   padding: 8px 16px;
   gap: 16px;
 }
@@ -68,18 +68,15 @@
 }
 
 .profileContainer {
-  background-color: #EDE9DE;
-  padding: 8px 16px;
-  border-radius: 24px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  transition: all 0.2s ease;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
 }
 
 .profileContainer:hover {
-  background-color: #E5DFD3;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .profileImage {
@@ -93,6 +90,20 @@
   color: #9a8c7c;
   font-weight: 500;
   font-size: 14px;
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  margin-right: 8px;
+}
+
+.iconButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 768px) {

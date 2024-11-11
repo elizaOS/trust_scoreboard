@@ -8,10 +8,18 @@ export const ApiSection: FC = () => {
   const handleNavigateToSaas = () => {
     router.push('/saas');
   };
+  
+  const handleNavigateToEliza = () => {
+    router.push('/eliza');
+  };
+
+  const handleNavigateToCheckout = () => {
+    router.push('/eliza');  // Points to eliza/index
+  };
 
   return (
     <div>
-      <h2 className={styles.title}>API Access</h2>
+      <h2 className={styles.title}></h2>
       <div className={styles.buttonParent}>
         <div 
           className={styles.button}
@@ -19,6 +27,16 @@ export const ApiSection: FC = () => {
         >
           <div className={styles.text}>
             Get API Access
+          </div>
+        </div>
+        
+
+        <div 
+          className={`${styles.button} ${styles.checkoutButton}`}
+          onClick={handleNavigateToCheckout}
+        >
+          <div className={styles.text}>
+            Get an Eliza
           </div>
         </div>
       </div>

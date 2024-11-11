@@ -57,11 +57,10 @@
     flex-direction: row;
     align-items: left;
     gap: 12px;
-    width: calc(100% - 48px);
-    margin: 0 24px;
+    width: 100%;
 }
 .numberParent {
-    width: calc(100% - 48px);
+    width: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -73,7 +72,6 @@
     text-align: left;
     font-size: 18px;
     color: #242424;
-    margin: 0 24px;
 }
 .userName {
     margin: 0 8px;
@@ -89,23 +87,18 @@
 .title {
     font-size: 24px;
     font-weight: 600;
-    color: #242424;
+    color: #fff;
     padding: 24px 0px 10px;
-    margin: 0 24px;
+    margin: 0;
 }
 
 @media (max-width: 768px) {
-    .numberParent {
-        padding: 0;
-        width: calc(100% - 48px);
-        margin: 0 24px;
+    .numberParent,
+    .buttonParent {
+        width: 100%;
     }
     
     .title {
-        margin: 24px;
-    }
-    .buttonParent {
-        width: calc(100% - 48px);
-        margin: 0 24px;
+        padding: 24px 0px 10px;
     }
 }

@@ -12,14 +12,16 @@
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
+    color: #fff;
 }
 
 .title {
     font-size: 34px;
     line-height: 42px;
     font-weight: 600;
-    color: #242424;
+    color: #fff;
     margin-bottom: 32px;
+    text-align: center;
 }
 
 .section {

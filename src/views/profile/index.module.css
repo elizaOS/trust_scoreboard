@@ -23,6 +23,19 @@
   margin-bottom: 24px;
 }
 
+.rowContainer {
+  display: flex;
+  gap: 24px;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 24px;
+}
+
+.column {
+  flex: 1;
+  min-width: 0; /* Prevents flex items from overflowing */
+}
+
 @media (max-width: 768px) {
     .container {
         width: 100vw;
@@ -34,5 +47,14 @@
     .content {
         width: 100%;
         padding: 0;
+    }
+
+    .rowContainer {
+      flex-direction: column;
+      padding: 0 16px;
+    }
+    
+    .column {
+      width: 100%;
     }
 }

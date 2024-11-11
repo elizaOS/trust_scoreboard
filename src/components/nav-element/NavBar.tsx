@@ -13,7 +13,6 @@ interface NavBarProps {
 const NavBar: FC<NavBarProps> = () => {
   const { data: session } = useSession();
   const [searchQuery, setSearchQuery] = useState('');
-  const { publicKey } = useWallet();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,20 +58,25 @@ const NavBar: FC<NavBarProps> = () => {
           Become Partner
         </a>
         {session ? (
-          <Link href="/profile" className={styles.profileContainer}>
-            <Image
-              src={session.user?.image || '/default-avatar.png'}
-              alt="Profile"
-              width={32}
-              height={32}
-              className={styles.profileImage}
-            />
-            {publicKey && (
-              <span className={styles.profileText}>
-                {`${publicKey.toString().slice(0, 4)}...${publicKey.toString().slice(-4)}`}
-              </span>
-            )}
-          </Link>
+          <>
+            <Link href="/" className={styles.iconButton}>
+              <Image
+                src="/menu_medal.svg"
+                alt="Medal"
+                width={24}
+                height={24}
+              />
+            </Link>
+            <Link href="/profile" className={styles.profileContainer}>
+              <Image
+                src={session.user?.image || '/default-avatar.png'}
+                alt="Profile"
+                width={32}
+                height={32}
+                className={styles.profileImage}
+              />
+            </Link>
+          </>
         ) : (
           <Link href="/api/auth/signin" className={styles.actionButton}>
             Sign In

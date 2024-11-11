@@ -108,13 +108,25 @@ const LeaderboardPartners: FC = () => {
     </div>
   );
 
+  const getRankDisplay = (rank: number) => {
+    switch (rank) {
+      case 1:
+        return <div className={styles.medalEmoji}>🥇</div>;
+      case 2:
+        return <div className={styles.medalEmoji}>🥈</div>;
+      case 3:
+        return <div className={styles.medalEmoji}>🥉</div>;
+      default:
+        return <div className={styles.text}>#{rank}</div>;
+    }
+  };
+
   const renderPartnerRow = (partner: PartnerWithUser) => (
     <div 
       key={partner.address} 
       className={`${partner.rank % 2 === 0 ? styles.row : styles.row1} ${partner.isCurrentUser ? styles.currentUserRow : ''}`}
     >
       <div className={styles.rowChild}>
-        <div className={styles.text}>{partner.rank}</div>
         <Image
           width={34}
           height={34}
@@ -126,7 +138,6 @@ const LeaderboardPartners: FC = () => {
           <div className={styles.text1}>
             {partner.discordName || partner.displayAddress}
           </div>
-          <div className={styles.text2}>Partner</div>
         </div>
       </div>
       <div className={styles.textWrapper}>
@@ -147,8 +158,8 @@ const LeaderboardPartners: FC = () => {
           <div className={styles.text3}>{partner.trustScore.toFixed(1)}</div>
         )}
       </div>
-      <div className={styles.text3}>
-        {formatHoldings(partner.holdings)}
+      <div className={styles.rankWrapper}>
+        {getRankDisplay(partner.rank)}
       </div>
     </div>
   );
@@ -164,15 +175,7 @@ const LeaderboardPartners: FC = () => {
       ) : !partners?.length ? (
         <div className={styles.emptyMessage}>No partners found</div>
       ) : (
-        <>
-          <div className={styles.headingParent}>
-            <div className={styles.heading}>PARTNER</div>
-            <div className={styles.heading}></div>
-            <div className={styles.heading2}>TRUST SCORE</div>
-            <div className={styles.heading3}>HOLDINGS</div>
-          </div>
-          {partners.map(renderPartnerRow)}
-        </>
+        <>{partners.map(renderPartnerRow)}</>
       )}
     </div>
   );

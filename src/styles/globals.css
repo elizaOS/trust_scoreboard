@@ -16,8 +16,8 @@ html,
 body {
   padding: 0;
   margin: 0;
+  background-color: #202120;
   font-family: var(--font-family-base);
-  background-color: #F1EDE3;
   min-height: 100vh;
   line-height: normal;
 }

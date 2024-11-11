@@ -33,7 +33,7 @@ const ProfileWallets: FC<WalletDisplayProps> = ({ truncateLength = 4 }) => {
 
   return (
     <div>
-      <h2 className={styles.title}>Wallets</h2>
+      <h2 className={styles.title}></h2>
       <div className={styles.buttonParent}>
         {wallet ? (
           <div 

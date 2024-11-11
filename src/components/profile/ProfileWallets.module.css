@@ -54,7 +54,7 @@
     color: #fff;
 }
 .numberParent {
-    width: calc(100% - 48px);
+    width: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -67,35 +67,30 @@
     font-size: 18px;
     color: #242424;
     font-family: var(--font-family-base);
-    margin: 0 24px;
+    margin: 0 14px;
 }
 .title {
     font-size: 24px;
     font-weight: 600;
-    color: #242424;
-    margin: 24px;
+    color: #fff;
+    padding: 24px 0px 10px;
+    margin: 0;
 }
 .buttonParent {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 12px;
-    width: calc(100% - 48px);
-    margin: 0 24px;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
-    .numberParent {
-        padding: 0;
-        width: calc(100% - 48px);
-        margin: 0 24px;
+    .numberParent,
+    .buttonParent {
+        width: 100%;
     }
     
     .title {
-        margin: 24px;
-    }
-    .buttonParent {
-        width: calc(100% - 48px);
-        margin: 0 24px;
+        padding: 24px 0px 10px;
     }
 }

@@ -37,7 +37,7 @@ const SocialButton: FC<SocialButtonProps> = ({ provider }) => {
     >
       <div className={styles.text}>
         {isThisProviderActive 
-          ? `Disconnect ${provider}` 
+          ? `${provider}` 
           : `Connect with ${provider}`}
       </div>
       {isThisProviderActive && session?.user?.name && (
@@ -55,7 +55,7 @@ export const Socials: FC = () => {
 
   return (
     <div>
-      <h2 className={styles.title}>Discord</h2>
+      <h2 className={styles.title}></h2>
       <div className={styles.buttonParent}>
         {providers.map((provider) => (
           <SocialButton
