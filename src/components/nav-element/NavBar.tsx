@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useSession } from "next-auth/react";
 import styles from './NavBar.module.css';
+import ApiSection from 'components/profile/ApiSection';
 
 interface NavBarProps {
   // Add any props if needed
@@ -49,14 +50,12 @@ const NavBar: FC<NavBarProps> = () => {
         <Link href="/explorer" className={styles.actionButton}>
           Explorer
         </Link>
-        <a 
-          href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className={styles.actionButton}
-        >
-          Become Partner
-        </a>
+        <Link href="/saas" className={styles.actionButton}>
+          Get API Access
+        </Link>
+        <Link href="/eliza" className={`${styles.actionButton} ${styles.elizaButton}`}>
+          Get an Eliza
+        </Link>
         {session ? (
           <>
             <Link href="/" className={styles.iconButton}>

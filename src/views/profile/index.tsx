@@ -35,7 +35,6 @@ const ProfileView: FC = () => {
                 <ProfileWallets />
               </div>
             </div>
-            <ApiSection />
           </>
         ) : (
           <ProfileHoldings />
