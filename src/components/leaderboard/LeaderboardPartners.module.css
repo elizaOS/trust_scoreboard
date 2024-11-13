@@ -45,12 +45,13 @@
     transition: background-color 0.2s ease;
 }
 
-/* .row {
-    background: #F1EDE3;
-} */
+.row {
+   height: 62px;
+}
 
 .row1 {
     background: #2d2d2d;
+    height: 62px;
 }
 
 .text {
