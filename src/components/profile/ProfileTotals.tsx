@@ -32,11 +32,11 @@ const getLastThirtyDaysRange = (): string => {
   const end = new Date();
   const start = new Date();
   start.setDate(end.getDate() - 30);
-  
+
   return `${formatDate(start)} - ${formatDate(end)}`;
 };
 
-const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }) => {
+const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } }) => {
   const { publicKey } = useWallet();
   const [activeView, setActiveView] = useState<View>('profile');
   const [metrics, setMetrics] = useState<MetricsData>({
@@ -54,10 +54,10 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
   useEffect(() => {
     const fetchData = async () => {
       if (!publicKey) return;
-      
+
       try {
         setIsLoading(true);
-        
+
         const dashboardResponse = await fetch('/api/dashboard');
         const dashboardData = await dashboardResponse.json();
 
@@ -68,11 +68,11 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
           const userPartner = dashboardData.partners.find(
             (p: any) => p.owner.toLowerCase() === publicKey.toString().toLowerCase()
           );
-          
-          const userRank = userPartner 
+
+          const userRank = userPartner
             ? dashboardData.partners.findIndex(
-                (p: any) => p.owner.toLowerCase() === publicKey.toString().toLowerCase()
-              ) + 1 
+              (p: any) => p.owner.toLowerCase() === publicKey.toString().toLowerCase()
+            ) + 1
             : 0;
 
           setMetrics(prev => ({
@@ -107,7 +107,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
     return num.toString();
   };
 
-  if (isLoading) {
+  if (!isLoading) {
     return <div>Loading...</div>;
   }
 
@@ -116,26 +116,28 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
       <div className={styles.metricsGrid}>
         <div className={styles.metricCard}>
           <div className={styles.metricContent}>
-            <Image src="/heart.svg" alt="Trust Score" width={24} height={24} />
+            <Image src="/heart.svg" alt="Trust Score" width={32} height={32} />
             <div className={styles.metricInfo}>
-              <div className={styles.value}>{metrics.trustScore.toFixed(1)}</div>
+              <div className={`text-[#FF4463] ${styles.value}`}>{metrics.trustScore.toFixed(1)}</div>
               <div className={styles.label}>Trust Score</div>
             </div>
           </div>
-          <div 
-            className={styles.progressBar} 
-            style={{ 
-              width: `${metrics.trustScore}%`,
-              minWidth: '10px'
-            }} 
-          />
+          <div className={styles.progressContainer}>
+            <div
+              className={styles.progressBar}
+              style={{
+                width: `${metrics.trustScore}%`,
+                minWidth: '10px'
+              }}
+            />
+          </div>
         </div>
 
         <div className={styles.metricCard}>
           <div className={styles.metricContent}>
             <Image src="/green_flame.svg" alt="Rank" width={24} height={24} />
             <div className={styles.metricInfo}>
-              <div className={styles.value}>#{metrics.rank}</div>
+              <div className={`text-[#68CE67] ${styles.value}`}>#{metrics.rank}</div>
               <div className={styles.label}>Rank</div>
             </div>
           </div>
@@ -145,7 +147,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
           <div className={styles.metricContent}>
             <Image src="/blue_flame.svg" alt="Tokens" width={24} height={24} />
             <div className={styles.metricInfo}>
-              <div className={styles.value}>{formatNumber(metrics.userHoldings)}</div>
+              <div className={`text-[#3B82F7] ${styles.value}`}>{formatNumber(metrics.userHoldings)}</div>
               <div className={styles.label}>Tokens</div>
             </div>
           </div>
@@ -155,7 +157,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
           <div className={styles.metricContent}>
             <Image src="/thumb.svg" alt="Success Rate" width={24} height={24} />
             <div className={styles.metricInfo}>
-              <div className={styles.value}>{metrics.successRate}%</div>
+              <div className={`text-[#935DEA] ${styles.value}`}>{metrics.successRate}%</div>
               <div className={styles.label}>Success Rate</div>
             </div>
           </div>
@@ -165,7 +167,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
           <div className={styles.metricContent}>
             <Image src="/yellow_flame.svg" alt="Shills" width={24} height={24} />
             <div className={styles.metricInfo}>
-              <div className={styles.value}>635</div>
+              <div className={`text-[#F2A33C] ${styles.value}`}>635</div>
               <div className={styles.label}>Shills</div>
             </div>
           </div>
@@ -175,7 +177,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => {} }
           <div className={styles.metricContent}>
             <Image src="/clock.svg" alt="Joined" width={24} height={24} />
             <div className={styles.metricInfo}>
-              <div className={styles.value}>34d</div>
+              <div className={`text-[#4FADF8] ${styles.value}`}>34d</div>
               <div className={styles.label}>Joined</div>
             </div>
           </div>
