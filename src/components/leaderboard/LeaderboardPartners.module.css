@@ -192,8 +192,8 @@
     .headingParent,
     .row,
     .row1 {
-        grid-template-columns: 3fr 1fr 1fr;
-        padding: 8px 12px;
+
+        padding: 8px 16px;
         gap: 12px;
     }
 
