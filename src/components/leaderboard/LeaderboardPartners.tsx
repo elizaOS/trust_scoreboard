@@ -121,10 +121,24 @@ const LeaderboardPartners: FC = () => {
     }
   };
 
+  const getTrustScoreClass = (rank: number): string => {
+    switch (rank) {
+      case 1:
+        return styles.trustScoreGold;
+      case 2:
+        return styles.trustScoreSilver;
+      case 3:
+        return styles.trustScoreBronze;
+      default:
+        return styles.text3;
+    }
+  };
+
+
   const renderPartnerRow = (partner: PartnerWithUser) => (
-    <div 
-      key={partner.address} 
-      className={`${partner.rank % 2 === 0 ? styles.row : styles.row1} ${partner.isCurrentUser ? styles.currentUserRow : ''}`}
+    <div
+      key={partner.address}
+      className={` ${styles.row1}  ${partner.isCurrentUser ? styles.currentUserRow : ''}`}
     >
       <div className={styles.rowChild}>
         <Image
@@ -140,26 +154,30 @@ const LeaderboardPartners: FC = () => {
           </div>
         </div>
       </div>
-      <div className={styles.textWrapper}>
-        {partner.trustScore === 0 ? (
-          <div className={styles.tooltipContainer}>
-            <Image
-              src="/null.svg"
-              alt="Null trust score"
-              width={20}
-              height={20}
-              className={styles.trustScoreImage}
-            />
-            <span className={styles.tooltip}>
-              AI Marc is Calculating Trust
-            </span>
-          </div>
-        ) : (
-          <div className={styles.text3}>{partner.trustScore.toFixed(1)}</div>
-        )}
-      </div>
-      <div className={styles.rankWrapper}>
-        {getRankDisplay(partner.rank)}
+      <div className='flex items-center'>
+        <div className={styles.textWrapper}>
+          {partner.trustScore === 0 ? (
+            <div className={styles.tooltipContainer}>
+              <Image
+                src="/null.svg"
+                alt="Null trust score"
+                width={20}
+                height={20}
+                className={styles.trustScoreImage}
+              />
+              <span className={styles.tooltip}>
+                AI Marc is Calculating Trust
+              </span>
+            </div>
+          ) : (
+            <div className={getTrustScoreClass(partner.rank)}>
+              {partner.trustScore.toFixed(1)}
+            </div>
+          )}
+        </div>
+        <div className={styles.rankWrapper}>
+          {getRankDisplay(partner.rank)}
+        </div>
       </div>
     </div>
   );

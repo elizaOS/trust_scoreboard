@@ -15,7 +15,9 @@
     border-radius: 14px;
 }
 
-.heading, .heading2, .heading3 {
+.heading,
+.heading2,
+.heading3 {
     font-size: 12px;
     line-height: 140%;
     text-transform: uppercase;
@@ -32,21 +34,22 @@
     text-align: right;
 }
 
-.row, .row1 {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+.row,
+.row1 {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 8px 16px;
     gap: 10px;
     color: black;
-    border-radius: 14px;
+    border-radius: 25px;
     width: 100%;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
     transition: background-color 0.2s ease;
 }
 
 .row {
-   height: 62px;
+    height: 62px;
 }
 
 .row1 {
@@ -80,11 +83,14 @@
     flex-direction: column;
 }
 
+
+
 .text1 {
     font-weight: bold;
     color: #fff;
     font-size: 16px;
 }
+
 
 .text2 {
     color: #ffff;
@@ -100,12 +106,30 @@
     padding-right: 16px;
 }
 
-.text3 {
+.text3,
+.trustScoreGold,
+.trustScoreSilver,
+.trustScoreBronze {
     font-weight: bold;
-    color: #fff;
     font-size: 16px;
     text-align: right;
     margin-left: auto;
+}
+
+.text3 {
+    color: #fff;
+}
+
+.trustScoreGold {
+    color: #FFA600;
+}
+
+.trustScoreSilver {
+    color: #858585;
+}
+
+.trustScoreBronze {
+    color: #D56B00;
 }
 
 .imageWrapper {
@@ -164,7 +188,10 @@
 }
 
 @media (max-width: 768px) {
-    .headingParent, .row, .row1 {
+
+    .headingParent,
+    .row,
+    .row1 {
         grid-template-columns: 3fr 1fr 1fr;
         padding: 8px 12px;
         gap: 12px;
@@ -183,7 +210,10 @@
         font-size: 12px;
     }
 
-    .text3 {
+    .text3,
+    .trustScoreGold,
+    .trustScoreSilver,
+    .trustScoreBronze {
         font-size: 14px;
     }
 
@@ -207,68 +237,83 @@
         height: 20px;
     }
 
-    .textWrapper, .tooltipContainer {
+    .textWrapper,
+    .tooltipContainer {
         padding-right: 12px;
     }
 }
 
 @keyframes gradientBorder {
-  0% {
-    border-color: #FF0000;
-  }
-  25% {
-    border-color: #FFB700;
-  }
-  50% {
-    border-color: #0073FF;
-  }
-  75% {
-    border-color: #FF00B7;
-  }
-  100% {
-    border-color: #FF0000;
-  }
+    0% {
+        border-color: #FF0000;
+    }
+
+    25% {
+        border-color: #FFB700;
+    }
+
+    50% {
+        border-color: #0073FF;
+    }
+
+    75% {
+        border-color: #FF00B7;
+    }
+
+    100% {
+        border-color: #FF0000;
+    }
 }
 
 .currentUserRow {
-  background: #2d2d2d !important;
-  border: 1px solid;
-  border-color: #FF0000;
-  position: relative;
-  overflow: hidden;
-  animation: gradientBorder 4s linear infinite;
+    background: #2d2d2d !important;
+    border: 1px solid;
+    border-color: #FF0000;
+    position: relative;
+    overflow: hidden;
+    animation: gradientBorder 4s linear infinite;
 }
 
 /* Remove the orange bar since we have the animated border */
 .currentUserRow::after {
-  display: none;
+    display: none;
 }
 
 .currentUserRow .text1 {
-  background: linear-gradient(90deg, #FF0000, #FFB700, #0073FF, #FF00B7);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  background-size: 300% 100%;
-  animation: gradientText 4s linear infinite;
+    background: linear-gradient(90deg, #FF0000, #FFB700, #0073FF, #FF00B7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 300% 100%;
+    animation: gradientText 4s linear infinite;
 }
 
 @keyframes gradientText {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 300% 50%;
-  }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 300% 50%;
+    }
 }
 
 .currentUserRow .text2 {
-  color: #9B8D7D;  /* Reset to normal color */
+    color: #9B8D7D;
+    /* Reset to normal color */
 }
 
-.row:hover, .row1:hover {
+.row:hover,
+.row1:hover {
     background: #F1EDE3;
+
+    .text1 {
+        color: #2d2d2d;
+    }
 }
+
+
+
 
 .currentUserRow:hover {
     background: #FFF5EC !important;
@@ -289,28 +334,28 @@
 }
 
 .medalEmoji {
-  font-size: 24px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 100%;
+    font-size: 24px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 .text {
-  font-size: 16px;
-  font-weight: 600;
-  color: #9B8D7D;
-  margin: 0;
-  text-align: right;
+    font-size: 16px;
+    font-weight: 600;
+    color: #9B8D7D;
+    margin: 0;
+    text-align: right;
 }
 
 @media (max-width: 768px) {
-  .medalEmoji {
-    font-size: 20px;
-  }
-  
-  .rankWrapper {
-    padding-right: 12px;
-  }
+    .medalEmoji {
+        font-size: 20px;
+    }
+
+    .rankWrapper {
+        padding-right: 12px;
+    }
 }
