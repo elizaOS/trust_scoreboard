@@ -8,75 +8,88 @@ import styles from './LeaderboardMedals.module.css';
 
 const LeaderboardMedals: FC = () => {
   const { data: dashboardData, isLoading } = useDashboard();
-  
+  const positions = [2, 1, 3];
+  const medalStyles = [styles.silver, styles.gold, styles.bronze];
+
+
+
   if (isLoading || !dashboardData) {
     return <div className={styles.container}>Loading...</div>;
   }
 
-  // Get top 3 wallets sorted by trust score
-  const topThree = dashboardData.partners
-    .sort((a, b) => b.trustScore - a.trustScore)
-    .slice(0, 3)
-    .map((partner, index) => ({
-      ...partner,
-      position: index + 1
-    }));
+  // Ensure partners array exists and handle potential null/undefined values
+  const topThree = (dashboardData?.partners || [])
+    .filter(partner =>
+      partner &&
+      typeof partner.trustScore === 'number' &&
+      !isNaN(partner.trustScore)
+    )
+    .sort((a, b) => {
+      // Ensure we're comparing valid numbers
+      const scoreA = typeof a.trustScore === 'number' ? a.trustScore : 0;
+      const scoreB = typeof b.trustScore === 'number' ? b.trustScore : 0;
+      return scoreB - scoreA;
+    })
+    .slice(0, 3);
+
+  // Ensure we always have exactly 3 elements even if there's insufficient data
+  const paddedTopThree = [...topThree];
+  while (paddedTopThree.length < 3) {
+    paddedTopThree.push(null);
+  }
 
   // Reorder array to show 2nd, 1st, 3rd
   const reorderedTopThree = [
-    topThree[1], // 2nd place
-    topThree[0], // 1st place
-    topThree[2]  // 3rd place
+    paddedTopThree[1], // 2nd place
+    paddedTopThree[0], // 1st place
+    paddedTopThree[2]  // 3rd place
   ];
-
-  const getMedalColor = (position: number) => {
-    switch (position) {
-      case 1:
-        return styles.gold;
-      case 2:
-        return styles.silver;
-      case 3:
-        return styles.bronze;
-      default:
-        return '';
-    }
-  };
 
   return (
     <div className={styles.container}>
-      {reorderedTopThree.map((user) => (
-        <div 
-          key={user.wallet} 
-          className={`${styles.medalHolder} ${user.position === 1 ? styles.firstPlace : ''}`}
-        >
-          <div className={styles.imageWrapper}>
-            <div className={`${styles.medal} ${getMedalColor(user.position)}`}>
-              {user.position}
+      {reorderedTopThree.map((user, index) => {
+        return (
+          <div
+            key={user?.wallet || index}
+            className={`${styles.medalHolder} ${index === 1 ? styles.firstPlace : ''}`}
+          >
+            <div className={styles.imageWrapper}>
+              <div className={`${styles.medal} ${medalStyles[index]}`}>
+                {positions[index]}
+              </div>
+              {user?.image ? (
+                <Image
+                  src={user.image}
+                  alt={user.wallet ? truncateAddress(user.wallet) : `Position ${positions[index]}`}
+                  width={index === 1 ? 80 : 64}
+                  height={index === 1 ? 80 : 64}
+                  className={`${styles.userImage} ${medalStyles[index]}`}
+                />
+              ) : (
+                <div
+                  className={`${styles.placeholderImage} ${medalStyles[index]}`}
+                  style={{ width: index === 1 ? '80px' : '64px', height: index === 1 ? '80px' : '64px' }}
+                />
+              )}
             </div>
-            {user.image ? (
-              <Image
-                src={user.image}
-                alt={truncateAddress(user.wallet)}
-                width={user.position === 1 ? 80 : 64}
-                height={user.position === 1 ? 80 : 64}
-                className={styles.userImage}
-              />
-            ) : (
-              <div className={`${styles.placeholderImage} ${getMedalColor(user.position)}`} />
-            )}
-          </div>
-          <div className={styles.userInfo}>
-            <span className={styles.name}>{truncateAddress(user.wallet)}</span>
-            <div className={`${styles.scoreWrapper} ${getMedalColor(user.position)}`}>
-              <span className={styles.score}>
-                {user.trustScore.toFixed(2)}
+            <div className={styles.userInfo}>
+              <span className={styles.name}>
+                {user?.displayAddress || user?.wallet ? truncateAddress(user.displayAddress || user.wallet) : `Position ${positions[index]}`}
               </span>
+              <div className={`${styles.scoreWrapper} ${medalStyles[index]}`}>
+                <span className={styles.score}>
+                  {user?.trustScore ? user.trustScore.toFixed(2) : '0.00'}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   );
 };
 
 export default LeaderboardMedals;
+
+
+

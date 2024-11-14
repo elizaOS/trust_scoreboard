@@ -4,6 +4,9 @@ interface Partner {
   wallet: string;
   trustScore: number;
   image?: string;
+  displayAddress?: string;
+  owner?: string;
+  amount?: number
 }
 
 interface DashboardData {
@@ -40,17 +43,26 @@ export const useDashboard = () => {
           {
             wallet: '8xzt6Cytp7JkrX44FkuRw2pXCzZg4BaCwdEzz6F4ZxJE',
             trustScore: 93.2,
-            image: '/path-to-image-1.jpg'
+            displayAddress: "",
+            image: '/path-to-image-1.jpg',
+            owner: "",
+            amount: 0,
           },
           {
             wallet: '6yztNCytp9JkrX44FkuRw2pXCzZg4BaCwdEzz6F4ZxJE',
             trustScore: 91.32,
-            image: '/path-to-image-2.jpg'
+            image: '/path-to-image-2.jpg',
+            displayAddress: "",
+            owner: "",
+            amount: 0,
           },
           {
             wallet: '4xzt6Cytp7JkrX44FkuRw2pXCzZg4BaCwdEzz6F4ZxJE',
             trustScore: 89.54,
-            image: '/path-to-image-3.jpg'
+            image: '/path-to-image-3.jpg',
+            displayAddress: "",
+            owner: "",
+            amount: 0,
           }
         ]
       });

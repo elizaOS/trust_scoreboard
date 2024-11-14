@@ -62,15 +62,15 @@
 }
 
 .gold {
-  background-color: #FFD700;
+  background-color: #FFA600
 }
 
 .silver {
-  background-color: #C0C0C0;
+  background-color: #858585
 }
 
 .bronze {
-  background-color: #CD7F32;
+  background-color: #D56B00
 }
 
 .userInfo {
@@ -82,7 +82,7 @@
 
 .name {
   font-weight: 500;
-  color: #242424;
+  color: white;
   font-size: 14px;
 }
 
@@ -93,33 +93,24 @@
 }
 
 .scoreWrapper.gold {
-  background-color: rgba(255, 215, 0, 0.1);
+  background-color:#FFA600
 }
 
 .scoreWrapper.silver {
-  background-color: rgba(192, 192, 192, 0.1);
+  background-color: #858585
 }
 
 .scoreWrapper.bronze {
-  background-color: rgba(205, 127, 50, 0.1);
+  background-color: #D56B00
 }
 
 .score {
   font-weight: 600;
   font-size: 16px;
+  color: white;
 }
 
-.gold .score {
-  color: #FFD700;
-}
 
-.silver .score {
-  color: #C0C0C0;
-}
-
-.bronze .score {
-  color: #CD7F32;
-}
 
 .firstPlace .score {
   font-size: 18px;
