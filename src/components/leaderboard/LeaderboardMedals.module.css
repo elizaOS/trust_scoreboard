@@ -2,128 +2,156 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 32px;
-  padding: 32px 24px;
-  margin: 24px 0;
+  gap: 2rem;
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }
 
 .medalHolder {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 0.75rem;
   transition: all 0.3s ease;
 }
 
 .firstPlace {
   transform: scale(1.15);
-  margin: 0 16px;
+  margin: 0 1rem;
 }
 
 .imageWrapper {
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: 5rem;
+  height: 5rem;
 }
 
-.firstPlace .imageWrapper {
-  width: 80px;
-  height: 80px;
+.firstPlaceImage {
+  width: 7.5rem;
+  height: 7.5rem;
+}
+
+.imageBorder {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 0.125rem;
 }
 
 .userImage {
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid transparent;
-}
-
-.placeholderImage {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  background-color: #DED8C7;
 }
 
 .medal {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 24px;
-  height: 24px;
+  top: -0.25rem;
+  left: -0.25rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 0.875rem;
   z-index: 1;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .gold {
-  background-color: #FFA600
+  background-color: #FFA600;
 }
 
 .silver {
-  background-color: #858585
+  background-color: #858585;
 }
 
 .bronze {
-  background-color: #D56B00
+  background-color: #D56B00;
 }
 
 .userInfo {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .name {
   font-weight: 500;
   color: white;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .scoreWrapper {
-  padding: 4px 12px;
-  border-radius: 12px;
-  background-color: #F5F5F5;
-}
-
-.scoreWrapper.gold {
-  background-color:#FFA600
-}
-
-.scoreWrapper.silver {
-  background-color: #858585
-}
-
-.scoreWrapper.bronze {
-  background-color: #D56B00
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.75rem;
 }
 
 .score {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 1rem;
   color: white;
 }
 
-
-
-.firstPlace .score {
-  font-size: 18px;
+.firstPlaceScore {
+  font-size: 1.125rem;
 }
 
-@media (max-width: 768px) {
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+}
+
+@media (max-width: 640px) {
   .container {
-    gap: 16px;
-    padding: 24px 16px;
+    gap: 1rem;
+    padding: 1rem;
   }
 
   .firstPlace {
     transform: scale(1.1);
-    margin: 0 8px;
+    margin: 0 0.5rem;
+  }
+
+  .imageWrapper {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .firstPlaceImage {
+    width: 6.25rem;
+    height: 6.25rem;
+  }
+
+  .medal {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  .name {
+    font-size: 0.75rem;
+  }
+
+  .score {
+    font-size: 0.875rem;
+  }
+
+  .firstPlaceScore {
+    font-size: 1rem;
   }
 }
