@@ -79,9 +79,7 @@ const LeaderboardMedals: FC = () => {
             </div>
             <div className={styles.userInfo}>
               <span className={styles.name}>
-                {user?.displayAddress || user?.wallet
-                  ? truncateAddress(user.displayAddress || user.wallet)
-                  : `Position ${positions[index]}`}
+                {user?.displayAddress || user?.wallet ? truncateAddress(user.displayAddress || user.wallet) : `Position ${positions[index]}`}
               </span>
               <div className={`${styles.scoreWrapper} ${medalClass}`}>
                 <span className={`${styles.score} ${isFirstPlace ? styles.firstPlaceScore : ''}`}>

@@ -310,6 +310,10 @@
     .text1 {
         color: #2d2d2d;
     }
+
+    .trustScoreImage {
+        filter: invert(0);
+    }
 }
 
 
@@ -345,7 +349,7 @@
 .text {
     font-size: 16px;
     font-weight: 600;
-    color: #9B8D7D;
+    color: #7E7E7E;
     margin: 0;
     text-align: right;
 }
