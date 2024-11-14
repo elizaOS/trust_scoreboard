@@ -1,95 +1,97 @@
 import { FC } from 'react';
 import Link from "next/link";
-import React, { useState } from "react";
 import Image from 'next/image';
-import { useWallet } from '@solana/wallet-adapter-react';
-import NavElement from '.';
 import { useSession } from "next-auth/react";
+import styles from './NavBar.module.css';
+import { useState } from 'react';
+import { RiBarChart2Fill } from "react-icons/ri";
 
-const truncateAddress = (address: string, length: number = 4): string => {
-  if (!address) return '';
-  if (window.innerWidth <= 768) {
-    return `${address.slice(0, 3)}..${address.slice(-2)}`;
-  }
-  return `${address.slice(0, length)}..${address.slice(-length)}`;
-};
+interface NavBarProps {
+  // Add any props if needed
+}
 
-export const AppBar: React.FC = () => {
-  const { data: session } = useSession();
-  const { publicKey } = useWallet();
+const NavBar: FC<NavBarProps> = () => {
+    const { data: session } = useSession();
+    const [searchQuery, setSearchQuery] = useState('');
 
-  const ProfileElement = () => (
-    <div className="flex items-center gap-2 bg-[#EDE9DE] px-4 py-2 rounded-full">
-      <Link href="/profile" className="flex items-center gap-2">
-        {session?.user?.image ? (
-          <>
-            <Image
-              src={session.user.image}
-              alt="Profile"
-              width={32}
-              height={32}
-              className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80"
-              onError={(e) => {
-                e.currentTarget.src = "/default-avatar.png"
-              }}
-            />
-            {publicKey && (
-              <span className="text-[#9a8c7c] font-medium text-sm md:text-base">
-                {truncateAddress(publicKey.toString())}
-              </span>
-            )}
-          </>
-        ) : (
-          <span className="text-[#9a8c7c] font-medium">
-            Profile
-          </span>
-        )}
-      </Link>
-    </div>
-  );
+    const handleSearch = (e: React.FormEvent) => {
+      e.preventDefault();
+      // Add search functionality
+    };
 
   return (
-    <div className=" flex flex-row items-center justify-between h-auto md:h-20 text-black bg-[#F1EDE3] text-neutral-content my-2">
-      <div className="flex items-center">
-        <div className="w-22 h-22 md:p-2 ml-4 md:ml-10">
-          <Link href="/" passHref className="text-secondary hover:text-white">
+    <nav className="w-full h-16 bg-[#202120] px-6 py-2">
+      <div className="h-full flex items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo.svg"
+            alt="Logo"
+            width={60}
+            height={32}
+            priority
+          />
+        </Link>
+
+        {/*Search Bar */}
+
+
+        <div className={`${styles.searchContainer} hidden`}>
+          <form onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+          </form>
+        </div>
+
+        {/* Right-side items */}
+        <div className="flex items-center gap-4">
+          <Link href="/explorer" className={`hidden ${styles.actionButton}`}>
+            Explorer
+          </Link>
+          <Link href="/saas" className={`hidden ${styles.actionButton}`}>
+            Get API Access
+          </Link>
+          <Link href="/eliza" className={`hidden ${styles.actionButton} ${styles.elizaButton}`}>
+            Get an Eliza
+          </Link>
+          <Link href="/" className="p-2 hover:bg-white/10  rounded-full">
             <Image
-              src="/logo.svg"
-              alt="Site Logo"
+              src="/bar-chart.svg"
+              alt="Medal"
               width={24}
               height={24}
-              priority
-              className="h-6 w-auto"
             />
           </Link>
+          {session ? (
+            <Link href="/profile" className="p-1 hover:bg-white/10 rounded-full">
+              <Image
+                src={session.user?.image || '/default-avatar.png'}
+                alt="Profile"
+                width={32}
+                height={32}
+                className="rounded-full object-cover"
+              />
+            </Link>
+          ) : (
+            <Link href="/api/auth/signin" className="p-1 hover:bg-white/10 rounded-full">
+              <Image
+                src="/default-avatar.png"
+                alt="Sign In"
+                width={32}
+                height={32}
+                className="rounded-full object-cover"
+              />
+            </Link>
+          )}
         </div>
       </div>
-      <div className=" flex flex-row items-center justify-end gap-4 md:gap-6 px-4">
-        {session?.user && (
-          <a 
-            href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              text-white
-              font-semibold
-              bg-[#F98C13]
-              rounded-xl
-              transition
-              duration-300
-              ease-in-out
-              hover:bg-[#e07a0f]
-              text-sm px-3 py-[8px]
-              md:text-base md:px-4 md:py-[8px]
-              lg:text-lg lg:px-4 lg:py-[8px]"
-          >
-            Become Partner
-          </a>
-        )}
-        <div className="flex items-center justify-end gap-6">
-          <ProfileElement />
-        </div>
-      </div>
-    </div>
+    </nav>
   );
 };
+
+export default NavBar;
