@@ -3,9 +3,23 @@ import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord";
 import TwitterProvider, { TwitterProfile } from "next-auth/providers/twitter";
 import GitHubProvider, { GithubProfile } from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { createHash } from "crypto";
 
 import { JWT } from "next-auth/jwt";
 import { Account, Profile } from "next-auth";
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
+
+function verifyTelegramAuth(data: any): boolean {
+  const secret = createHash("sha256").update(TELEGRAM_BOT_TOKEN).digest();
+  const checkHash = data.hash;
+  const dataStr = Object.keys(data)
+    .filter((key) => key !== "hash")
+    .sort()
+    .map((key) => `${key}=${data[key]}`)
+    .join("\n");
+  const hash = createHash("sha256").update(dataStr).digest("hex");
+  return checkHash === hash;
+}
 
 declare module "next-auth" {
   interface Session {
@@ -54,26 +68,28 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         id: { label: "Telegram ID", type: "text" },
         username: { label: "Telegram Username", type: "text" },
+        hash: { label: "Telegram Hash", type: "text" },
       },
-      async authorize(credentials: Record<"id" | "username" | "hash", string>) {
-        const response = await fetch(
-          `${process.env.NEXTAUTH_URL}/api/auth/telegram`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: credentials.id,
-              username: credentials.username,
-              hash: credentials.hash,
-            }),
-          }
-        );
+      async authorize(credentials) {
+        const { id, username, hash } = credentials;
 
-        const user = await response.json();
-        if (user && !user.error) {
-          return user;
+        // Verify the Telegram data
+        if (!verifyTelegramAuth({ id, username, hash })) {
+          throw new Error("Invalid Telegram authentication");
         }
-        return null;
+
+        // Fetch user data from the backend API
+        const user = await fetch(`${process.env.NEST_API_URL}/user/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider: "telegram",
+            providerId: id,
+            name: username,
+          }),
+        }).then((res) => res.json());
+
+        return user || null;
       },
     }),
   ],
