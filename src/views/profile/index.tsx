@@ -17,31 +17,36 @@ const ProfileView: FC = () => {
   };
 
   return (
-    <div className={`${styles.container} text-left`}>
-      <ProfileData />
-      
-      <div className="flex justify-center w-full" style={{ padding: '0 16px', maxWidth: '600px' }}>
-        <ProfileTotals onViewChange={handleViewChange} />
-      </div>
-
-      <div className={`${styles.content} text-left`}>
-        {currentView === 'profile' ? (
-          <>
-            <div className={styles.rowContainer}>
-              <div className={styles.column}>
-                <Socials />
-              </div>
-              <div className={styles.column}>
-                <ProfileWallets />
+    <div className={styles.container}>
+      <div className={styles.contentWrapper}>
+        <div className={styles.profileDataWrapper}>
+          <ProfileData />
+        </div>
+        <div className={styles.profileTotalsWrapper}>
+          <ProfileTotals onViewChange={handleViewChange} />
+        </div>
+        <div className={styles.contentArea}>
+          {currentView === 'profile' ? (
+            <div className={styles.profileContent}>
+              <div className={styles.rowContainer}>
+                <div className={`px-10 ${styles.column}`}>
+                  <Socials />
+                </div>
+                <div className={styles.column}>
+                  <ProfileWallets />
+                </div>
               </div>
             </div>
-          </>
-        ) : (
-          <ProfileHoldings />
-        )}
+          ) : (
+            <ProfileHoldings />
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
 export default ProfileView;
+
+
+
