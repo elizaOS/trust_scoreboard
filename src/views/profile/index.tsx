@@ -29,10 +29,10 @@ const ProfileView: FC = () => {
           {currentView === 'profile' ? (
             <div className={styles.profileContent}>
               <div className={styles.rowContainer}>
-                <div className={`px-10 ${styles.column}`}>
+                <div className={`hidden px-10 ${styles.column}`}>
                   <Socials />
                 </div>
-                <div className={styles.column}>
+                <div className={`hidden ${styles.column}`}>
                   <ProfileWallets />
                 </div>
               </div>

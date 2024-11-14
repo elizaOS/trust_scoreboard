@@ -163,7 +163,7 @@ const LeaderboardPartners: FC = () => {
                 alt="Null trust score"
                 width={20}
                 height={20}
-                className={styles.trustScoreImage}
+                className={`invert brightness-0  transition-all duration-300 ${styles.trustScoreImage}`}
               />
               <span className={styles.tooltip}>
                 AI Marc is Calculating Trust
