@@ -1,27 +1,28 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import { DefaultSession } from 'next-auth';
-import DiscordProvider, { DiscordProfile } from 'next-auth/providers/discord';
-import GitHubProvider, { GithubProfile } from 'next-auth/providers/github';
-import TwitterProvider, { TwitterProfile } from 'next-auth/providers/twitter';
-import { JWT } from 'next-auth/jwt';
-import { Account, Profile, User } from 'next-auth';
+import NextAuth, { NextAuthOptions, DefaultSession } from "next-auth";
+import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord";
+import TwitterProvider, { TwitterProfile } from "next-auth/providers/twitter";
+import GitHubProvider, { GithubProfile } from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-// Declare module to augment next-auth types
-declare module 'next-auth' {
+import { JWT } from "next-auth/jwt";
+import { Account, Profile } from "next-auth";
+
+declare module "next-auth" {
   interface Session {
-    user: DefaultSession['user'] & {
-      id?: string;
-      connections?: {
+    user: DefaultSession["user"] & {
+      id: string;
+      connections: {
         [provider: string]: {
           name: string;
           image: string;
         };
       };
+      hasLinkedSolana: boolean;
+      accessToken: string;
+      refreshToken: string;
     };
   }
 }
-
-// Extend JWT interface to include connections
 interface CustomJWT extends JWT {
   connections?: {
     [provider: string]: {
@@ -30,6 +31,7 @@ interface CustomJWT extends JWT {
     };
   };
   sub?: string;
+  hasLinkedSolana?: boolean;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -41,11 +43,38 @@ export const authOptions: NextAuthOptions = {
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID!,
       clientSecret: process.env.TWITTER_CLIENT_SECRET!,
-      version: '2.0',
+      version: "2.0",
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: "Telegram",
+      credentials: {
+        id: { label: "Telegram ID", type: "text" },
+        username: { label: "Telegram Username", type: "text" },
+      },
+      async authorize(credentials: Record<"id" | "username" | "hash", string>) {
+        const response = await fetch(
+          `${process.env.NEXTAUTH_URL}/api/auth/telegram`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: credentials.id,
+              username: credentials.username,
+              hash: credentials.hash,
+            }),
+          }
+        );
+
+        const user = await response.json();
+        if (user && !user.error) {
+          return user;
+        }
+        return null;
+      },
     }),
   ],
   callbacks: {
@@ -57,48 +86,64 @@ export const authOptions: NextAuthOptions = {
           customToken.connections = {};
         }
 
-        switch (account.provider) {
-          case 'discord':
-            const discordProfile = profile as DiscordProfile;
-            customToken.connections.discord = {
-              name: discordProfile.username || discordProfile.name || '',
-              image: `https://cdn.discordapp.com/avatars/${discordProfile.id}/${discordProfile.avatar}.png`,
-            };
-            break;
-          case 'twitter':
-            const twitterProfile = profile as TwitterProfile;
-            customToken.connections.twitter = {
-              name: twitterProfile.data?.name || twitterProfile.data?.username || '',
-              image: twitterProfile.data?.profile_image_url || '',
-            };
-            break;
-          case 'github':
-            const githubProfile = profile as GithubProfile;
-            customToken.connections.github = {
-              name: githubProfile.login || githubProfile.name || '',
-              image: githubProfile.avatar_url || '',
-            };
-            break;
-        }
+        // Map provider details based on the provider type
+        const providerData: { [provider: string]: any } = {
+          discord: {
+            id: (profile as DiscordProfile).id,
+            name: (profile as DiscordProfile).username,
+            avatarUrl: `https://cdn.discordapp.com/avatars/${
+              (profile as DiscordProfile).id
+            }/${(profile as DiscordProfile).avatar}.png`,
+          },
+          twitter: {
+            id: (profile as TwitterProfile).data?.id,
+            name: (profile as TwitterProfile).data?.name,
+            avatarUrl: (profile as TwitterProfile).data?.profile_image_url,
+          },
+          github: {
+            id: (profile as GithubProfile).id,
+            name: (profile as GithubProfile).login,
+            avatarUrl: (profile as GithubProfile).avatar_url,
+          },
+          telegram: {
+            id: account.id,
+            name: account.username,
+            avatarUrl: "",
+          },
+        };
+
+        const user = await fetch(`${process.env.NEST_API_URL}/user/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider: account.provider,
+            providerId: providerData[account.provider].id,
+            name: providerData[account.provider].name,
+            avatarUrl: providerData[account.provider].avatarUrl,
+          }),
+        }).then((res) => res.json());
+
+        customToken.sub = user.id;
+        customToken.hasLinkedSolana = user.hasLinkedSolana;
+        customToken.accessToken = user.accessToken || "";
+        customToken.refreshToken = user.refreshToken || "";
+        customToken.connections = user.connections || {};
       }
       return customToken;
     },
+
     async session({ session, token }) {
-      const customToken = token as CustomJWT;
-
-      if (customToken.connections) {
-        session.user.connections = customToken.connections;
-      }
-
-      // Ensure user.id is set from the token's sub
-      if (customToken.sub) {
-        session.user.id = customToken.sub;
-      }
-
+      session.user.id = token.sub;
+      session.user.connections = (token as CustomJWT).connections || {};
+      session.user.hasLinkedSolana =
+        (token as CustomJWT).hasLinkedSolana || false;
+      session.user.accessToken = (token as CustomJWT).accessToken as string;
+      session.user.refreshToken = (token as CustomJWT).refreshToken as string;
+      session.user.hasLinkedSolana = (token as CustomJWT).hasLinkedSolana;
       return session;
     },
   },
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === "development",
 };
 
 export default NextAuth(authOptions);
