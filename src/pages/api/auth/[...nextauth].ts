@@ -33,7 +33,9 @@ declare module "next-auth" {
       };
       hasLinkedSolana: boolean;
       accessToken: string;
+      expirationTime: number;
       refreshToken: string;
+      refreshTokenExpirationTime: number;
     };
   }
 }
@@ -141,8 +143,11 @@ export const authOptions: NextAuthOptions = {
 
         customToken.sub = user.id;
         customToken.hasLinkedSolana = user.hasLinkedSolana;
-        customToken.accessToken = user.accessToken || "";
+        customToken.accessToken = user.token || "";
         customToken.refreshToken = user.refreshToken || "";
+        customToken.expirationTime = user.expirationTime || 0;
+        customToken.refreshTokenExpirationTime =
+          user.refreshTokenExpirationTime || 0;
         customToken.connections = user.connections || {};
       }
       return customToken;
@@ -154,8 +159,13 @@ export const authOptions: NextAuthOptions = {
       session.user.hasLinkedSolana =
         (token as CustomJWT).hasLinkedSolana || false;
       session.user.accessToken = (token as CustomJWT).accessToken as string;
+      session.user.expirationTime = (token as CustomJWT)
+        .expirationTime as number;
+      session.user.refreshTokenExpirationTime = (token as CustomJWT)
+        .refreshTokenExpirationTime as number;
       session.user.refreshToken = (token as CustomJWT).refreshToken as string;
       session.user.hasLinkedSolana = (token as CustomJWT).hasLinkedSolana;
+
       return session;
     },
   },
