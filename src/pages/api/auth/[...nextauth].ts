@@ -140,7 +140,7 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify({
             provider: user?.provider,
             providerId: user?.id || "",
-            name: user?.name || "",
+            name: user?.username || "",
             avatarUrl: user?.image || "",
           }),
         }).then((res) => res.json());
