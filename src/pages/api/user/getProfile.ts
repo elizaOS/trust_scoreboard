@@ -1,13 +1,14 @@
 // /pages/api/user/getProfile.ts
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from "../auth/[...nextauth]"; // adjust path as necessary
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   // Get the session, which includes the access token
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
 
   // Check if session exists and accessToken is available
   if (!session || !session.user || !session.user.connections) {
@@ -16,8 +17,17 @@ export default async function handler(
       .json({ error: "Unauthorized: No connections found" });
   }
 
-  const connection =
-    session.user.connections["telegram"] || session.user.connections["discord"];
+  const userConnections = session.user.connections;
+
+  if (!userConnections) {
+    return res
+      .status(401)
+      .json({ error: "Unauthorized: No connections found" });
+  }
+  // find the working connection
+  const connection = Object.values(userConnections).find(
+    (connection) => connection.accessToken
+  );
   if (!connection) {
     return res
       .status(401)
@@ -32,7 +42,7 @@ export default async function handler(
   const accessToken = connection.accessToken;
 
   try {
-    const response = await fetch(`${process.env.NEST_API_URL}/getProfile`, {
+    const response = await fetch(`${process.env.NEST_API_URL}/user/profile`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,

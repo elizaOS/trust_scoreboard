@@ -1,21 +1,21 @@
-import { FC } from 'react';
-import { useSession, signOut } from 'next-auth/react';
-import Image from 'next/image';
-import styles from './ProfileData.module.css';
+import { FC } from "react";
+import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
+import styles from "./ProfileData.module.css";
 
 export const ProfileData: FC = () => {
   const { data: session } = useSession();
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: '/' });
+    signOut({ callbackUrl: "/" });
   };
 
   // Helper function to determine the user role
   const getUserRole = () => {
-    if (!session?.user?.connections) return 'Partner';
-    if ('telegram' in session.user.connections) return 'Telegram';
-    if ('discord' in session.user.connections) return 'Discord';
-    return 'Partner';
+    if (!session?.user?.connections) return "Partner";
+    if ("telegram" in session.user.connections) return "Telegram";
+    if ("discord" in session.user.connections) return "Discord";
+    return "Partner";
   };
 
   return (
@@ -36,16 +36,11 @@ export const ProfileData: FC = () => {
         )}
         <div className={styles.userInfo}>
           <h1 className={styles.userName}>
-            {session?.user?.name || 'Anonymous'}
+            {session?.user?.name || "Anonymous"}
           </h1>
-          <span className={styles.userRole}>
-            {getUserRole()}
-          </span>
+          <span className={styles.userRole}>{getUserRole()}</span>
         </div>
-        <button 
-          onClick={handleSignOut}
-          className={styles.signOutButton}
-        >
+        <button onClick={handleSignOut} className={styles.signOutButton}>
           Sign Out
         </button>
       </div>
@@ -53,4 +48,4 @@ export const ProfileData: FC = () => {
   );
 };
 
-export default ProfileData; 
+export default ProfileData;

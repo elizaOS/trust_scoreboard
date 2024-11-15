@@ -19,8 +19,11 @@ declare module "next-auth" {
           refreshToken?: string;
           refreshTokenExpirationTime?: number;
           hasLinkedSolana?: boolean;
+          provider?: string;
         };
       };
+      accessToken?: string;
+      refreshToken?: string;
     } & DefaultSession["user"];
   }
   interface User {
@@ -41,6 +44,7 @@ interface CustomJWT extends JWT {
       refreshToken?: string;
       refreshTokenExpirationTime?: number;
       hasLinkedSolana?: boolean;
+      provider?: string;
     };
   };
 }
@@ -72,6 +76,9 @@ function verifyTelegramAuth(data: any): boolean {
   return hmac === hash;
 }
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID!,
@@ -115,11 +122,19 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async session({ session, token }) {
+      const provider = "telegram"; // Change this to the provider you need
+
+      const connection = (token as CustomJWT).connections?.[provider];
+
       return {
         ...session,
         user: {
           ...session.user,
           connections: (token as CustomJWT).connections || {},
+          accessToken: connection?.accessToken, // Flatten the accessToken
+          refreshToken: connection?.refreshToken, // Flatten the refreshToken
+          expirationTime: connection?.expirationTime,
+          refreshTokenExpirationTime: connection?.refreshTokenExpirationTime,
           id: token.sub!,
         },
       };
@@ -157,14 +172,36 @@ export const authOptions: NextAuthOptions = {
           [account.provider]: {
             name: user?.username || "",
             image: user?.image || "",
-            accessToken: reponse.accessToken as string,
+            accessToken: reponse.token as string,
             expirationTime: reponse.expirationTime as number,
             refreshToken: reponse.refreshToken as string,
             refreshTokenExpirationTime:
               reponse.refreshTokenExpirationTime as number,
             hasLinkedSolana: reponse.hasLinkedSolana,
+            provider: account.provider,
           },
         };
+
+        if (customToken.connections) {
+          for (const provider in customToken.connections) {
+            if (customToken.connections[provider].accessToken) {
+              customToken.connections[provider].accessToken =
+                customToken.connections[provider].accessToken;
+            }
+            if (customToken.connections[provider].refreshToken) {
+              customToken.connections[provider].refreshToken =
+                customToken.connections[provider].refreshToken;
+            }
+            if (customToken.connections[provider].expirationTime) {
+              customToken.connections[provider].expirationTime =
+                customToken.connections[provider].expirationTime;
+            }
+            if (customToken.connections[provider].refreshTokenExpirationTime) {
+              customToken.connections[provider].refreshTokenExpirationTime =
+                customToken.connections[provider].refreshTokenExpirationTime;
+            }
+          }
+        }
       }
       return token as CustomJWT;
     },
