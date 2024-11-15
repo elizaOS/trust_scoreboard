@@ -155,3 +155,46 @@
     font-size: 1rem;
   }
 }
+
+/* Add these styles to your existing LeaderboardMedals.module.css file */
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeletonCircle {
+  background-color: #242424;
+  border: 2px solid #3C3C3C;
+  border-radius: 50%;
+}
+
+.skeletonText {
+  height: 1rem;
+  width: 80px;
+  background-color: #242424;
+  border: 1px solid #3C3C3C;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.skeletonScore {
+  height: 1.5rem;
+  width: 4rem;
+  background-color: #242424;
+  border: 1px solid #3C3C3C;
+  border-radius: 0.75rem;
+  margin-top: 0.25rem;
+}
+

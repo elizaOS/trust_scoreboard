@@ -55,6 +55,7 @@
 .row1 {
     background: #2d2d2d;
     height: 62px;
+    transition: all 0.3s ease;
 }
 
 .text {
@@ -363,3 +364,21 @@
         padding-right: 12px;
     }
 }
+
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+

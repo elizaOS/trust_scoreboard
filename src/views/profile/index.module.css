@@ -13,7 +13,6 @@
   max-width: 800px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
 }
 
 .profileDataWrapper,
@@ -40,7 +39,24 @@
 
 .column {
   flex: 1;
-  min-width: 0; /* Prevents flex items from overflowing */
+  min-width: 0;
+  /* Prevents flex items from overflowing */
+}
+
+.signOutButton {
+  display: flex;
+  height: 50px;
+  /* max-width: 600px; */
+  padding: 14px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  align-self: stretch;
+  border-radius: 14px;
+  background: #242424;
+  width: 100%;
+  color: #747474;
+  font-weight: bolder;
 }
 
 @media (max-width: 768px) {

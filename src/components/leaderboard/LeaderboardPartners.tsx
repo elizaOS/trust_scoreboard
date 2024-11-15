@@ -20,6 +20,15 @@ interface PartnerWithUser extends Partner {
   discordImage?: string;
 }
 
+const SkeletonRow = () => (
+  <div className={`${styles.row1} animate-pulse`}>
+    <div className={styles.rowChild}>
+      <div className="w-8 h-8 bg-[#3C3C3C] rounded-full" />
+
+    </div>
+  </div>
+);
+
 const LeaderboardPartners: FC = () => {
   const { publicKey } = useWallet();
   const { data: session } = useSession();
@@ -29,6 +38,7 @@ const LeaderboardPartners: FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 3;
+  const SKELETON_ROWS = 5;
 
   const formatAddress = useCallback((address: string) => {
     if (isMobile) {
@@ -93,21 +103,6 @@ const LeaderboardPartners: FC = () => {
     fetchData();
   }, [retryCount, isMobile, formatAddress, publicKey, session]);
 
-  const formatHoldings = (value: number): string => {
-    if (value >= 1000000) {
-      return `${(value / 1000000).toFixed(2)}M`;
-    } else if (value >= 1000) {
-      return `${(value / 1000).toFixed(2)}K`;
-    }
-    return value.toFixed(2);
-  };
-
-  const Loader = () => (
-    <div className="flex justify-center items-center w-full py-8">
-      <div className="w-8 h-8 border-4 border-[#F98C13] border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
-
   const getRankDisplay = (rank: number) => {
     switch (rank) {
       case 1:
@@ -134,11 +129,10 @@ const LeaderboardPartners: FC = () => {
     }
   };
 
-
   const renderPartnerRow = (partner: PartnerWithUser) => (
     <div
       key={partner.address}
-      className={` ${styles.row1}  ${partner.isCurrentUser ? styles.currentUserRow : ''}`}
+      className={`${styles.row1} ${partner.isCurrentUser ? styles.currentUserRow : ''}`}
     >
       <div className={styles.rowChild}>
         <Image
@@ -154,7 +148,7 @@ const LeaderboardPartners: FC = () => {
           </div>
         </div>
       </div>
-      <div className='flex items-center'>
+      <div className="flex items-center">
         <div className={styles.textWrapper}>
           {partner.trustScore === 0 ? (
             <div className={styles.tooltipContainer}>
@@ -163,7 +157,7 @@ const LeaderboardPartners: FC = () => {
                 alt="Null trust score"
                 width={20}
                 height={20}
-                className={`invert brightness-0  transition-all duration-300 ${styles.trustScoreImage}`}
+                className={`invert brightness-0 transition-all duration-300 ${styles.trustScoreImage}`}
               />
               <span className={styles.tooltip}>
                 AI Marc is Calculating Trust
@@ -185,7 +179,11 @@ const LeaderboardPartners: FC = () => {
   return (
     <div className={styles.frameParent}>
       {isLoading ? (
-        <Loader />
+        <>
+          {[...Array(SKELETON_ROWS)].map((_, index) => (
+            <SkeletonRow key={index} />
+          ))}
+        </>
       ) : error ? (
         <div className={styles.errorMessage}>
           Error loading partners. Retrying... ({retryCount}/{MAX_RETRIES})

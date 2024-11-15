@@ -6,9 +6,7 @@ import styles from "./ProfileData.module.css";
 export const ProfileData: FC = () => {
   const { data: session } = useSession();
 
-  const handleSignOut = () => {
-    signOut({ callbackUrl: "/" });
-  };
+ 
 
   // Helper function to determine the user role
   const getUserRole = () => {
@@ -38,11 +36,8 @@ export const ProfileData: FC = () => {
           <h1 className={styles.userName}>
             {session?.user?.name || "Anonymous"}
           </h1>
-          <span className={styles.userRole}>{getUserRole()}</span>
+          <span className={`hidden ${styles.userRole}`}>{getUserRole()}</span>
         </div>
-        <button onClick={handleSignOut} className={styles.signOutButton}>
-          Sign Out
-        </button>
       </div>
     </div>
   );
