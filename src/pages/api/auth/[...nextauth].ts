@@ -158,9 +158,9 @@ export const authOptions: NextAuthOptions = {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            provider: user?.provider,
+            provider: user?.provider || account.provider || "discord",
             providerId: user?.id || "",
-            name: user?.username || "",
+            name: user?.username || user?.name || "",
             avatarUrl: user?.image || "",
           }),
         }).then((res) => res.json());
@@ -170,7 +170,7 @@ export const authOptions: NextAuthOptions = {
         customToken.connections = {
           ...(customToken.connections || {}),
           [account.provider]: {
-            name: user?.username || "",
+            name: user?.username || user?.name || "",
             image: user?.image || "",
             accessToken: reponse.token as string,
             expirationTime: reponse.expirationTime as number,
