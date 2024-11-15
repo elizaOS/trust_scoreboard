@@ -2,6 +2,7 @@ import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import styles from './signin.module.css';
 import { useEffect } from 'react';
+import discordLogo from '../../../public/discord.svg';
 
 export default function SignIn() {
   const handleDiscordSignIn = () => {
@@ -48,10 +49,10 @@ export default function SignIn() {
           className={styles.discordButton}
         >
           <Image 
-            src="/discord-mark-white.svg" 
+            src={discordLogo}
             alt="Discord" 
-            width={24} 
-            height={24} 
+            width={100} 
+            height={100} 
           />
           Connect to Discord
         </button>
