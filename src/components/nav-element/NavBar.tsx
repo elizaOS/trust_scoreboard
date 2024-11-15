@@ -70,22 +70,17 @@ const NavBar: FC<NavBarProps> = () => {
           {session ? (
             <Link href="/profile" className="p-1 hover:bg-white/10 rounded-full">
               <Image
-                src={session.user?.image || '/default-avatar.png'}
-                alt="Profile"
+                src={session.user?.image ?? '/profile_default.png'}
+                alt={session.user?.name ?? 'Profile'}
                 width={32}
                 height={32}
                 className="rounded-full object-cover"
+                unoptimized
               />
             </Link>
           ) : (
-            <Link href="/api/auth/signin" className="p-1 hover:bg-white/10 rounded-full">
-              <Image
-                src="/default-avatar.png"
-                alt="Sign In"
-                width={32}
-                height={32}
-                className="rounded-full object-cover"
-              />
+            <Link href="/auth/signin" className={styles.actionButton}>
+              Sign In
             </Link>
           )}
         </div>
