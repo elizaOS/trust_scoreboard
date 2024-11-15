@@ -2,9 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 2rem;
   padding: 1rem 1.5rem;
   margin: 1rem 0;
+  gap: 10px;
 }
 
 .loading {
@@ -23,7 +23,7 @@
 }
 
 .firstPlace {
-  transform: scale(1.15);
+  /* transform: scale(1.15); */
   margin: 0 1rem;
 }
 
@@ -139,7 +139,7 @@
   }
 
   .firstPlace {
-    transform: scale(1.1);
+    /* transform: scale(1.1); */
     margin: 0 0.5rem;
   }
 
