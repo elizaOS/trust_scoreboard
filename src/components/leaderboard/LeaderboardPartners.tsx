@@ -139,7 +139,7 @@ const LeaderboardPartners: FC = () => {
           width={34}
           height={34}
           alt="Partner avatar"
-          src={partner.discordImage || "/profile_default.png"}
+          src={partner.discordImage || "/noname.svg"}
           className={styles.avatarImage}
         />
         <div className={styles.textParent}>
@@ -169,9 +169,12 @@ const LeaderboardPartners: FC = () => {
             </div>
           )}
         </div>
-        <div className={styles.rankWrapper}>
-          {getRankDisplay(partner.rank)}
-        </div>
+        {
+          partner.trustScore ? (<div className={styles.rankWrapper}>
+            {getRankDisplay(partner.rank)}
+          </div>) : null
+        }
+
       </div>
     </div>
   );
