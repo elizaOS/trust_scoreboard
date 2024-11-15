@@ -15,7 +15,7 @@ declare module "next-auth" {
           image: string;
         };
       };
-    } & DefaultSession["user"]
+    } & DefaultSession["user"];
   }
 }
 
@@ -26,6 +26,11 @@ interface CustomJWT extends JWT {
     [provider: string]: {
       name: string;
       image: string;
+      accessToken?: string;
+      expirationTime?: number;
+      refreshToken?: string;
+      refreshTokenExpirationTime?: number;
+      hasLinkedSolana?: boolean;
     };
   };
 }
@@ -49,30 +54,32 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.DISCORD_CLIENT_SECRET!,
     }),
     CredentialsProvider({
-      name: 'Telegram',
+      name: "Telegram",
       credentials: {
-        id: { type: 'text' },
-        first_name: { type: 'text' },
-        last_name: { type: 'text' },
-        username: { type: 'text' },
-        photo_url: { type: 'text' },
-        hash: { type: 'text' },
+        id: { type: "text" },
+        first_name: { type: "text" },
+        last_name: { type: "text" },
+        username: { type: "text" },
+        photo_url: { type: "text" },
+        hash: { type: "text" },
       },
       async authorize(credentials) {
         if (!credentials) return null;
-        
+
         const isValid = verifyTelegramAuth(credentials);
         if (!isValid) return null;
 
         return {
           id: credentials.id,
-          name: `${credentials.first_name} ${credentials.last_name || ''}`.trim(),
+          name: `${credentials.first_name} ${
+            credentials.last_name || ""
+          }`.trim(),
           image: credentials.photo_url,
           username: credentials.username,
-          provider: 'telegram'
+          provider: "telegram",
         };
-      }
-    })
+      },
+    }),
   ],
   callbacks: {
     async session({ session, token }) {
@@ -81,8 +88,8 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           connections: (token as CustomJWT).connections || {},
-          id: token.sub!
-        }
+          id: token.sub!,
+        },
       };
     },
     async jwt({ token, user, account }): Promise<CustomJWT> {
@@ -91,20 +98,40 @@ export const authOptions: NextAuthOptions = {
       }
       if (account) {
         const customToken = token as CustomJWT;
+
+        const reponse = await fetch(`${process.env.NEST_API_URL}/user/auth`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider: account.provider,
+            providerId: account.id,
+            name: user?.name || "",
+            avatarUrl: user?.image || "",
+          }),
+        }).then((res) => res.json());
+        if (reponse.error) {
+          throw new Error(reponse.error);
+        }
         customToken.connections = {
           ...(customToken.connections || {}),
           [account.provider]: {
-            name: user?.name || '',
-            image: user?.image || ''
-          }
+            name: user?.name || "",
+            image: user?.image || "",
+            accessToken: account.accessToken as string,
+            expirationTime: account.expirationTime as number,
+            refreshToken: account.refreshToken as string,
+            refreshTokenExpirationTime:
+              account.refreshTokenExpirationTime as number,
+            hasLinkedSolana: reponse.hasLinkedSolana,
+          },
         };
       }
       return token as CustomJWT;
-    }
+    },
   },
   pages: {
-    signIn: '/auth/signin',
-  }
+    signIn: "/auth/signin",
+  },
 };
 
 export default NextAuth(authOptions);
