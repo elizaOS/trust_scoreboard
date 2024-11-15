@@ -2,9 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 2rem;
   padding: 1rem 1.5rem;
   margin: 1rem 0;
+  gap: 10px;
 }
 
 .loading {
@@ -23,7 +23,7 @@
 }
 
 .firstPlace {
-  transform: scale(1.15);
+  /* transform: scale(1.15); */
   margin: 0 1rem;
 }
 
@@ -42,7 +42,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  padding: 0.125rem;
+  padding: 3px
 }
 
 .userImage {
@@ -54,19 +54,28 @@
 
 .medal {
   position: absolute;
-  top: -0.25rem;
-  left: -0.25rem;
+  top: 1px;
+  left: -4px;
   width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
   display: flex;
-  align-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 8px 14px;
   justify-content: center;
-  color: white;
-  font-weight: 600;
-  font-size: 0.875rem;
+  align-items: center;
+  gap: 14px;
   z-index: 1;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-family-base);
+  border-radius: 100px;
+  font-family: 700;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.firstPlacemedal {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
 }
 
 .gold {
@@ -89,14 +98,21 @@
 }
 
 .name {
-  font-weight: 500;
-  color: white;
-  font-size: 0.875rem;
+  color: #FFF;
+  text-align: center;
+  font-family: var(--font-family-base);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
 }
 
 .scoreWrapper {
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.75rem;
+  display: flex;
+  padding: 4px 14px;
+  align-items: center;
+  gap: 14px;
+  border-radius: 100px;
 }
 
 .score {
@@ -123,7 +139,7 @@
   }
 
   .firstPlace {
-    transform: scale(1.1);
+    /* transform: scale(1.1); */
     margin: 0 0.5rem;
   }
 
@@ -138,9 +154,10 @@
   }
 
   .medal {
-    width: 1.5rem;
-    height: 1.5rem;
-    font-size: 0.75rem;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: 700;
   }
 
   .name {
@@ -156,7 +173,7 @@
   }
 }
 
-/* Add these styles to your existing LeaderboardMedals.module.css file */
+
 
 @keyframes pulse {
 
@@ -197,4 +214,3 @@
   border-radius: 0.75rem;
   margin-top: 0.25rem;
 }
-

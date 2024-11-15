@@ -1,15 +1,10 @@
 import { FC } from 'react';
 import Image from 'next/image';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { truncateAddress } from '../../utils/helpers';
 import { useDashboard } from '../../hooks/useDashboard';
-import type { Partner } from '../../types/dashboard';
 import styles from './LeaderboardMedals.module.css';
 
-
-
 const SkeletonMedal: FC<{ position: number }> = ({ position }) => {
-  const isFirstPlace = position === 1;
+  const isFirstPlace = position === 2;
   const size = isFirstPlace ? '120px' : '80px';
 
   return (
@@ -28,34 +23,16 @@ const SkeletonMedal: FC<{ position: number }> = ({ position }) => {
 
 const LeaderboardMedals: FC = () => {
   const { data: dashboardData, isLoading } = useDashboard();
-  const positions = [2, 1, 3];
-
-  if (isLoading || !dashboardData) {
-    return <div className={styles.loading}>Loading...</div>;
-  }
 
   const topThree = (dashboardData?.partners || [])
-    .filter(partner =>
-      partner &&
-      typeof partner.trustScore === 'number' &&
-      !isNaN(partner.trustScore)
-    )
-    .sort((a, b) => {
-      const scoreA = typeof a.trustScore === 'number' ? a.trustScore : 0;
-      const scoreB = typeof b.trustScore === 'number' ? b.trustScore : 0;
-      return scoreB - scoreA;
-    })
+    .filter(partner => partner && typeof partner.rank === 'number' && !isNaN(partner.rank))
+    .sort((a, b) => a.rank - b.rank)
     .slice(0, 3);
 
-  const paddedTopThree = [...topThree];
-  while (paddedTopThree.length < 3) {
-    paddedTopThree.push(null);
-  }
-
   const reorderedTopThree = [
-    paddedTopThree[1], // 2nd place
-    paddedTopThree[0], // 1st place
-    paddedTopThree[2]  // 3rd place
+    topThree[1], // 2nd place
+    topThree[0], // 1st place
+    topThree[2]  // 3rd place
   ];
 
   const getMedalClass = (index: number) => {
@@ -69,29 +46,28 @@ const LeaderboardMedals: FC = () => {
   return (
     <div className={styles.container}>
       {isLoading || !dashboardData ? (
-        positions.map((position) => (
+        [1, 2, 3].map((position) => (
           <SkeletonMedal key={position} position={position} />
         ))
       ) : (
-
         reorderedTopThree.map((user, index) => {
           const isFirstPlace = index === 1;
           const medalClass = getMedalClass(index);
 
           return (
             <div
-              key={user?.wallet || index}
+              key={user?.id || index}
               className={`${styles.medalHolder} ${isFirstPlace ? styles.firstPlace : ''}`}
             >
               <div className={`${styles.imageWrapper} ${isFirstPlace ? styles.firstPlaceImage : ''}`}>
-                <div className={`${styles.medal} ${medalClass}`}>
-                  {positions[index]}
+                <div className={`${styles.medal} ${medalClass} ${isFirstPlace ? styles.firstPlacemedal : ''}`}>
+                  {user?.rank}
                 </div>
                 <div className={`${styles.imageBorder} ${medalClass}`}>
-                  {user?.image ? (
+                  {user?.avatarUrl ? (
                     <Image
-                      src={user.image}
-                      alt={user && user.wallet ? truncateAddress(user.wallet) : `Position ${positions[index]}`}
+                      src={user.avatarUrl}
+                      alt={user && user.name ? user.name : `Position ${user?.rank}`}
                       width={isFirstPlace ? 120 : 80}
                       height={isFirstPlace ? 120 : 80}
                       className={styles.userImage}
@@ -105,7 +81,7 @@ const LeaderboardMedals: FC = () => {
               </div>
               <div className={styles.userInfo}>
                 <span className={styles.name}>
-                  {user?.displayAddress || user?.wallet ? truncateAddress(user.displayAddress || user.wallet) : `Position ${positions[index]}`}
+                  {user?.name ? user.name : `Position ${user?.rank}`}
                 </span>
                 <div className={`${styles.scoreWrapper} ${medalClass}`}>
                   <span className={`${styles.score} ${isFirstPlace ? styles.firstPlaceScore : ''}`}>
@@ -116,12 +92,9 @@ const LeaderboardMedals: FC = () => {
             </div>
           );
         })
-
       )}
-
     </div>
   );
 };
 
 export default LeaderboardMedals;
-
