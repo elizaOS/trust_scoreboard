@@ -24,8 +24,8 @@ export const ProfileData: FC = () => {
             <Image
               src={session.user.image}
               alt="Profile"
-              width={68}
-              height={68}
+              width={120}
+            height={120}
               className={styles.profileImage}
               priority
               unoptimized
