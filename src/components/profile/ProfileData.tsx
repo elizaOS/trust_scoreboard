@@ -36,7 +36,7 @@ export const ProfileData: FC = () => {
           <h1 className={styles.userName}>
             {session?.user?.name || "Anonymous"}
           </h1>
-          <span className={styles.userRole}>{getUserRole()}</span>
+          <span className={`hidden ${styles.userRole}`}>{getUserRole()}</span>
         </div>
       </div>
     </div>

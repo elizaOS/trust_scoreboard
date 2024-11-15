@@ -35,7 +35,7 @@ const ProfileView: FC = () => {
         {
           session?.user &&
           (<div className="flex items-center justify-center w-full px-[24px]">
-            <button onClick={handleSignOut} className={styles.signOutButton}>
+            <button onClick={handleSignOut} className={`rounded-2xl ${styles.signOutButton}`}>
               Logout
             </button>
           </div>)

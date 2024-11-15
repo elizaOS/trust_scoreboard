@@ -116,20 +116,16 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
       <div className={styles.metricsGrid}>
         <div className={styles.metricCard}>
           <div className={styles.metricContent}>
-            <Image src="/heart.svg" alt="Trust Score" width={32} height={32} />
-            <div className={styles.metricInfo}>
-              <div className={`text-[#FF4463] ${styles.value}`}>{metrics.trustScore.toFixed(1)}</div>
-              <div className={styles.label}>Trust Score</div>
+            <div className='flex items-center justify-between w-full'>
+              <div className='flex items-center gap-[14px]'>
+                <Image src="/heart.svg" alt="Trust Score" width={32} height={32} />
+                <div className={styles.metricInfo}>
+                  <div className={`${styles.label}`}>Trust Score</div>
+                  <p className={styles.metricsAi}>Assigned from AI Marc</p>
+                </div>
+              </div>
+              <div className={`text-[#FF4463] ${styles.trustScorevalue}`}>{metrics.trustScore.toFixed(1)}</div>
             </div>
-          </div>
-          <div className={styles.progressContainer}>
-            <div
-              className={styles.progressBar}
-              style={{
-                width: `${metrics.trustScore}%`,
-                minWidth: '10px'
-              }}
-            />
           </div>
         </div>
 
