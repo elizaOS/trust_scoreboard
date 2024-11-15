@@ -36,13 +36,19 @@ interface CustomJWT extends JWT {
 }
 
 function verifyTelegramAuth(data: any): boolean {
-  const secret = createHash("sha256").update(TELEGRAM_BOT_TOKEN).digest();
+  if (!data || !data.id || !data.username || !data.hash) {
+    console.error("Missing Telegram data:", data);
+    return false;
+  }
+
+  // const secret = createHash("sha256").update(TELEGRAM_BOT_TOKEN).digest();
   const checkHash = data.hash;
   const dataStr = Object.keys(data)
     .filter((key) => key !== "hash")
     .sort()
     .map((key) => `${key}=${data[key]}`)
     .join("\n");
+
   const hash = createHash("sha256").update(dataStr).digest("hex");
   return checkHash === hash;
 }
@@ -64,6 +70,8 @@ export const authOptions: NextAuthOptions = {
         hash: { type: "text" },
       },
       async authorize(credentials) {
+        console.log("Received Telegram credentials:", credentials);
+
         if (!credentials) return null;
 
         const isValid = verifyTelegramAuth(credentials);
@@ -72,7 +80,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: credentials.id,
           name: `${credentials.first_name} ${
-            credentials.last_name || ""
+            credentials?.last_name || ""
           }`.trim(),
           image: credentials.photo_url,
           username: credentials.username,
