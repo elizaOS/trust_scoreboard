@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions, DefaultSession } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { createHash } from "crypto";
+import { createHash, createHmac } from "crypto";
 import { JWT } from "next-auth/jwt";
 
 // Extend the built-in session types
@@ -12,10 +12,15 @@ declare module "next-auth" {
       connections: {
         [provider: string]: {
           name: string;
+          username: string;
           image: string;
         };
       };
     } & DefaultSession["user"];
+  }
+  interface User {
+    username?: string;
+    provider?: string;
   }
 }
 
@@ -40,19 +45,27 @@ function verifyTelegramAuth(data: any): boolean {
     console.error("Missing Telegram data:", data);
     return false;
   }
+  // console.log("Verifying Telegram auth:", data);
+  const { hash, ...params } = data;
+  Object.keys(params).forEach(
+    (key) =>
+      params[key] === undefined ||
+      (params[key] === "undefined" && delete params[key])
+  );
+  // Generate the secret using the SHA-256 hash of the Telegram bot token
+  const secret = createHash("sha256").update(TELEGRAM_BOT_TOKEN).digest();
 
-  // const secret = createHash("sha256").update(TELEGRAM_BOT_TOKEN).digest();
-  const checkHash = data.hash;
-  const dataStr = Object.keys(data)
-    .filter((key) => key !== "hash")
+  const checkString = Object.keys(params)
     .sort()
-    .map((key) => `${key}=${data[key]}`)
+    .map((key) => `${key}=${params[key]}`)
     .join("\n");
+  const hmac = createHmac("sha256", secret).update(checkString).digest("hex");
 
-  const hash = createHash("sha256").update(dataStr).digest("hex");
-  return checkHash === hash;
+  // console.log("Calculated hash:", hmac);
+  // console.log("Received hash:", hash);
+
+  return hmac === hash;
 }
-
 export const authOptions: NextAuthOptions = {
   providers: [
     DiscordProvider({
@@ -68,15 +81,21 @@ export const authOptions: NextAuthOptions = {
         username: { type: "text" },
         photo_url: { type: "text" },
         hash: { type: "text" },
+        auth_date: { type: "number" },
       },
       async authorize(credentials) {
-        console.log("Received Telegram credentials:", credentials);
-
         if (!credentials) return null;
 
-        const isValid = verifyTelegramAuth(credentials);
+        const isValid = verifyTelegramAuth({
+          auth_date: credentials.auth_date,
+          id: credentials.id,
+          first_name: credentials.first_name,
+          last_name: credentials.last_name,
+          username: credentials.username,
+          photo_url: credentials.photo_url,
+          hash: credentials.hash,
+        });
         if (!isValid) return null;
-
         return {
           id: credentials.id,
           name: `${credentials.first_name} ${
@@ -106,13 +125,21 @@ export const authOptions: NextAuthOptions = {
       }
       if (account) {
         const customToken = token as CustomJWT;
+        console.log("Account:", account);
+        console.log("User:", user);
+        console.log({
+          provider: account.provider,
+          providerId: user?.id || "",
+          name: user?.name || "",
+          avatarUrl: user?.image || "",
+        });
 
         const reponse = await fetch(`${process.env.NEST_API_URL}/user/auth`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            provider: account.provider,
-            providerId: account.id,
+            provider: user?.provider,
+            providerId: user?.id || "",
             name: user?.name || "",
             avatarUrl: user?.image || "",
           }),
@@ -123,7 +150,7 @@ export const authOptions: NextAuthOptions = {
         customToken.connections = {
           ...(customToken.connections || {}),
           [account.provider]: {
-            name: user?.name || "",
+            name: user?.username || "",
             image: user?.image || "",
             accessToken: account.accessToken as string,
             expirationTime: account.expirationTime as number,
