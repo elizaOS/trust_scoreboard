@@ -14,6 +14,11 @@ declare module "next-auth" {
           name: string;
           username: string;
           image: string;
+          accessToken?: string;
+          expirationTime?: number;
+          refreshToken?: string;
+          refreshTokenExpirationTime?: number;
+          hasLinkedSolana?: boolean;
         };
       };
     } & DefaultSession["user"];
@@ -152,11 +157,11 @@ export const authOptions: NextAuthOptions = {
           [account.provider]: {
             name: user?.username || "",
             image: user?.image || "",
-            accessToken: account.accessToken as string,
-            expirationTime: account.expirationTime as number,
-            refreshToken: account.refreshToken as string,
+            accessToken: reponse.accessToken as string,
+            expirationTime: reponse.expirationTime as number,
+            refreshToken: reponse.refreshToken as string,
             refreshTokenExpirationTime:
-              account.refreshTokenExpirationTime as number,
+              reponse.refreshTokenExpirationTime as number,
             hasLinkedSolana: reponse.hasLinkedSolana,
           },
         };
