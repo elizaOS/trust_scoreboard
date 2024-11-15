@@ -1,13 +1,34 @@
 import NextAuth, { NextAuthOptions, DefaultSession } from "next-auth";
-import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord";
-import TwitterProvider, { TwitterProfile } from "next-auth/providers/twitter";
-import GitHubProvider, { GithubProfile } from "next-auth/providers/github";
+import DiscordProvider from "next-auth/providers/discord";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { createHash } from "crypto";
-
 import { JWT } from "next-auth/jwt";
-import { Account, Profile } from "next-auth";
+
+// Extend the built-in session types
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      connections: {
+        [provider: string]: {
+          name: string;
+          image: string;
+        };
+      };
+    } & DefaultSession["user"]
+  }
+}
+
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
+
+interface CustomJWT extends JWT {
+  connections?: {
+    [provider: string]: {
+      name: string;
+      image: string;
+    };
+  };
+}
 
 function verifyTelegramAuth(data: any): boolean {
   const secret = createHash("sha256").update(TELEGRAM_BOT_TOKEN).digest();
@@ -19,35 +40,6 @@ function verifyTelegramAuth(data: any): boolean {
     .join("\n");
   const hash = createHash("sha256").update(dataStr).digest("hex");
   return checkHash === hash;
-}
-
-declare module "next-auth" {
-  interface Session {
-    user: DefaultSession["user"] & {
-      id: string;
-      connections: {
-        [provider: string]: {
-          name: string;
-          image: string;
-        };
-      };
-      hasLinkedSolana: boolean;
-      accessToken: string;
-      expirationTime: number;
-      refreshToken: string;
-      refreshTokenExpirationTime: number;
-    };
-  }
-}
-interface CustomJWT extends JWT {
-  connections?: {
-    [provider: string]: {
-      name: string;
-      image: string;
-    };
-  };
-  sub?: string;
-  hasLinkedSolana?: boolean;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -69,11 +61,9 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials) return null;
         
-        // Verify the Telegram authentication
         const isValid = verifyTelegramAuth(credentials);
         if (!isValid) return null;
 
-        // Return user object
         return {
           id: credentials.id,
           name: `${credentials.first_name} ${credentials.last_name || ''}`.trim(),
@@ -86,26 +76,30 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.sub!;
-        session.user.connections = token.connections as any;
-      }
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          connections: (token as CustomJWT).connections || {},
+          id: token.sub!
+        }
+      };
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account }): Promise<CustomJWT> {
       if (user) {
         token.sub = user.id;
       }
       if (account) {
-        token.connections = {
-          ...token.connections,
+        const customToken = token as CustomJWT;
+        customToken.connections = {
+          ...(customToken.connections || {}),
           [account.provider]: {
             name: user?.name || '',
             image: user?.image || ''
           }
         };
       }
-      return token;
+      return token as CustomJWT;
     }
   },
   pages: {

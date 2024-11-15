@@ -10,6 +10,14 @@ export const ProfileData: FC = () => {
     signOut({ callbackUrl: '/' });
   };
 
+  // Helper function to determine the user role
+  const getUserRole = () => {
+    if (!session?.user?.connections) return 'Partner';
+    if ('telegram' in session.user.connections) return 'Telegram';
+    if ('discord' in session.user.connections) return 'Discord';
+    return 'Partner';
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.profileContainer}>
@@ -31,8 +39,7 @@ export const ProfileData: FC = () => {
             {session?.user?.name || 'Anonymous'}
           </h1>
           <span className={styles.userRole}>
-            {session?.user?.connections?.telegram ? 'Telegram' : 
-             session?.user?.connections?.discord ? 'Discord' : 'Partner'}
+            {getUserRole()}
           </span>
         </div>
         <button 
