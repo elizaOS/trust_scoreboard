@@ -131,7 +131,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
 
         <div className={styles.metricCard}>
           <div className={styles.metricContent}>
-            <Image src="/green_flame.svg" alt="Rank" width={24} height={24} />
+            <Image src="/green_flame.svg" alt="Rank" width={32} height={32} />
             <div className={styles.metricInfo}>
               <div className={`text-[#68CE67] ${styles.value}`}>#{metrics.rank}</div>
               <div className={styles.label}>Rank</div>
@@ -151,7 +151,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
 
         <div className={styles.metricCard}>
           <div className={styles.metricContent}>
-            <Image src="/thumb.svg" alt="Success Rate" width={24} height={24} />
+            <Image src="/thumb.svg" alt="Success Rate" width={32} height={32} />
             <div className={styles.metricInfo}>
               <div className={`text-[#935DEA] ${styles.value}`}>{metrics.successRate}%</div>
               <div className={styles.label}>Success Rate</div>
@@ -161,7 +161,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
 
         <div className={styles.metricCard}>
           <div className={styles.metricContent}>
-            <Image src="/yellow_flame.svg" alt="Shills" width={24} height={24} />
+            <Image src="/yellow_flame.svg" alt="Shills" width={32} height={32} />
             <div className={styles.metricInfo}>
               <div className={`text-[#F2A33C] ${styles.value}`}>635</div>
               <div className={styles.label}>Shills</div>
@@ -171,7 +171,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
 
         <div className={styles.metricCard}>
           <div className={styles.metricContent}>
-            <Image src="/clock.svg" alt="Joined" width={24} height={24} />
+            <Image src="/clock.svg" alt="Joined" width={32} height={32} />
             <div className={styles.metricInfo}>
               <div className={`text-[#4FADF8] ${styles.value}`}>34d</div>
               <div className={styles.label}>Joined</div>
