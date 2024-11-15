@@ -30,7 +30,10 @@ export const ProfileData: FC = () => {
           <h1 className={styles.userName}>
             {session?.user?.name || 'Anonymous'}
           </h1>
-          <span className={styles.userRole}>Partner</span>
+          <span className={styles.userRole}>
+            {session?.user?.connections?.telegram ? 'Telegram' : 
+             session?.user?.connections?.discord ? 'Discord' : 'Partner'}
+          </span>
         </div>
         <button 
           onClick={handleSignOut}

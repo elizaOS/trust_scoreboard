@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 export default function SignIn() {
   const handleDiscordSignIn = () => {
-    signIn('discord', { callbackUrl: '/' });
+    signIn('discord', { callbackUrl: '/profile' });
   };
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function SignIn() {
       const script = document.createElement('script');
       script.async = true;
       script.src = "https://telegram.org/js/telegram-widget.js?22";
-      script.setAttribute('data-telegram-login', 'AI16ZBot');
+      script.setAttribute('data-telegram-login', 'AI16ZBOT');
       script.setAttribute('data-size', 'large');
       script.setAttribute('data-radius', '14');
       script.setAttribute('data-onauth', 'window.onTelegramAuth(user)');
@@ -28,9 +28,12 @@ export default function SignIn() {
       console.log('Telegram auth:', user);
       signIn('credentials', {
         id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
         username: user.username,
+        photo_url: user.photo_url,
         hash: user.hash,
-        callbackUrl: '/',
+        callbackUrl: '/profile',
       });
     };
   }, []);
