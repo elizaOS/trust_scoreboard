@@ -68,6 +68,11 @@
   z-index: 1;
 }
 
+.firstPlacemedal{
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+}
+
 .gold {
   background-color: #FFA600;
 }
@@ -137,9 +142,10 @@
   }
 
   .medal {
-    width: 1.5rem;
-    height: 1.5rem;
-    font-size: 0.75rem;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: 700;
   }
 
   .name {

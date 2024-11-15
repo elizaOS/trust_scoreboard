@@ -60,7 +60,7 @@ const LeaderboardMedals: FC = () => {
               className={`${styles.medalHolder} ${isFirstPlace ? styles.firstPlace : ''}`}
             >
               <div className={`${styles.imageWrapper} ${isFirstPlace ? styles.firstPlaceImage : ''}`}>
-                <div className={`${styles.medal} ${medalClass}`}>
+                <div className={`${styles.medal} ${medalClass} ${isFirstPlace ? styles.firstPlacemedal : ''}`}>
                   {user?.rank}
                 </div>
                 <div className={`${styles.imageBorder} ${medalClass}`}>
