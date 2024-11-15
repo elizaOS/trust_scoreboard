@@ -32,7 +32,7 @@ export default async function handler(
   const accessToken = connection.accessToken;
 
   try {
-    const response = await fetch(`${process.env.BACKEND_API_URL}/getProfile`, {
+    const response = await fetch(`${process.env.NEST_API_URL}/getProfile`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
