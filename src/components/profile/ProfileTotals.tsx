@@ -11,15 +11,19 @@ interface ProfileTotalsProps {
 }
 
 interface MetricsData {
-  trustScore: number;
-  successRate: number;
-  transparency: number;
-  shillingScore: number;
-  recommendations: number;
-  rank: number;
-  totalPartners: number;
-  userHoldings: number;
+  trustScore: number | null;
+  successRate: number | null;
+  transparency: number | null;
+  shillingScore: number | null;
+  recommendations: number | null;
+  rank: number | null;
+  totalPartners: number | null;
+  userHoldings: number | null;
 }
+
+const displayMetric = (value: number | null): string => {
+  return value !== null ? value.toString() : "-";
+};
 
 const formatDate = (date: Date): string => {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -40,14 +44,14 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
   const { publicKey } = useWallet();
   const [activeView, setActiveView] = useState<View>('profile');
   const [metrics, setMetrics] = useState<MetricsData>({
-    trustScore: 89.4,
-    successRate: 83,
-    transparency: 89,
-    shillingScore: 25,
-    recommendations: 428,
-    rank: 42,
-    totalPartners: 0,
-    userHoldings: 0
+    trustScore: null,
+    successRate: null,
+    transparency: null,
+    shillingScore: null,
+    recommendations: null,
+    rank: null,
+    totalPartners: null,
+    userHoldings: null
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -124,7 +128,8 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
                   <p className={styles.metricsAi}>Assigned from AI Marc</p>
                 </div>
               </div>
-              <div className={`text-[#FF4463] ${styles.trustScorevalue}`}>{metrics.trustScore.toFixed(1)}</div>
+              {/* <div className={`text-[#FF4463] ${styles.trustScorevalue}`}>{metrics.trustScore}</div> */}
+              <Image src="/lock-03.svg" alt="Rank" width={20} height={20} />
             </div>
           </div>
         </div>
@@ -133,7 +138,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
           <div className={styles.metricContent}>
             <Image src="/green_flame.svg" alt="Rank" width={32} height={32} />
             <div className={styles.metricInfo}>
-              <div className={`text-[#68CE67] ${styles.value}`}>#{metrics.rank}</div>
+              <div className={`text-[#68CE67] ${styles.value}`}>{displayMetric(metrics.rank)}</div>
               <div className={styles.label}>Rank</div>
             </div>
           </div>
@@ -153,7 +158,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
           <div className={styles.metricContent}>
             <Image src="/thumb.svg" alt="Success Rate" width={32} height={32} />
             <div className={styles.metricInfo}>
-              <div className={`text-[#935DEA] ${styles.value}`}>{metrics.successRate}%</div>
+              <div className={`text-[#935DEA] ${styles.value}`}>{displayMetric(metrics.successRate)}</div>
               <div className={styles.label}>Success Rate</div>
             </div>
           </div>
@@ -163,7 +168,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
           <div className={styles.metricContent}>
             <Image src="/yellow_flame.svg" alt="Shills" width={32} height={32} />
             <div className={styles.metricInfo}>
-              <div className={`text-[#F2A33C] ${styles.value}`}>635</div>
+              <div className={`text-[#F2A33C] ${styles.value}`}>{displayMetric(metrics.shillingScore)}</div>
               <div className={styles.label}>Shills</div>
             </div>
           </div>
@@ -173,7 +178,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
           <div className={styles.metricContent}>
             <Image src="/clock.svg" alt="Joined" width={32} height={32} />
             <div className={styles.metricInfo}>
-              <div className={`text-[#4FADF8] ${styles.value}`}>34d</div>
+              <div className={`text-[#4FADF8] ${styles.value}`}>{displayMetric(metrics.recommendations)}</div>
               <div className={styles.label}>Joined</div>
             </div>
           </div>
