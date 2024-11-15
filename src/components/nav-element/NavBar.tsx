@@ -20,7 +20,7 @@ const NavBar: FC<NavBarProps> = () => {
     };
 
   return (
-    <nav className="w-full h-16 bg-[#202120] px-6 py-2">
+    <nav className="w-full h-16 bg-[#202120] px-6 py-2 sticky z-[100] top-0">
       <div className="h-full flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
