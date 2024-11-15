@@ -306,7 +306,8 @@
 
 .row:hover,
 .row1:hover {
-    background: #F1EDE3;
+    cursor: pointer;
+    /* background: #F1EDE3;
 
     .text1 {
         color: #2d2d2d;
@@ -314,15 +315,15 @@
 
     .trustScoreImage {
         filter: invert(0);
-    }
+    } */
 }
 
 
 
 
-.currentUserRow:hover {
+/* .currentUserRow:hover {
     background: #FFF5EC !important;
-}
+} */
 
 .rankWrapper {
     display: flex;
@@ -381,4 +382,3 @@
 .animate-pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
-
