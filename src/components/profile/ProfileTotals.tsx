@@ -139,7 +139,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
           </div>
         </div>
 
-        <div className={styles.metricCard}>
+        {/* <div className={styles.metricCard}>
           <div className={styles.metricContent}>
             <Image src="/blue_flame.svg" alt="Tokens" width={24} height={24} />
             <div className={styles.metricInfo}>
@@ -147,7 +147,7 @@ const ProfileTotals: NextPage<ProfileTotalsProps> = ({ onViewChange = () => { } 
               <div className={styles.label}>Tokens</div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className={styles.metricCard}>
           <div className={styles.metricContent}>

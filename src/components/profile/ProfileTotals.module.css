@@ -12,7 +12,7 @@
 }
 
 .metricCard {
-  background: rgba(255, 255, 255, 0.1);
+  background: #2D2D2D;;
   backdrop-filter: blur(4px);
   border-radius: 30px;
   padding: 16px;
@@ -22,7 +22,7 @@
 
 .metricCard:first-child {
   grid-column: 1 / -1;
-  background: rgba(255, 255, 255, 0.15);
+  background: #2D2D2D;;
 }
 
 .metricContent {
