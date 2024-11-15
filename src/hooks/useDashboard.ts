@@ -1,12 +1,26 @@
 import { useState, useEffect } from 'react';
+import { get } from '../utils/axios';
+
+const fetchHighestRankedUsers = async () => {
+  console.log("sdasdsdadasd=?????????");
+  
+  try {
+    const response = await get('/user/highestRankedUsers');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching highest ranked users:', error);
+    throw error;
+  }
+};
+
+
 
 interface Partner {
-  wallet: string;
   trustScore: number;
-  image?: string;
-  displayAddress?: string;
-  owner?: string;
-  amount?: number
+  avatarUrl?: string;
+  rank?:number
+  id?: string;
+  name?: string;
 }
 
 interface DashboardData {
@@ -21,10 +35,10 @@ export const useDashboard = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        // Replace with your actual API endpoint
-        const response = await fetch('/api/dashboard');
-        const jsonData = await response.json();
-        setData(jsonData);
+        const partners = await fetchHighestRankedUsers();
+  
+        
+        setData({partners});
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to fetch dashboard data'));
       } finally {
@@ -35,40 +49,7 @@ export const useDashboard = () => {
     fetchDashboard();
   }, []);
 
-  // For development, let's add some mock data
-  useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      setData({
-        partners: [
-          {
-            wallet: '8xzt6Cytp7JkrX44FkuRw2pXCzZg4BaCwdEzz6F4ZxJE',
-            trustScore: 93.2,
-            displayAddress: "",
-            image: '/path-to-image-1.jpg',
-            owner: "",
-            amount: 0,
-          },
-          {
-            wallet: '6yztNCytp9JkrX44FkuRw2pXCzZg4BaCwdEzz6F4ZxJE',
-            trustScore: 91.32,
-            image: '/path-to-image-2.jpg',
-            displayAddress: "",
-            owner: "",
-            amount: 0,
-          },
-          {
-            wallet: '4xzt6Cytp7JkrX44FkuRw2pXCzZg4BaCwdEzz6F4ZxJE',
-            trustScore: 89.54,
-            image: '/path-to-image-3.jpg',
-            displayAddress: "",
-            owner: "",
-            amount: 0,
-          }
-        ]
-      });
-      setIsLoading(false);
-    }
-  }, []);
+  
 
   return { data, isLoading, error };
-}; 
+};
