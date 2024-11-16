@@ -22,8 +22,11 @@ const NavBar: FC<NavBarProps> = () => {
   return (
     <nav className="w-full h-16 bg-[#202120] px-6 py-2 sticky z-[100] top-0">
       <div className="h-full flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
+        {/* Empty div for spacing */}
+        <div className="w-[100px]"></div>
+
+        {/* Centered Logo */}
+        <Link href="/" className="flex items-center absolute left-1/2 transform -translate-x-1/2">
           <Image
             src="/logo.svg"
             alt="Logo"
@@ -33,9 +36,7 @@ const NavBar: FC<NavBarProps> = () => {
           />
         </Link>
 
-        {/*Search Bar */}
-
-
+        {/* Search Bar */}
         <div className={`${styles.searchContainer} hidden`}>
           <form onSubmit={handleSearch}>
             <input
@@ -48,42 +49,7 @@ const NavBar: FC<NavBarProps> = () => {
           </form>
         </div>
 
-        {/* Right-side items */}
-        <div className="flex items-center gap-4">
-          <Link href="/explorer" className={`hidden ${styles.actionButton}`}>
-            Explorer
-          </Link>
-          <Link href="/saas" className={`hidden ${styles.actionButton}`}>
-            Get API Access
-          </Link>
-          <Link href="/eliza" className={`hidden ${styles.actionButton} ${styles.elizaButton}`}>
-            Get an Eliza
-          </Link>
-          <Link href="/" className="p-2 hover:bg-white/10  rounded-full">
-            <Image
-              src="/bar-chart.svg"
-              alt="Medal"
-              width={24}
-              height={24}
-            />
-          </Link>
-          {session ? (
-            <Link href="/profile" className="p-1 hover:bg-white/10 rounded-full">
-              <Image
-                src={session.user?.image ?? '/profile_default.png'}
-                alt={session.user?.name ?? 'Profile'}
-                width={32}
-                height={32}
-                className="rounded-full object-cover"
-                unoptimized
-              />
-            </Link>
-          ) : (
-            <Link href="/auth/signin" className={styles.actionButton}>
-              Sign In
-            </Link>
-          )}
-        </div>
+ 
       </div>
     </nav>
   );
