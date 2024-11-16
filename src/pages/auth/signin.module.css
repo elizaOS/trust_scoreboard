@@ -30,7 +30,7 @@
   justify-content: center;
   gap: 12px;
   padding: 12px 24px;
-  border-radius: 14px;
+  border-radius: 1000px;
   font-size: 16px;
   font-weight: 600;
   color: white;
@@ -46,10 +46,3 @@
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-.telegramContainer {
-  height: 48px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-} 
