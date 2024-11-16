@@ -2,7 +2,8 @@ import { signIn } from "next-auth/react";
 import Image from "next/image";
 import styles from "./signin.module.css";
 import { useEffect } from "react";
-import discordLogo from "../../../public/discord.svg";
+import discordLogo from "../../../public/discordLogo.svg";
+import telegramLogo from "../../../public/telegramLogo.svg"
 
 export default function SignIn() {
   const handleDiscordSignIn = () => {
@@ -48,14 +49,24 @@ export default function SignIn() {
 
       <div className={styles.buttonContainer}>
         <button onClick={handleDiscordSignIn} className={styles.discordButton}>
-          <Image src={discordLogo} alt="Discord" width={100} height={100} />
+          <Image src={discordLogo} alt="Discord" width={24} height={24} />
           Connect to Discord
         </button>
 
         <div
-          id="telegram-login-container"
-          className={styles.telegramContainer}
-        />
+        id="telegram-login-container"
+        className={styles.discordButton}
+        style={{
+          backgroundColor: '#54a9eb',
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '14px 48px',
+          borderRadius: '1000px',
+        }}
+      >
+      </div>
       </div>
     </div>
   );
