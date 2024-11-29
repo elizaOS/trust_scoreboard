@@ -1,39 +1,39 @@
-import { FC } from 'react';
-import Image from 'next/image';
-import { useDashboard } from '../../hooks/useDashboard';
-import styles from './LeaderboardMedals.module.css';
+import { FC, useMemo } from "react"
+import Image from "next/image"
+import styles from "./LeaderboardMedals.module.css"
+import { TUser } from "@/types/user"
 
 const SkeletonMedal: FC<{ position: number }> = ({ position }) => {
-  const isFirstPlace = position === 2;
-  const size = isFirstPlace ? '120px' : '80px';
+  const isFirstPlace = position === 2
+  const size = isFirstPlace ? "120px" : "80px"
 
   const getMedalClass = (index: number) => {
     switch (index) {
       case 2:
-        return styles.gold;
+        return styles.gold
       case 1:
-        return styles.silver;
+        return styles.silver
       default:
-        return styles.bronze;
+        return styles.bronze
     }
-  };
+  }
 
-  const displayPosition = position === 2 ? '1' : position === 1 ? '2' : '3';
+  const displayPosition = position === 2 ? "1" : position === 1 ? "2" : "3"
 
   return (
     <div
       className={`${styles.medalHolder} ${
-        isFirstPlace ? styles.firstPlace : ''
+        isFirstPlace ? styles.firstPlace : ""
       }`}
     >
       <div
         className={`${styles.imageWrapper} ${
-          isFirstPlace ? styles.firstPlaceImage : ''
+          isFirstPlace ? styles.firstPlaceImage : ""
         }`}
       >
         <div
           className={`${styles.medal} ${getMedalClass(position)} ${
-            isFirstPlace ? styles.firstPlacemedal : ''
+            isFirstPlace ? styles.firstPlacemedal : ""
           }`}
         >
           {displayPosition}
@@ -47,112 +47,210 @@ const SkeletonMedal: FC<{ position: number }> = ({ position }) => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-const LeaderboardMedals: FC = () => {
-  const { data: dashboardData, isLoading } = useDashboard();
-
-  const topThree = (dashboardData?.partners || [])
-    .filter(
-      (partner) =>
-        partner && typeof partner.rank === 'number' && !isNaN(partner.rank)
-    )
-    .sort((a, b) => a.rank - b.rank)
-    .slice(0, 3);
-
-  const reorderedTopThree = [
-    topThree[1], // 2nd place
-    topThree[0], // 1st place
-    topThree[2], // 3rd place
-  ];
+const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
+  users,
+  isLoading,
+}) => {
+  const sortedUsers = useMemo(
+    () => users?.sort((a, b) => a.rank - b.rank),
+    [users]
+  )
 
   const getMedalClass = (index: number) => {
     switch (index) {
       case 1:
-        return styles.gold;
+        return styles.gold
       case 0:
-        return styles.silver;
+        return styles.silver
       default:
-        return styles.bronze;
+        return styles.bronze
     }
-  };
-
-  console.log('isLoading', isLoading);
-  console.log('dashboardData', dashboardData);
+  }
 
   return (
     <div className={styles.container}>
-      {isLoading || !dashboardData
-        ? [1, 2, 3].map((position) => (
-            <SkeletonMedal key={position} position={position} />
-          ))
-        : reorderedTopThree.map((user, index) => {
-            const isFirstPlace = index === 1;
-            const medalClass = getMedalClass(index);
-
-            return (
-              <div
-                key={user?.id || index}
-                className={`${styles.medalHolder} ${
-                  isFirstPlace ? styles.firstPlace : ''
-                }`}
-              >
+      {isLoading ? (
+        [1, 2, 3].map((position) => (
+          <SkeletonMedal key={position} position={position} />
+        ))
+      ) : (
+        <>
+          {sortedUsers?.[1] ? (
+            <div key={sortedUsers[1]?.id} className={styles.medalHolder}>
+              <div className={styles.imageWrapper}>
                 <div
-                  className={`${styles.imageWrapper} ${
-                    isFirstPlace ? styles.firstPlaceImage : ''
-                  }`}
+                  className={`${styles.medal} ${getMedalClass(sortedUsers[1]?.rank)}`}
                 >
-                  <div
-                    className={`${styles.medal} ${medalClass} ${
-                      isFirstPlace ? styles.firstPlacemedal : ''
-                    }`}
-                  >
-                    {user?.rank}
-                  </div>
-                  <div className={`${styles.imageBorder} ${medalClass}`}>
-                    {user?.avatarUrl ? (
-                      <Image
-                        src={user.avatarUrl}
-                        alt={
-                          user && user.name
-                            ? user.name
-                            : `Position ${user?.rank}`
-                        }
-                        width={isFirstPlace ? 120 : 80}
-                        height={isFirstPlace ? 120 : 80}
-                        className={styles.userImage}
-                      />
-                    ) : (
-                      <div
-                        className={`${styles.placeholderImage}`}
-                        style={{
-                          width: index === 1 ? '80px' : '64px',
-                          height: index === 1 ? '80px' : '64px',
-                        }}
-                      />
-                    )}
-                  </div>
+                  {sortedUsers[1]?.rank}
                 </div>
-                <div className={styles.userInfo}>
-                  <span className={styles.name}>
-                    {user?.name ? user.name : `Position ${user?.rank}`}
-                  </span>
-                  <div className={`${styles.scoreWrapper} ${medalClass}`}>
-                    <span
-                      className={`${styles.score} ${
-                        isFirstPlace ? styles.firstPlaceScore : ''
-                      }`}
-                    >
-                      {user?.trustScore ? user.trustScore.toFixed(2) : '0.00'}
-                    </span>
-                  </div>
+                <div
+                  className={`${styles.imageBorder} ${getMedalClass(sortedUsers[1]?.rank)}`}
+                >
+                  {sortedUsers[1]?.avatarUrl ? (
+                    <Image
+                      src={sortedUsers[1].avatarUrl}
+                      alt={
+                        sortedUsers[1] && sortedUsers[1].name
+                          ? sortedUsers[1].name
+                          : `Position ${sortedUsers[1]?.rank}`
+                      }
+                      width={80}
+                      height={80}
+                      className={styles.userImage}
+                    />
+                  ) : (
+                    <div
+                      className={styles.placeholderImage}
+                      style={{
+                        width: "64px",
+                        height: "64px",
+                      }}
+                    />
+                  )}
                 </div>
               </div>
-            );
-          })}
-    </div>
-  );
-};
+              <div className={styles.userInfo}>
+                <span className={styles.name}>
+                  {sortedUsers[1]?.name
+                    ? sortedUsers[1].name
+                    : `Position ${sortedUsers[1]?.rank}`}
+                </span>
+                <div
+                  className={`${styles.scoreWrapper} ${getMedalClass(sortedUsers[1]?.rank)}`}
+                >
+                  <span className={styles.score}>
+                    {sortedUsers[1]?.score
+                      ? sortedUsers[1].score.toFixed(2)
+                      : "0.00"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <SkeletonMedal key={1} position={1} />
+          )}
 
-export default LeaderboardMedals;
+          {sortedUsers?.[0] ? (
+            <div
+              key={sortedUsers?.[0]?.id}
+              className={`${styles.medalHolder} ${styles.firstPlace}`}
+            >
+              <div
+                className={`${styles.imageWrapper} ${styles.firstPlaceImage}`}
+              >
+                <div
+                  className={`${styles.medal} ${styles.firstPlaceMedal} ${getMedalClass(sortedUsers[0]?.rank)}`}
+                >
+                  {sortedUsers?.[0]?.rank}
+                </div>
+                <div
+                  className={`${styles.imageBorder} ${getMedalClass(sortedUsers[0]?.rank)}`}
+                >
+                  {sortedUsers[0]?.avatarUrl ? (
+                    <Image
+                      src={sortedUsers?.[0]?.avatarUrl}
+                      alt={
+                        sortedUsers?.[0] && sortedUsers?.[0].name
+                          ? sortedUsers?.[0].name
+                          : `Position ${sortedUsers?.[0]?.rank}`
+                      }
+                      width={120}
+                      height={120}
+                      className={styles.userImage}
+                    />
+                  ) : (
+                    <div
+                      className={styles.placeholderImage}
+                      style={{
+                        width: "80px",
+                        height: "80px",
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className={styles.userInfo}>
+                <span className={styles.name}>
+                  {sortedUsers?.[0]?.name
+                    ? sortedUsers?.[0].name
+                    : `Position ${sortedUsers?.[0]?.rank}`}
+                </span>
+                <div
+                  className={`${styles.scoreWrapper} ${getMedalClass(sortedUsers[0]?.rank)}`}
+                >
+                  <span className={`${styles.score} ${styles.firstPlaceScore}`}>
+                    {sortedUsers?.[0]?.score
+                      ? sortedUsers?.[0].score.toFixed(2)
+                      : "0.00"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <SkeletonMedal key={2} position={2} />
+          )}
+
+          {sortedUsers?.[2] ? (
+            <div key={sortedUsers?.[2]?.id} className={styles.medalHolder}>
+              <div className={styles.imageWrapper}>
+                <div
+                  className={`${styles.medal} ${getMedalClass(sortedUsers[1]?.rank)}`}
+                >
+                  {sortedUsers?.[2]?.rank}
+                </div>
+                <div
+                  className={`${styles.imageBorder} ${getMedalClass(sortedUsers[2]?.rank)}`}
+                >
+                  {sortedUsers?.[2]?.avatarUrl ? (
+                    <Image
+                      src={sortedUsers?.[2]?.avatarUrl}
+                      alt={
+                        sortedUsers?.[2] && sortedUsers?.[2].name
+                          ? sortedUsers?.[2].name
+                          : `Position ${sortedUsers?.[2]?.rank}`
+                      }
+                      width={80}
+                      height={80}
+                      className={styles.userImage}
+                    />
+                  ) : (
+                    <div
+                      className={styles.placeholderImage}
+                      style={{
+                        width: "64px",
+                        height: "64px",
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className={styles.userInfo}>
+                <span className={styles.name}>
+                  {sortedUsers?.[2]?.name
+                    ? sortedUsers?.[2].name
+                    : `Position ${sortedUsers?.[2]?.rank}`}
+                </span>
+                <div
+                  className={`${styles.scoreWrapper} ${getMedalClass(sortedUsers[2]?.rank)}`}
+                >
+                  <span className={styles.score}>
+                    {sortedUsers?.[2]?.score
+                      ? sortedUsers?.[2].score.toFixed(2)
+                      : "0.00"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <SkeletonMedal key={3} position={3} />
+          )}
+        </>
+      )}
+    </div>
+  )
+}
+
+export default LeaderboardMedals
