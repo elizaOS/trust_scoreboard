@@ -21,7 +21,12 @@ export const HomeView: FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <h2 className={styles.title}>Trust Leaderboard</h2>
+        <div className="flex flex-col items-center justify-center gap-2 px-4">
+          <h2 className={styles.title}>Marc’s Trust Leaderboard</h2>
+          <h3 className="text-center text-xl font-semibold text-white/70">
+            Limited access to Marc&apos;s Cabal Chat
+          </h3>
+        </div>
 
         <LeaderboardMedals users={topUsers} isLoading={isLoadingUsers} />
 

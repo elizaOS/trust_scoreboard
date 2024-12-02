@@ -1,7 +1,5 @@
 .container {
-
   width: 100%;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,12 +16,10 @@
 }
 
 .title {
-  font-size: 34px;
-  line-height: 42px;
-  font-weight: 600;
+  font-family: var(--font-family-title);
   color: #fff;
-  margin-bottom: 32px;
   text-align: center;
+  @apply text-5xl leading-[48px] tracking-[4.32px];
 }
 
 .section {
@@ -38,8 +34,7 @@
 
 @media (max-width: 768px) {
   .container {
-    padding: 24px 16px;
-
+    padding: 24px 0px;
   }
 
   .content {
