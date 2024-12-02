@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Bootzy";
+  src: url("/fonts/Bootzy TM.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-  --font-family-base: "SF Compact Round", "SF Compact Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, system-ui,
+    sans-serif;
+  --font-family-title: "Bootzy", sans-serif;
 }
 
 body {
@@ -16,9 +25,10 @@ html,
 body {
   padding: 0;
   margin: 0;
-  background-color: #202120;
+  background: linear-gradient(to top, #212121 70%, #303030);
   font-family: var(--font-family-base);
   min-height: 100vh;
+  width: 100%;
   line-height: normal;
 }
 
@@ -51,6 +61,3 @@ a {
   width: 100% !important;
   
 } */
-
-
-

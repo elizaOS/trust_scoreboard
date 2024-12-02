@@ -29,7 +29,7 @@ const SkeletonMedal: FC<{ position: number }> = ({ position }) => {
       <div
         className={`${styles.imageWrapper} ${
           isFirstPlace ? styles.firstPlaceImage : ""
-        }`}
+        } inline-flex`}
       >
         <div
           className={`${styles.medal} ${getMedalClass(position)} ${
@@ -39,10 +39,10 @@ const SkeletonMedal: FC<{ position: number }> = ({ position }) => {
           {displayPosition}
         </div>
         <div
-          className={`${styles.skeletonCircle}`}
+          className={`${styles.skeletonCircle} flex-grow`}
           style={{
-            width: size,
-            height: size,
+            maxWidth: size,
+            maxHeight: size,
           }}
         />
       </div>
@@ -124,7 +124,7 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
                   <span className={styles.score}>
                     {sortedUsers[1]?.score
                       ? sortedUsers[1].score.toFixed(2)
-                      : "0.00"}
+                      : "-"}
                   </span>
                 </div>
               </div>
@@ -165,8 +165,8 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
                     <div
                       className={styles.placeholderImage}
                       style={{
-                        width: "80px",
-                        height: "80px",
+                        maxWidth: "80px",
+                        maxHeight: "80px",
                       }}
                     />
                   )}
@@ -184,7 +184,7 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
                   <span className={`${styles.score} ${styles.firstPlaceScore}`}>
                     {sortedUsers?.[0]?.score
                       ? sortedUsers?.[0].score.toFixed(2)
-                      : "0.00"}
+                      : "-"}
                   </span>
                 </div>
               </div>
@@ -239,7 +239,7 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
                   <span className={styles.score}>
                     {sortedUsers?.[2]?.score
                       ? sortedUsers?.[2].score.toFixed(2)
-                      : "0.00"}
+                      : "-"}
                   </span>
                 </div>
               </div>

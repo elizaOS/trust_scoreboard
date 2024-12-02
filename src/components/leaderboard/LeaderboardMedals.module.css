@@ -19,6 +19,7 @@
   flex-direction: column;
   min-width: 8rem;
   max-width: 10rem;
+  min-height: 155px;
   align-items: center;
   gap: 0.75rem;
   transition: all 0.3s ease;
@@ -27,6 +28,7 @@
 .firstPlace {
   /* transform: scale(1.15); */
   margin: 0 1rem;
+  min-height: 198px;
 }
 
 .imageWrapper {
@@ -58,7 +60,6 @@
   position: absolute;
   top: 1px;
   left: -4px;
-  width: 2rem;
   display: flex;
   width: 30px;
   height: 30px;
@@ -69,10 +70,6 @@
   z-index: 1;
   font-family: var(--font-family-base);
   border-radius: 100px;
-  font-family: 700;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 22px;
 }
 
 .firstPlacemedal {
@@ -82,14 +79,17 @@
 
 .gold {
   background-color: #ffa600;
+  @apply text-xl font-bold text-white;
 }
 
 .silver {
   background-color: #858585;
+  @apply text-base font-bold text-white;
 }
 
 .bronze {
   background-color: #d56b00;
+  @apply text-base font-bold text-white;
 }
 
 .userInfo {
@@ -102,17 +102,13 @@
 }
 
 .name {
-  color: #fff;
   text-align: center;
   font-family: var(--font-family-base);
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 28px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  @apply text-xl font-semibold text-white;
 }
 
 .scoreWrapper {
@@ -146,6 +142,11 @@
     padding: 1rem;
   }
 
+  .medalHolder {
+    max-width: 100px;
+    min-width: 100px;
+  }
+
   .firstPlace {
     /* transform: scale(1.1); */
     margin: 0 0.5rem;
@@ -164,12 +165,6 @@
   .medal {
     width: 30px;
     height: 30px;
-    font-size: 20px;
-    font-weight: 700;
-  }
-
-  .name {
-    font-size: 0.75rem;
   }
 
   .score {
