@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Bootzy";
+  src: url("/fonts/Bootzy TM.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-  --font-family-base: "SF Compact Round", "SF Compact Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, system-ui,
+    sans-serif;
+  --font-family-title: "Bootzy", sans-serif;
 }
 
 body {
@@ -16,9 +25,10 @@ html,
 body {
   padding: 0;
   margin: 0;
+  background: linear-gradient(to top, #212121 70%, #303030);
   font-family: var(--font-family-base);
-  background-color: #F1EDE3;
   min-height: 100vh;
+  width: 100%;
   line-height: normal;
 }
 
@@ -36,3 +46,18 @@ a {
 .wallet-adapter-button:not([disabled]):hover {
   background-color: #707070;
 }
+
+/* #telegram-login-AI16ZBOT{
+ width: 100% !important;
+}
+
+#telegram-login-AI16ZBOT body {
+  width: 100% !important;
+  background-color: #202120;
+}
+
+#telegram-login-AI16ZBOT body .body_widget_login,
+#telegram-login-AI16ZBOT body .tgme_widget_login_button {
+  width: 100% !important;
+  
+} */

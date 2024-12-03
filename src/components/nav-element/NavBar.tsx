@@ -1,95 +1,55 @@
-import { FC } from 'react';
-import Link from "next/link";
-import React, { useState } from "react";
-import Image from 'next/image';
-import { useWallet } from '@solana/wallet-adapter-react';
-import NavElement from '.';
-import { useSession } from "next-auth/react";
+import { FC } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { useSession } from "next-auth/react"
+import styles from "./NavBar.module.css"
+import { useState } from "react"
+import { RiBarChart2Fill } from "react-icons/ri"
 
-const truncateAddress = (address: string, length: number = 4): string => {
-  if (!address) return '';
-  if (window.innerWidth <= 768) {
-    return `${address.slice(0, 3)}..${address.slice(-2)}`;
+interface NavBarProps {
+  // Add any props if needed
+}
+
+const NavBar: FC<NavBarProps> = () => {
+  const { data: session } = useSession()
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Add search functionality
   }
-  return `${address.slice(0, length)}..${address.slice(-length)}`;
-};
-
-export const AppBar: React.FC = () => {
-  const { data: session } = useSession();
-  const { publicKey } = useWallet();
-
-  const ProfileElement = () => (
-    <div className="flex items-center gap-2 bg-[#EDE9DE] px-4 py-2 rounded-full">
-      <Link href="/profile" className="flex items-center gap-2">
-        {session?.user?.image ? (
-          <>
-            <Image
-              src={session.user.image}
-              alt="Profile"
-              width={32}
-              height={32}
-              className="w-8 h-8 rounded-full cursor-pointer hover:opacity-80"
-              onError={(e) => {
-                e.currentTarget.src = "/default-avatar.png"
-              }}
-            />
-            {publicKey && (
-              <span className="text-[#9a8c7c] font-medium text-sm md:text-base">
-                {truncateAddress(publicKey.toString())}
-              </span>
-            )}
-          </>
-        ) : (
-          <span className="text-[#9a8c7c] font-medium">
-            Profile
-          </span>
-        )}
-      </Link>
-    </div>
-  );
 
   return (
-    <div className=" flex flex-row items-center justify-between h-auto md:h-20 text-black bg-[#F1EDE3] text-neutral-content my-2">
-      <div className="flex items-center">
-        <div className="w-22 h-22 md:p-2 ml-4 md:ml-10">
-          <Link href="/" passHref className="text-secondary hover:text-white">
-            <Image
-              src="/logo.svg"
-              alt="Site Logo"
-              width={24}
-              height={24}
-              priority
-              className="h-6 w-auto"
+    <nav className="sticky top-0 z-[100] h-[66px] w-full px-6 py-3.5">
+      <div className="flex h-full items-center justify-between">
+        {/* Centered Logo */}
+        <Link href="https://elizaos.ai/ai16z" className="">
+          <Image src="/logo.svg" alt="Logo" width={50} height={29} priority />
+        </Link>
+
+        <Link
+          href="https://discord.com/invite/ai16z"
+          className="inline-flex items-center rounded-full bg-white/20 px-3.5 py-2 transition-all duration-300 hover:bg-white/30"
+        >
+          <span className="text-base font-semibold text-white">
+            Join Discord
+          </span>
+        </Link>
+        {/* Search Bar */}
+        {/* <div className={`${styles.searchContainer} hidden`}>
+          <form onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
             />
-          </Link>
-        </div>
+          </form>
+        </div> */}
       </div>
-      <div className=" flex flex-row items-center justify-end gap-4 md:gap-6 px-4">
-        {session?.user && (
-          <a 
-            href="https://www.daos.fun/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              text-white
-              font-semibold
-              bg-[#F98C13]
-              rounded-xl
-              transition
-              duration-300
-              ease-in-out
-              hover:bg-[#e07a0f]
-              text-sm px-3 py-[8px]
-              md:text-base md:px-4 md:py-[8px]
-              lg:text-lg lg:px-4 lg:py-[8px]"
-          >
-            Become Partner
-          </a>
-        )}
-        <div className="flex items-center justify-end gap-6">
-          <ProfileElement />
-        </div>
-      </div>
-    </div>
-  );
-};
+    </nav>
+  )
+}
+
+export default NavBar
