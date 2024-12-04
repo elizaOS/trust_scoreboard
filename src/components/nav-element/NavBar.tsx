@@ -20,11 +20,11 @@ const NavBar: FC<NavBarProps> = () => {
   }
 
   return (
-    <nav className="sticky top-0 z-[100] h-[66px] w-full px-6 py-3.5">
+    <nav className="sticky top-0 z-[100] h-[66px] w-full bg-black/25 px-6 py-3.5 backdrop-blur-[69px]">
       <div className="flex h-full items-center justify-between">
         {/* Centered Logo */}
         <Link href="https://elizaos.ai/ai16z" className="">
-          <Image src="/logo.svg" alt="Logo" width={50} height={29} priority />
+          <Image src="/logo.svg" alt="Logo" width={55} height={36} priority />
         </Link>
 
         <Link

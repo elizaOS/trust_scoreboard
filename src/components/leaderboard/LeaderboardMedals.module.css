@@ -108,7 +108,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  @apply text-xl font-semibold text-white;
+  @apply text-lg font-semibold text-white;
 }
 
 .scoreWrapper {
