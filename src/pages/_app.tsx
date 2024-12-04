@@ -27,7 +27,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <SessionProvider session={pageProps.session}>
       <Head>
-        <title>ai16z Partners Lounge</title>
+        <title>ai16z - Marc&apos;s Trust Leaderboard</title>
       </Head>
 
       <Script

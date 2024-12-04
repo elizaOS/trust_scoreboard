@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 16px;
+  padding: 48px 16px;
   font-family: var(--font-family-base);
 }
 
@@ -16,10 +16,10 @@
 }
 
 .title {
-  font-family: var(--font-family-title);
+  font-family: var(--font-family-base);
   color: #fff;
   text-align: center;
-  @apply text-5xl leading-[48px] tracking-[4.32px];
+  @apply text-[38px] font-semibold leading-[48px];
 }
 
 .section {

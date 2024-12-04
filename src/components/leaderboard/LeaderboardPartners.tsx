@@ -3,6 +3,7 @@ import Image from "next/image"
 import styles from "./LeaderboardPartners.module.css"
 import { useMediaQuery } from "react-responsive"
 import { TUser } from "@/types/user"
+import { AvatarWithFallback } from "./AvatarImage"
 
 const SkeletonRow = () => (
   <div className={`${styles.row1} animate-pulse`}>
@@ -48,11 +49,9 @@ const LeaderboardPartners: FC<{ users: TUser[]; isLoading: boolean }> = ({
   const renderUserRow = (user: TUser) => (
     <div key={user.id} className={styles.row1}>
       <div className={styles.rowChild}>
-        <Image
-          width={34}
-          height={34}
-          alt="Partner avatar"
-          src={user.avatarUrl || "/noname.svg"}
+        <AvatarWithFallback
+          src={user.avatarUrl}
+          name={user.name}
           className={styles.avatarImage}
         />
         <div className={styles.textParent}>

@@ -2,6 +2,7 @@ import { FC, useMemo } from "react"
 import Image from "next/image"
 import styles from "./LeaderboardMedals.module.css"
 import { TUser } from "@/types/user"
+import { AvatarWithFallback } from "./AvatarImage"
 
 const SkeletonMedal: FC<{ position: number }> = ({ position }) => {
   const isFirstPlace = position === 2
@@ -63,7 +64,7 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
     switch (index) {
       case 1:
         return styles.gold
-      case 0:
+      case 2:
         return styles.silver
       default:
         return styles.bronze
@@ -90,16 +91,11 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
                   className={`${styles.imageBorder} ${getMedalClass(sortedUsers[1]?.rank)}`}
                 >
                   {sortedUsers[1]?.avatarUrl ? (
-                    <Image
-                      src={sortedUsers[1].avatarUrl}
-                      alt={
-                        sortedUsers[1] && sortedUsers[1].name
-                          ? sortedUsers[1].name
-                          : `Position ${sortedUsers[1]?.rank}`
-                      }
-                      width={80}
-                      height={80}
+                    <AvatarWithFallback
+                      src={sortedUsers[1]?.avatarUrl}
+                      name={sortedUsers[1]?.name}
                       className={styles.userImage}
+                      size={80}
                     />
                   ) : (
                     <div
@@ -150,16 +146,11 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
                   className={`${styles.imageBorder} ${getMedalClass(sortedUsers[0]?.rank)}`}
                 >
                   {sortedUsers[0]?.avatarUrl ? (
-                    <Image
-                      src={sortedUsers?.[0]?.avatarUrl}
-                      alt={
-                        sortedUsers?.[0] && sortedUsers?.[0].name
-                          ? sortedUsers?.[0].name
-                          : `Position ${sortedUsers?.[0]?.rank}`
-                      }
-                      width={120}
-                      height={120}
+                    <AvatarWithFallback
+                      src={sortedUsers[0]?.avatarUrl}
+                      name={sortedUsers[0]?.name}
                       className={styles.userImage}
+                      size={120}
                     />
                   ) : (
                     <div
@@ -197,7 +188,7 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
             <div key={sortedUsers?.[2]?.id} className={styles.medalHolder}>
               <div className={styles.imageWrapper}>
                 <div
-                  className={`${styles.medal} ${getMedalClass(sortedUsers[1]?.rank)}`}
+                  className={`${styles.medal} ${getMedalClass(sortedUsers[2]?.rank)}`}
                 >
                   {sortedUsers?.[2]?.rank}
                 </div>
@@ -205,16 +196,11 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
                   className={`${styles.imageBorder} ${getMedalClass(sortedUsers[2]?.rank)}`}
                 >
                   {sortedUsers?.[2]?.avatarUrl ? (
-                    <Image
+                    <AvatarWithFallback
                       src={sortedUsers?.[2]?.avatarUrl}
-                      alt={
-                        sortedUsers?.[2] && sortedUsers?.[2].name
-                          ? sortedUsers?.[2].name
-                          : `Position ${sortedUsers?.[2]?.rank}`
-                      }
-                      width={80}
-                      height={80}
+                      name={sortedUsers?.[2]?.name}
                       className={styles.userImage}
+                      size={80}
                     />
                   ) : (
                     <div
