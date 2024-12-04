@@ -1,17 +1,27 @@
-import { FC } from "react"
-import { TradesView } from "@/views/trades/index"
+import type { NextPage } from "next"
 import Head from "next/head"
+import Trades from "../components/trades/Trades"
 
-const TradesPage: FC = () => {
+const TradesPage: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>ai16z - Marc&apos;s Trades</title>
-        <meta name="description" content="ai16z - Marc's Trades" />
+        <title>Marc&apos;s Trades</title>
+        <meta
+          name="description"
+          content="View Marc's trading activity and performance"
+        />
       </Head>
-      <TradesView />
+      <Trades />
     </div>
   )
+}
+
+// Add this to explicitly tell Next.js this is not a dynamic page
+export const getStaticProps = () => {
+  return {
+    props: {},
+  }
 }
 
 export default TradesPage
