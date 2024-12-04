@@ -1,106 +1,93 @@
 import type { FC } from "react"
 import Image from "next/image"
-import styles from "./LeaderboardPartners.module.css"
-import { useMediaQuery } from "react-responsive"
-import { TUser } from "@/types/user"
-import { AvatarWithFallback } from "./AvatarImage"
+import styles from "./Trades.module.css"
 
-const SkeletonRow = () => (
-  <div className={`${styles.row1} animate-pulse`}>
-    <div className={styles.rowChild}>
-      <div className="h-8 w-8 rounded-full bg-[#3C3C3C]" />
+interface Trade {
+  id: string
+  date: Date
+  type: "Swapped"
+  tokenIn: {
+    amount: number
+    symbol: string
+  }
+  tokenOut: {
+    amount: number
+    symbol: string
+  }
+  user: {
+    name: string
+    avatarUrl: string
+  }
+}
+
+const TradeRow: FC<{ trade: Trade }> = ({ trade }) => (
+  <div className="flex items-center justify-between bg-[#1C1C1C] rounded-lg p-4 mb-2">
+    <div className="flex items-center gap-3">
+      <div className="relative">
+        <Image
+          src="/solana-logo.png"
+          alt="Solana Logo"
+          width={24}
+          height={24}
+          className="absolute top-0 right-0"
+        />
+        <Image
+          src={trade.user.avatarUrl}
+          alt={trade.user.name}
+          width={40}
+          height={40}
+          className="rounded-full"
+        />
+      </div>
+      <div className="flex flex-col">
+        <span className="text-white text-lg">{trade.type}</span>
+        <span className="text-gray-400">{trade.user.name}</span>
+      </div>
+    </div>
+    <div className="flex flex-col items-end">
+      <span className="text-green-400">+{trade.tokenOut.amount.toLocaleString()} ${trade.tokenOut.symbol}</span>
+      <span className="text-white">-{trade.tokenIn.amount} {trade.tokenIn.symbol}</span>
     </div>
   </div>
 )
 
-const LeaderboardPartners: FC<{ users: TUser[]; isLoading: boolean }> = ({
-  users,
-  isLoading,
-}) => {
-  const isMobile = useMediaQuery({ maxWidth: 768 })
-  const SKELETON_ROWS = 5
-
-  const getRankDisplay = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return <div className={styles.medalEmoji}>🥇</div>
-      case 2:
-        return <div className={styles.medalEmoji}>🥈</div>
-      case 3:
-        return <div className={styles.medalEmoji}>🥉</div>
-      default:
-        return <div className={styles.text}>#{rank}</div>
-    }
-  }
-
-  const getTrustScoreClass = (rank: number): string => {
-    switch (rank) {
-      case 1:
-        return styles.trustScoreGold
-      case 2:
-        return styles.trustScoreSilver
-      case 3:
-        return styles.trustScoreBronze
-      default:
-        return styles.text3
-    }
-  }
-
-  const renderUserRow = (user: TUser) => (
-    <div key={user.id} className={styles.row1}>
-      <div className={styles.rowChild}>
-        <AvatarWithFallback
-          src={user.avatarUrl}
-          name={user.name}
-          className={styles.avatarImage}
-        />
-        <div className={styles.textParent}>
-          <div className={styles.text1}>{user.name}</div>
-        </div>
-      </div>
-      <div className="flex items-center">
-        <div className={styles.textWrapper}>
-          {user.score === 0 ? (
-            <div className={styles.tooltipContainer}>
-              <Image
-                src="/null.svg"
-                alt="Null trust score"
-                width={20}
-                height={20}
-                className={`brightness-0 invert transition-all duration-300 ${styles.trustScoreImage}`}
-              />
-              <span className={styles.tooltip}>
-                AI Marc is Calculating Trust
-              </span>
-            </div>
-          ) : (
-            <div className={getTrustScoreClass(user.rank)}>
-              {user.score.toFixed(1)}
-            </div>
-          )}
-        </div>
-        {user.score ? (
-          <div className={styles.rankWrapper}>{getRankDisplay(user.rank)}</div>
-        ) : null}
-      </div>
-    </div>
-  )
+const Trades: FC = () => {
+  // Mock data - replace with actual data fetching
+  const trades: Trade[] = [
+    {
+      id: "1",
+      date: new Date("2024-11-12"),
+      type: "Swapped",
+      tokenIn: { amount: 100, symbol: "SOL" },
+      tokenOut: { amount: 234324, symbol: "WIF" },
+      user: { name: "Jupiter", avatarUrl: "/avatar.png" }
+    },
+    // Add more mock trades as needed
+  ]
 
   return (
-    <div className={styles.frameParent}>
-      {isLoading ? (
-        <>
-          {[...Array(SKELETON_ROWS)].map((_, index) => (
-            <SkeletonRow key={index} />
-          ))}
-        </>
-      ) : !users?.length ? (
-        <div className={styles.emptyMessage}>No partners found</div>
-      ) : (
-        <>{users.map(renderUserRow)}</>
-      )}
+    <div className="max-w-4xl mx-auto p-4">
+      <h1 className="text-4xl font-bold text-white text-center mb-4">Marc's Trades</h1>
+      <p className="text-gray-400 text-center mb-8">
+        Join our discord for access to Marc's Cabal Chat.
+      </p>
+      
+      <div className="space-y-4">
+        {trades.map(trade => (
+          <div key={trade.id}>
+            <div className="text-gray-400 mb-2">
+              {trade.date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+              })}
+            </div>
+            <TradeRow trade={trade} />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
 
-export default LeaderboardPartners
+export default Trades
