@@ -63,7 +63,7 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
     switch (index) {
       case 1:
         return styles.gold
-      case 0:
+      case 2:
         return styles.silver
       default:
         return styles.bronze
@@ -197,7 +197,7 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
             <div key={sortedUsers?.[2]?.id} className={styles.medalHolder}>
               <div className={styles.imageWrapper}>
                 <div
-                  className={`${styles.medal} ${getMedalClass(sortedUsers[1]?.rank)}`}
+                  className={`${styles.medal} ${getMedalClass(sortedUsers[2]?.rank)}`}
                 >
                   {sortedUsers?.[2]?.rank}
                 </div>
