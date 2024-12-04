@@ -147,7 +147,7 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
                 >
                   {sortedUsers[0]?.avatarUrl ? (
                     <AvatarWithFallback
-                      src={`${sortedUsers[0]?.avatarUrl}x`}
+                      src={sortedUsers[0]?.avatarUrl}
                       name={sortedUsers[0]?.name}
                       className={styles.userImage}
                       size={120}
@@ -197,7 +197,7 @@ const LeaderboardMedals: FC<{ users: TUser[]; isLoading: boolean }> = ({
                 >
                   {sortedUsers?.[2]?.avatarUrl ? (
                     <AvatarWithFallback
-                      src={`${sortedUsers?.[2]?.avatarUrl}x`}
+                      src={sortedUsers?.[2]?.avatarUrl}
                       name={sortedUsers?.[2]?.name}
                       className={styles.userImage}
                       size={80}
