@@ -1,6 +1,9 @@
 import type { NextPage } from "next"
 import Head from "next/head"
 import Trades from "../components/trades/Trades"
+import NavBar from "@/components/nav-element/NavBar"
+import Link from "next/link"
+import { ContentContainer } from "@/components/ContentContainer"
 
 const TradesPage: NextPage = () => {
   return (
@@ -12,7 +15,21 @@ const TradesPage: NextPage = () => {
           content="View Marc's trading activity and performance"
         />
       </Head>
-      <Trades />
+      <NavBar>
+        <Link
+          href="https://gmgn.ai/sol/address/GnGSB33wYPgJFei8nsGyYRDgaeZrpcLbWoAbEPuSE9QV"
+          className="inline-flex items-center rounded-full bg-white/20 px-3.5 py-2 transition-all duration-300 hover:bg-white/30"
+        >
+          <span className="text-base font-semibold text-white">
+            View Wallet
+          </span>
+        </Link>
+      </NavBar>
+      <main className="flex flex-1 justify-center">
+        <ContentContainer>
+          <Trades />
+        </ContentContainer>
+      </main>
     </div>
   )
 }
