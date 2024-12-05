@@ -41,12 +41,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
       <ContextProvider>
         <div className="flex min-h-screen flex-col">
           <Notifications />
-          <NavBar />
-          <main className="flex flex-1 justify-center">
-            <ContentContainer>
-              <Component {...pageProps} />
-            </ContentContainer>
-          </main>
+          <Component {...pageProps} />
         </div>
       </ContextProvider>
     </SessionProvider>

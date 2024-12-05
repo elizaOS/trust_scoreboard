@@ -8,9 +8,10 @@ import { RiBarChart2Fill } from "react-icons/ri"
 
 interface NavBarProps {
   // Add any props if needed
+  children?: React.ReactNode
 }
 
-const NavBar: FC<NavBarProps> = () => {
+const NavBar: FC<NavBarProps> = ({ children }) => {
   const { data: session } = useSession()
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -26,15 +27,7 @@ const NavBar: FC<NavBarProps> = () => {
         <Link href="https://elizaos.ai/ai16z" className="">
           <Image src="/logo.svg" alt="Logo" width={55} height={36} priority />
         </Link>
-
-        <Link
-          href="https://discord.com/invite/ai16z"
-          className="inline-flex items-center rounded-full bg-white/20 px-3.5 py-2 transition-all duration-300 hover:bg-white/30"
-        >
-          <span className="text-base font-semibold text-white">
-            Join Discord
-          </span>
-        </Link>
+        {children}
         {/* Search Bar */}
         {/* <div className={`${styles.searchContainer} hidden`}>
           <form onSubmit={handleSearch}>
