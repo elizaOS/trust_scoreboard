@@ -48,8 +48,6 @@ const TradeRow: FC<{ trade: TTrade }> = ({ trade }) => {
 const Trades: FC = () => {
   const { trades, isLoading } = useGetTrades()
 
-  console.log("First 10 trades", JSON.stringify(trades.slice(0, 10), null, 2))
-
   const groupedTrades = useMemo(() => {
     return trades.reduce((acc, trade) => {
       const date = new Date(trade.createdAt).toLocaleDateString("en-US", {
