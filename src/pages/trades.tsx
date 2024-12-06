@@ -9,7 +9,7 @@ const TradesPage: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Marc&apos;s Trades</title>
+        <title>ai16z - Marc&apos;s Trades</title>
         <meta
           name="description"
           content="View Marc's trading activity and performance"
