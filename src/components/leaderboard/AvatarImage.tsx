@@ -18,15 +18,19 @@ export const AvatarWithFallback = ({
   const initial = name?.[0]?.toUpperCase() || "?"
   const fontSize = size / 2
 
+  const proxiedSrc = src
+    ? `/api/proxy/imageProxy?url=${encodeURIComponent(src)}`
+    : undefined
+
   return (
     <>
-      {!error && src && (
+      {!error && proxiedSrc && (
         <Image
           width={size}
           height={size}
           alt={`${name}'s avatar`}
-          src={src}
-          className={className}
+          src={proxiedSrc}
+          className={`${className} rounded-full`}
           onError={() => setError(true)}
         />
       )}
@@ -34,7 +38,7 @@ export const AvatarWithFallback = ({
         className={`${className} inline-flex grow items-center justify-center rounded-full bg-blue-500 font-medium text-white`}
         style={{
           fontSize: `${fontSize}px`,
-          display: !src || error ? "flex" : "none",
+          display: !proxiedSrc || error ? "flex" : "none",
         }}
       >
         {initial}
