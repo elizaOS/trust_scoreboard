@@ -17,7 +17,7 @@ const TradesPage: NextPage = () => {
       </Head>
       <NavBar>
         <Link
-          href="https://gmgn.ai/sol/address/GypeM9BqKeKGJGTnPxTf1PdVa3UC2LkiYnvvW8CJSNj2"
+          href="https://solscan.io/account/GypeM9BqKeKGJGTnPxTf1PdVa3UC2LkiYnvvW8CJSNj2#transfers"
           className="inline-flex items-center rounded-full bg-white/20 px-3.5 py-2 transition-all duration-300 hover:bg-white/30"
         >
           <span className="text-base font-semibold text-white">
