@@ -4,6 +4,7 @@ import LeaderboardTotals from "../../components/leaderboard/LeaderboardTotals"
 import LeaderboardMedals from "../../components/leaderboard/LeaderboardMedals"
 import LeaderboardPartners from "../../components/leaderboard/LeaderboardPartners"
 import { useGetUsers } from "@/services/useUsers"
+import PageSwitcher from "@/components/nav-element/PageSwitcher"
 
 export const HomeView: FC = () => {
   const { users, isLoading: isLoadingUsers } = useGetUsers({
@@ -20,6 +21,7 @@ export const HomeView: FC = () => {
 
   return (
     <div className={styles.container}>
+      <PageSwitcher className="mb-6" />
       <div className={styles.content}>
         <div className="flex flex-col items-center justify-center gap-2 px-4">
           <h2 className={styles.title}>Marc’s Trust Leaderboard</h2>

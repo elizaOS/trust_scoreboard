@@ -2,7 +2,8 @@ import { Suspense, useMemo, type FC } from "react"
 import Image from "next/image"
 import { AvatarWithFallback } from "../leaderboard/AvatarImage"
 import { TTrade, useGetTrades } from "@/services/useTrades"
-
+import { format } from "date-fns"
+import PageSwitcher from "../nav-element/PageSwitcher"
 const TradeRow: FC<{ trade: TTrade }> = ({ trade }) => {
   const buyTransaction = trade.transactions.find(
     (transaction) => transaction.type === "buy"
@@ -30,7 +31,9 @@ const TradeRow: FC<{ trade: TTrade }> = ({ trade }) => {
         </div>
         <div className="flex flex-col">
           <span className="text-lg text-white">{trade.tokenName}</span>
-          <span className="text-gray-400">Swapped</span>
+          <span className="text-gray-400">
+            Swapped at {format(new Date(trade.createdAt), "h:mm a")}
+          </span>
         </div>
       </div>
       <div className="flex flex-col items-end">
@@ -126,6 +129,7 @@ const Trades: FC = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="mx-auto w-full max-w-xl py-12">
+        <PageSwitcher className="mb-6" />
         <h1 className="mb-4 text-center text-4xl font-bold text-white">
           Marc&apos;s Trades
         </h1>
