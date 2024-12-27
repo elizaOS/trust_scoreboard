@@ -22,24 +22,8 @@ const NavBar: FC<NavBarProps> = ({ children }) => {
 
   return (
     <nav className="sticky top-0 z-[100] h-[66px] w-full bg-black/25 px-6 py-3.5 backdrop-blur-[69px]">
-      <div className="flex h-full items-center justify-between">
-        {/* Centered Logo */}
-        <Link href="https://elizaos.ai/ai16z" className="">
-          <Image src="/logo.svg" alt="Logo" width={55} height={36} priority />
-        </Link>
+      <div className="flex h-full items-center justify-end">
         {children}
-        {/* Search Bar */}
-        {/* <div className={`${styles.searchContainer} hidden`}>
-          <form onSubmit={handleSearch}>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className={styles.searchInput}
-            />
-          </form>
-        </div> */}
       </div>
     </nav>
   )
